@@ -1,0 +1,84 @@
+{
+  "banner_observations": {
+    "by_port": {
+      "22": "SSH-2.0-mod_sftp/0.9.9"
+    },
+    "files": ["nmap.txt"]
+  },
+  "confidence": "high",
+  "contradictions": [],
+  "created_at": "2026-05-28T07:08:51+00:00",
+  "detected_products": [
+    {
+      "port": "22",
+      "product": "ProFTPD",
+      "service": "ssh",
+      "version": "1.3.5e + mod_sftp/0.9.9"
+    }
+  ],
+  "error_message_observations": [
+    "Application error response on integer overflow test (CVE-2011-1137)"
+  ],
+  "evidence_refs": ["nmap.txt", "recon_meta.env", "searchsploit_proftpd.json"],
+  "exploit_intel_summary": {
+    "CVE-2015-3306": "ProFTPD 1.3.5 mod_copy RCE (EDB-36742, EDB-49908) - FTP not accessible",
+    "CVE-2011-1137": "ProFTPD mod_sftp Integer Overflow DoS (EDB-16129) - partial: long string causes timeout on 109",
+    "CVE-2010-4221": "ProFTPD Telnet IAC buffer overflow - may be patched in 1.3.5e",
+    "CVE-2009-0543": "ProFTPD mod_mysql auth bypass - cannot verify mod_sql loaded"
+  },
+  "filesystem_leakage_hints": [],
+  "http_side_observations": {},
+  "manual_review_required": true,
+  "module_hints": ["mod_sftp/0.9.9", "mod_copy (potentially loaded, FTP not accessible)"],
+  "notes": "All three targets share identical SSH host key SHA256:Ht7BR9NOXxsGMbzVEj0NThaMcOdg4Zt7+H8ERHIMBy8 - cloned configuration",
+  "operator": "wenlongy",
+  "port_observations": [
+    {
+      "details": "ProFTPD 1.3.5e mod_sftp/0.9.9",
+      "port": "22",
+      "product": "ProFTPD mod_sftp",
+      "proto": "tcp",
+      "raw": "SSH-2.0-mod_sftp/0.9.9",
+      "service": "ssh",
+      "state": "open",
+      "version": "0.9.9"
+    }
+  ],
+  "protocol_observations": {
+    "nmap_available": true,
+    "raw_excerpt": "All targets: port 22/tcp open, SSH-2.0-mod_sftp/0.9.9"
+  },
+  "recommended_search_queries": [
+    "ProFTPD 1.3.5e CVE",
+    "mod_sftp 0.9.9 vulnerability",
+    "CVE-2015-3306 ProFTPD mod_copy",
+    "CVE-2011-1137 mod_sftp integer overflow",
+    "SSH weak algorithm CBC MD5 attack"
+  ],
+  "run_id": "task1_attack_20260528T070851Z",
+  "service_candidates": [
+    "ProFTPD 1.3.5e mod_sftp/0.9.9 on 22/tcp"
+  ],
+  "sftp_candidate_ports": [
+    {
+      "confidence": "high",
+      "port": "22",
+      "product": "ProFTPD mod_sftp",
+      "proto": "tcp",
+      "reason": "Banner explicitly identifies mod_sftp/0.9.9 - ProFTPD SFTP subsystem",
+      "service": "ssh",
+      "version": "0.9.9"
+    }
+  ],
+  "source_name": "parse_recon.py",
+  "source_type": "script",
+  "task_id": "task1",
+  "tls_observations": {},
+  "tool_intel": {
+    "weak_kex_algorithms": ["diffie-hellman-group1-sha1", "diffie-hellman-group14-sha1", "rsa1024-sha1"],
+    "weak_host_key_algorithms": ["ssh-dss"],
+    "weak_ciphers": ["aes128-cbc", "aes192-cbc", "aes256-cbc"],
+    "weak_macs": ["hmac-md5", "hmac-md5-96", "hmac-sha1", "hmac-sha1-96"]
+  },
+  "version_hints": ["ProFTPD 1.3.5e", "mod_sftp/0.9.9"]
+}

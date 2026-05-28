@@ -1,0 +1,44 @@
+{
+  "confidence": "medium",
+  "created_at": "2026-05-28T06:12:13+00:00",
+  "evidence_refs": [],
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "review_task1_batch_120.133.131.110",
+  "source_name": "build_manifests.py",
+  "source_type": "script",
+  "task_id": "task1",
+  "tools": [
+    {
+      "name": "python3",
+      "path": "/opt/anaconda3/bin/python3",
+      "required": true
+    },
+    {
+      "name": "ssh",
+      "path": "/usr/bin/ssh",
+      "required": false
+    },
+    {
+      "name": "curl",
+      "path": "/opt/anaconda3/bin/curl",
+      "required": false
+    },
+    {
+      "name": "openssl",
+      "path": "/opt/anaconda3/bin/openssl",
+      "required": false
+    },
+    {
+      "name": "nmap",
+      "path": null,
+      "required": false
+    },
+    {
+      "name": "searchsploit",
+      "path": "/Users/wenlongy/dev/src/exploitdb/searchsploit",
+      "required": false
+    }
+  ]
+}

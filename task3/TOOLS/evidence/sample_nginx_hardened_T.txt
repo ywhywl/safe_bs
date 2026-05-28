@@ -1,0 +1,20 @@
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+server {
+    listen 443 ssl http2;
+    server_name hardened.demo.local;
+    server_tokens off;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    add_header X-Frame-Options SAMEORIGIN;
+    add_header X-Content-Type-Options nosniff;
+    add_header Content-Security-Policy "default-src 'self'";
+    add_header Referrer-Policy no-referrer;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
+    location / {
+        root /srv/www/app;
+    }
+    location /admin {
+        deny all;
+    }
+}

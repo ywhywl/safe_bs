@@ -1,0 +1,47 @@
+{
+  "confidence": "medium",
+  "created_at": "2026-05-28T06:12:21+00:00",
+  "evidence_items": [
+    {
+      "captured_at": "",
+      "description": "",
+      "evidence_id": "nmap",
+      "hash": "",
+      "path": "raw/nmap.txt",
+      "related_phase": "recon",
+      "sensitivity": "unknown",
+      "type": "txt",
+      "usable_in_report": true
+    },
+    {
+      "captured_at": "",
+      "description": "",
+      "evidence_id": "recon_meta",
+      "hash": "",
+      "path": "raw/recon_meta.env",
+      "related_phase": "recon",
+      "sensitivity": "unknown",
+      "type": "env",
+      "usable_in_report": true
+    },
+    {
+      "captured_at": "",
+      "description": "",
+      "evidence_id": "manual_validation_note",
+      "hash": "",
+      "path": "evidence/manual_validation_note.md",
+      "related_phase": "validation",
+      "sensitivity": "unknown",
+      "type": "md",
+      "usable_in_report": true
+    }
+  ],
+  "evidence_refs": [],
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "review_task1_batch_120.133.131.110",
+  "source_name": "build_evidence_index.py",
+  "source_type": "script",
+  "task_id": "task1"
+}

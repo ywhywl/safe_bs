@@ -1,0 +1,141 @@
+{
+  "ai_usage_summary": "Use external LLM only with sanitized report context.",
+  "confidence": "medium",
+  "created_at": "2026-05-28T06:12:21+00:00",
+  "do_not_disclose_items": [
+    "raw secrets",
+    "full sensitive artifacts"
+  ],
+  "evidence_refs": [],
+  "evidence_summary": [
+    {
+      "captured_at": "",
+      "description": "",
+      "evidence_id": "nmap",
+      "hash": "",
+      "path": "raw/nmap.txt",
+      "related_phase": "recon",
+      "sensitivity": "unknown",
+      "type": "txt",
+      "usable_in_report": true
+    },
+    {
+      "captured_at": "",
+      "description": "",
+      "evidence_id": "recon_meta",
+      "hash": "",
+      "path": "raw/recon_meta.env",
+      "related_phase": "recon",
+      "sensitivity": "unknown",
+      "type": "env",
+      "usable_in_report": true
+    },
+    {
+      "captured_at": "",
+      "description": "",
+      "evidence_id": "manual_validation_note",
+      "hash": "",
+      "path": "evidence/manual_validation_note.md",
+      "related_phase": "validation",
+      "sensitivity": "unknown",
+      "type": "md",
+      "usable_in_report": true
+    }
+  ],
+  "impact_summary": "Validation has not been completed yet.",
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "remediation_summary": "Upgrade the affected service, remove vulnerable modules where possible, and restrict exposed services.",
+  "run_id": "review_task1_batch_120.133.131.110",
+  "search_query_summary": [
+    "OpenSSH 8.2",
+    "OpenSSH 9.3"
+  ],
+  "service_identity_summary": {
+    "candidates": [
+      "OpenSSH on 2222/tcp",
+      "OpenSSH on 10022/tcp"
+    ],
+    "sftp_candidate_ports": [
+      {
+        "confidence": "medium",
+        "port": "2222",
+        "product": "OpenSSH",
+        "proto": "tcp",
+        "reason": "SSH transport detected; SFTP usually runs as SSH subsystem.",
+        "service": "ssh",
+        "version": "8.2"
+      },
+      {
+        "confidence": "medium",
+        "port": "10022",
+        "product": "OpenSSH",
+        "proto": "tcp",
+        "reason": "SSH transport detected; SFTP usually runs as SSH subsystem.",
+        "service": "ssh",
+        "version": "9.3"
+      }
+    ],
+    "versions": [
+      "OpenSSH 8.2",
+      "OpenSSH 9.3"
+    ]
+  },
+  "source_name": "build_report_context.py",
+  "source_type": "script",
+  "target_summary": {
+    "ports": [
+      "2222",
+      "10022"
+    ],
+    "recon_collection_mode": "imported_scan",
+    "scope": "authorized testing only",
+    "target": "120.133.131.110"
+  },
+  "task_id": "task1",
+  "timeline_summary": [
+    {
+      "action_label": "initial reconnaissance completed",
+      "analyst_comment": "First version records baseline execution milestones only.",
+      "evidence_refs": [],
+      "phase": "recon",
+      "result_summary": "Raw service artifacts collected where available.",
+      "status": "completed",
+      "target": "",
+      "timestamp": "2026-05-28T06:12:21+00:00"
+    }
+  ],
+  "tool_intel_summary": {
+    "OpenSSH 8.2": [],
+    "OpenSSH 9.3": []
+  },
+  "validated_issue_summary": [],
+  "validation_plan_summary": [
+    {
+      "evidence_to_capture": [
+        "banner",
+        "imported nmap output",
+        "service response",
+        "sftp candidate ports: ['2222', '10022']"
+      ],
+      "expected_signal": "Consistent banner, identified SSH/SFTP port, and service fingerprint alignment",
+      "objective": "Confirm target service identity and reachable protocol surface.",
+      "safety_boundary": "No destructive write or persistence",
+      "step_id": "s1",
+      "stop_condition": "Identity is inconsistent with the hypothesis"
+    },
+    {
+      "evidence_to_capture": [
+        "command transcript",
+        "response summary",
+        "screenshots if applicable"
+      ],
+      "expected_signal": "Observable validation evidence without exceeding scope",
+      "objective": "Perform minimal authorized validation aligned with the selected hypothesis.",
+      "safety_boundary": "Stop on ambiguity and require manual review",
+      "step_id": "s2",
+      "stop_condition": "Unexpected service behavior or scope violation risk"
+    }
+  ]
+}

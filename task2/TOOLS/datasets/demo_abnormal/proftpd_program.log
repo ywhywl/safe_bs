@@ -1,0 +1,9 @@
+2026-05-18 09:00:00,201 nucc-30-test-uat-app-3-dmz-9 proftpd[4100001]: 172.31.160.55 (202.104.136.69[202.104.136.69]): USER mms_cmb: Login successful
+2026-05-18 09:00:00,202 nucc-30-test-uat-app-3-dmz-9 proftpd[4100002]: 172.31.160.55 (220.248.41.29[220.248.41.29]): SSH2 session opened.
+2026-05-18 09:00:00,203 nucc-30-test-uat-app-3-dmz-9 proftpd[4100002]: 172.31.160.55 (220.248.41.29[220.248.41.29]): SSH2 session closed.
+2026-05-19 09:02:10,201 nucc-30-test-uat-app-3-dmz-9 proftpd[4200001]: 172.31.160.55 (202.104.136.69[202.104.136.69]): USER mms_cmb: Login successful
+2026-05-19 09:02:10,202 nucc-30-test-uat-app-3-dmz-9 proftpd[4200002]: 172.31.160.55 (220.248.41.29[220.248.41.29]): SSH2 session opened.
+2026-05-19 09:02:10,203 nucc-30-test-uat-app-3-dmz-9 proftpd[4200002]: 172.31.160.55 (220.248.41.29[220.248.41.29]): SSH2 session closed.
+2026-05-20 23:59:58,001 nucc-30-test-uat-app-3-dmz-9 proftpd[4999001]: 172.31.160.55 (8.8.8.8[8.8.8.8]): USER mms_cmb: Login failed
+2026-05-20 23:59:58,002 nucc-30-test-uat-app-3-dmz-9 proftpd[4999002]: 172.31.160.55 (198.51.100.77[198.51.100.77]): USER farms_warn_ruisuiyh: Login failed
+2026-05-20 23:59:58,003 nucc-30-test-uat-app-3-dmz-9 proftpd[4999003]: 172.31.160.55 (203.0.113.55[203.0.113.55]): SSH2 session opened.

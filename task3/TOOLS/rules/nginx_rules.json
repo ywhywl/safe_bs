@@ -1,0 +1,461 @@
+[
+  {
+    "rule_id": "tls_weak_protocol",
+    "title": "TLS 协议版本包含不安全的旧版本",
+    "severity": "high",
+    "match_type": "contains_any",
+    "field": "tls_protocols",
+    "values": ["TLSv1", "TLSv1.1", "SSLv2", "SSLv3"],
+    "remediation": "禁用旧版 TLS，仅保留 TLSv1.2 和 TLSv1.3。"
+  },
+  {
+    "rule_id": "tls_v13_missing",
+    "title": "未启用 TLSv1.3（更高效更安全的协议版本）",
+    "severity": "medium",
+    "match_type": "missing_all",
+    "field": "tls_protocols",
+    "values": ["TLSv1.3"],
+    "remediation": "在 ssl_protocols 中加入 TLSv1.3，提升安全性和性能。"
+  },
+  {
+    "rule_id": "missing_security_headers",
+    "title": "缺少关键安全响应头",
+    "severity": "medium",
+    "match_type": "missing_any",
+    "field": "security_headers",
+    "values": ["X-Content-Type-Options", "Content-Security-Policy"],
+    "remediation": "在 server 或 location 块中添加 X-Content-Type-Options: nosniff 和 Content-Security-Policy 头。"
+  },
+  {
+    "rule_id": "autoindex_enabled",
+    "title": "目录列表功能已开启",
+    "severity": "high",
+    "match_type": "equals",
+    "field": "autoindex",
+    "value": true,
+    "remediation": "除非有明确的业务需求，应关闭 autoindex。"
+  },
+  {
+    "rule_id": "missing_hsts",
+    "title": "缺少 Strict-Transport-Security 头",
+    "severity": "high",
+    "match_type": "missing_any",
+    "field": "security_headers",
+    "values": ["Strict-Transport-Security"],
+    "remediation": "对 HTTPS 服务添加 Strict-Transport-Security 头（建议 max-age≥63072000）。"
+  },
+  {
+    "rule_id": "missing_referrer_policy",
+    "title": "缺少 Referrer-Policy 头",
+    "severity": "low",
+    "match_type": "missing_any",
+    "field": "security_headers",
+    "values": ["Referrer-Policy"],
+    "remediation": "添加 Referrer-Policy 头以减少意外的 referrer 信息泄露。"
+  },
+  {
+    "rule_id": "server_tokens_enabled",
+    "title": "server_tokens 未关闭",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "server_tokens_off",
+    "value": false,
+    "remediation": "设置 server_tokens off 以减少版本信息暴露。"
+  },
+  {
+    "rule_id": "sensitive_location_exposed",
+    "title": "敏感路径对外暴露",
+    "severity": "medium",
+    "match_type": "contains_substring_any",
+    "field": "locations",
+    "values": ["/admin", "/internal", "/private", "/.git", "/.env", "/.htaccess", "/console", "/debug", "/swagger", "/api-docs"],
+    "remediation": "限制或加固敏感路径，确保不被广泛暴露。"
+  },
+  {
+    "rule_id": "http_no_redirect_to_https",
+    "title": "HTTP 监听端口未重定向到 HTTPS",
+    "severity": "high",
+    "match_type": "equals",
+    "field": "http_redirects_to_https",
+    "value": false,
+    "remediation": "HTTP server 块应配置 return 301 https://$host$request_uri 重定向到 HTTPS。"
+  },
+  {
+    "rule_id": "http_https_same_server_block",
+    "title": "HTTP 和 HTTPS 在同一 server block 中（无法独立控制）",
+    "severity": "high",
+    "match_type": "equals",
+    "field": "http_https_same_block",
+    "value": true,
+    "remediation": "将 HTTP 和 HTTPS 分为独立 server block，HTTP 块只做 301 重定向。"
+  },
+  {
+    "rule_id": "empty_server_name",
+    "title": "server_name 为空（默认匹配所有请求）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "has_empty_server_name",
+    "value": true,
+    "remediation": "设置明确的 server_name，避免成为默认 server 捕获非预期请求。"
+  },
+  {
+    "rule_id": "cookie_missing_secure_flag",
+    "title": "proxy_cookie_path 设置缺少 Secure 标记",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "cookie_has_secure_flag",
+    "value": false,
+    "remediation": "在 proxy_cookie_path 中添加 Secure 标记，确保 cookie 仅通过 HTTPS 传输。"
+  },
+  {
+    "rule_id": "cookie_missing_samesite",
+    "title": "proxy_cookie_path 设置缺少 SameSite 属性",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "cookie_has_samesite",
+    "value": false,
+    "remediation": "在 proxy_cookie_path 中添加 SameSite=Lax 或 SameSite=Strict，防止 CSRF 攻击。"
+  },
+  {
+    "rule_id": "ssl_ciphers_weak",
+    "title": "SSL 加密套件包含不安全的算法",
+    "severity": "high",
+    "match_type": "contains_any",
+    "field": "weak_cipher_keywords",
+    "values": ["RC4", "DES", "3DES", "MD5", "NULL", "EXPORT", "SHA1", "CBC"],
+    "remediation": "移除弱加密套件，使用现代加密算法（如 ECDHE+AESGCM）。"
+  },
+  {
+    "rule_id": "missing_ssl_ciphers_config",
+    "title": "未显式配置 ssl_ciphers（可能使用包含弱算法的默认值）",
+    "severity": "high",
+    "match_type": "equals",
+    "field": "ssl_ciphers_defined",
+    "value": false,
+    "remediation": "显式配置 ssl_ciphers，仅允许现代安全加密套件。"
+  },
+  {
+    "rule_id": "missing_ssl_session_cache",
+    "title": "未配置 ssl_session_cache（影响 TLS 性能和会话恢复安全）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "ssl_session_cache_configured",
+    "value": false,
+    "remediation": "配置 ssl_session_cache shared:SSL:10m 和 ssl_session_timeout 10m，提升 TLS 性能并安全缓存会话。"
+  },
+  {
+    "rule_id": "missing_ocsp_stapling",
+    "title": "未启用 OCSP Stapling（客户端需单独验证证书状态）",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "ocsp_stapling_enabled",
+    "value": false,
+    "remediation": "启用 ssl_stapling on 和 ssl_stapling_verify on，减少客户端证书验证延迟。"
+  },
+  {
+    "rule_id": "missing_access_control_on_sensitive_paths",
+    "title": "健康检查/状态页面缺少访问控制",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "status_pages_without_acl",
+    "value": true,
+    "remediation": "对 /status、/healthcheck、/vstatus 等路径添加 allow/deny 访问控制。"
+  },
+  {
+    "rule_id": "path_traversal_alias_risk",
+    "title": "alias 与 try_files 组合可能存在路径遍历风险",
+    "severity": "high",
+    "match_type": "greater_than",
+    "field": "alias_try_files_pairs_count",
+    "value": 0,
+    "remediation": "避免 alias 与 try_files 同时使用，或确保 alias 路径以 / 结尾且 try_files 不回退到 @proxy。"
+  },
+  {
+    "rule_id": "cors_blocked_by_403",
+    "title": "OPTIONS 请求被粗暴阻断（返回 403）",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "options_returns_403",
+    "value": true,
+    "remediation": "对 OPTIONS 请求返回 204 或正确 CORS 头，而非直接 403。"
+  },
+  {
+    "rule_id": "cookie_exposes_business_code",
+    "title": "cookie 中包含业务编码（org_code），存在信息泄露风险",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "cookie_contains_org_code",
+    "value": true,
+    "remediation": "避免在 cookie 中明文存储业务编码，改用加密或随机 token。"
+  },
+  {
+    "rule_id": "missing_rate_limit",
+    "title": "大部分 location 未配置速率限制",
+    "severity": "medium",
+    "match_type": "less_than",
+    "field": "rate_limited_locations_ratio",
+    "value": 0.3,
+    "remediation": "使用 limit_req 或 limit_rate 对关键 location 配置速率限制。"
+  },
+  {
+    "rule_id": "missing_conn_limit",
+    "title": "未配置 limit_conn（缺少连接数限制，易受并发 DDoS）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "limit_conn_configured",
+    "value": false,
+    "remediation": "在 http 块定义 limit_conn_zone $binary_remote_addr zone=conn_limit:10m，在 server/location 中配置 limit_conn conn_limit 100。"
+  },
+  {
+    "rule_id": "duplicate_log_format",
+    "title": "存在重复定义的 log_format",
+    "severity": "low",
+    "match_type": "greater_than",
+    "field": "duplicate_log_format_count",
+    "value": 0,
+    "remediation": "移除重复的 log_format 定义，确保每个格式名称唯一。"
+  },
+  {
+    "rule_id": "log_escape_char_misconfigured",
+    "title": "log_escape_char 配置错误（重复转义同一字符）",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "log_escape_char_error",
+    "value": true,
+    "remediation": "修正 log_escape_char 配置，确保每个字符映射唯一且正确。"
+  },
+  {
+    "rule_id": "proxy_pass_https_without_verify",
+    "title": "proxy_pass 到 HTTPS 后端未配置证书验证",
+    "severity": "high",
+    "match_type": "equals",
+    "field": "proxy_pass_https_without_verify",
+    "value": true,
+    "remediation": "配置 proxy_ssl_verify on、proxy_ssl_trusted_certificate 和 proxy_ssl_verify_depth。"
+  },
+  {
+    "rule_id": "proxy_pass_http_backend",
+    "title": "proxy_pass 到 HTTP 后端（nginx 与后端间无加密）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "proxy_pass_http_backend",
+    "value": true,
+    "remediation": "将 proxy_pass 改为 https://，或在可信内网环境中明确标注风险。"
+  },
+  {
+    "rule_id": "lua_session_not_on_all_locations",
+    "title": "access_by_lua 会话校验未覆盖所有 location",
+    "severity": "high",
+    "match_type": "equals",
+    "field": "lua_session_partial",
+    "value": true,
+    "remediation": "确保 access_by_lua_block 会话校验覆盖所有需要认证的 location，或在 server 级别统一设置。"
+  },
+  {
+    "rule_id": "upstream_ip_hash_no_backup",
+    "title": "ip_hash 贐载均衡无备用节点，故障时不可自动切换",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "ip_hash_no_backup",
+    "value": true,
+    "remediation": "考虑使用 backup 参数或 least_conn + keepalive 替代纯 ip_hash。"
+  },
+  {
+    "rule_id": "upstream_duplicate_server",
+    "title": "upstream 中存在重复的 server 地址",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "upstream_has_duplicate_server",
+    "value": true,
+    "remediation": "移除 upstream 中重复的 server 定义，确保每个后端地址唯一。"
+  },
+  {
+    "rule_id": "missing_proxy_hide_headers",
+    "title": "未配置 proxy_hide_header 隐藏后端响应头（X-Powered-By 等）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "proxy_hide_headers_configured",
+    "value": false,
+    "remediation": "配置 proxy_hide_header X-Powered-By; proxy_hide_header Server; 防止后端信息泄露到客户端。"
+  },
+  {
+    "rule_id": "unrestricted_http_methods",
+    "title": "未限制危险 HTTP 方法（TRACE/DELETE/PUT 等可能被滥用）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "http_methods_limited",
+    "value": false,
+    "remediation": "使用 limit_except GET POST HEAD { deny all; } 限制非必要 HTTP 方法，尤其禁用 TRACE（防止 XST 攻击）。"
+  },
+  {
+    "rule_id": "hidden_files_not_blocked",
+    "title": "未阻止对隐藏文件（.git/.env/.htaccess）的访问",
+    "severity": "high",
+    "match_type": "equals",
+    "field": "hidden_files_blocked",
+    "value": false,
+    "remediation": "添加 location ~ /\\\\.{ deny all; } 阻止对所有隐藏文件的访问。"
+  },
+  {
+    "rule_id": "missing_disable_symlinks",
+    "title": "未配置 disable_symlinks（符号链接可能暴露意外文件）",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "disable_symlinks_configured",
+    "value": false,
+    "remediation": "配置 disable_symlinks on 或 disable_symlinks if_not_owner，防止通过符号链接访问意外文件。"
+  },
+  {
+    "rule_id": "upload_no_execution_block",
+    "title": "上传目录未禁止脚本执行（可能上传并执行恶意脚本）",
+    "severity": "high",
+    "match_type": "equals",
+    "field": "upload_dir_execution_blocked",
+    "value": false,
+    "remediation": "在上传 location 中添加 location ~* ^/upload/.*\\\\.(php|jsp|py|sh|cgi)$ { deny all; } 禁止脚本执行。"
+  },
+  {
+    "rule_id": "client_max_body_size_unlimited",
+    "title": "部分 server 未设置 client_max_body_size（允许超大文件上传）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "client_max_body_size_unlimited",
+    "value": true,
+    "remediation": "在 http 或 server 块设置合理的 client_max_body_size（如 20m），防止恶意大文件上传耗尽资源。"
+  },
+  {
+    "rule_id": "missing_proxy_timeout_config",
+    "title": "未显式配置 proxy_connect/read/send_timeout（使用默认 60s 可能过长）",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "proxy_timeout_configured",
+    "value": false,
+    "remediation": "配置 proxy_connect_timeout 5s; proxy_read_timeout 30s; proxy_send_timeout 30s; 合理控制后端超时。"
+  },
+  {
+    "rule_id": "access_log_disabled",
+    "title": "部分 location 禁用了 access_log（造成审计盲区）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "has_access_log_off",
+    "value": true,
+    "remediation": "仅在健康检查等非业务 location 禁用 access_log，业务 location 必须保留日志记录。"
+  },
+  {
+    "rule_id": "error_page_internal_info",
+    "title": "自定义错误页面可能暴露内部信息（使用 root html）",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "error_page_uses_root_html",
+    "value": true,
+    "remediation": "确保自定义错误页面不包含内部 IP、路径或版本信息。审查 html 目录下的 404.html/50x.html 内容。"
+  },
+  {
+    "rule_id": "open_redirect_risk",
+    "title": "存在潜在的开放重定向风险（rewrite/proxy_redirect 未限制）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "has_open_redirect_risk",
+    "value": true,
+    "remediation": "审查所有 rewrite 和 proxy_redirect 规则，确保不基于用户输入（$query_string/$request_uri）做无限制重定向。"
+  },
+  {
+    "rule_id": "nginx_runs_as_nobody",
+    "title": "nginx 以 nobody 用户运行（低权限但需确认文件访问权限匹配）",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "nginx_runs_as_nobody",
+    "value": true,
+    "remediation": "nobody 用户权限极低是好的，但需确保 /data 等目录的读写权限与 nobody 匹配，避免权限不匹配导致安全问题。"
+  },
+  {
+    "rule_id": "worker_processes_one",
+    "title": "worker_processes 设为 1（性能瓶颈，无法利用多核）",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "worker_processes_one",
+    "value": true,
+    "remediation": "将 worker_processes 设为 auto 或与 CPU 核数匹配，提升性能和并发处理能力。"
+  },
+  {
+    "rule_id": "worker_connections_low",
+    "title": "worker_connections 仅为 1024（并发能力偏低）",
+    "severity": "low",
+    "match_type": "less_than",
+    "field": "worker_connections_value",
+    "value": 2048,
+    "remediation": "将 worker_connections 提升到 4096 或更高，配合 worker_processes 提升并发能力。"
+  },
+  {
+    "rule_id": "missing_keepalive_to_upstream",
+    "title": "未配置 upstream keepalive（每次请求新建连接，性能浪费）",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "upstream_keepalive_configured",
+    "value": false,
+    "remediation": "在 upstream 块中添加 keepalive 32; 并在 proxy_set_header 中设置 Connection \"\"; 实现长连接复用。"
+  },
+  {
+    "rule_id": "missing_real_ip_from_proxy",
+    "title": "未配置 set_real_ip_from（无法从代理层获取真实客户端 IP）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "real_ip_configured",
+    "value": false,
+    "remediation": "配置 set_real_ip_from 10.0.0.0/8; 和 real_ip_header X-Forwarded-For; 确保日志和访问控制基于真实 IP。"
+  },
+  {
+    "rule_id": "if_directive_evil",
+    "title": "在 location 中使用 if 指令（\"If Is Evil\" — nginx 官方文档警告的常见陷阱）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "has_if_in_location",
+    "value": true,
+    "remediation": "避免在 location 中使用 if，改用 try_files、rewrite 或 map 指令替代。nginx 官方明确指出 \"If Is Evil\"。"
+  },
+  {
+    "rule_id": "missing_ssl_prefer_server_ciphers",
+    "title": "未配置 ssl_prefer_server_ciphers on（客户端可能选择弱套件）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "ssl_prefer_server_ciphers_on",
+    "value": false,
+    "remediation": "配置 ssl_prefer_server_ciphers on; 确保服务端优先选择强加密套件，而非让客户端选择。"
+  },
+  {
+    "rule_id": "lua_shared_dict_exposure",
+    "title": "lua_shared_dict 暴露内部缓存区（session_cache 可被 lua 代码任意读写）",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "has_lua_shared_dict",
+    "value": true,
+    "remediation": "审查所有 lua 代码对 shared dict 的读写操作，确保无未授权访问或信息泄露路径。"
+  },
+  {
+    "rule_id": "proxy_redirect_misconfigured",
+    "title": "proxy_redirect 配置异常（koil-r 无效值）",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "proxy_redirect_has_invalid_value",
+    "value": true,
+    "remediation": "审查 proxy_redirect koil-r; 该值看起来是无效配置，移除或修正为有效重定向规则。"
+  },
+  {
+    "rule_id": "missing_buffer_config",
+    "title": "未显式配置 proxy_buffer_size/proxy_buffers（默认值可能导致大头部溢出）",
+    "severity": "low",
+    "match_type": "equals",
+    "field": "proxy_buffer_configured",
+    "value": false,
+    "remediation": "配置 proxy_buffer_size 8k; proxy_buffers 8 8k; 防止后端大响应头溢出缓冲区。"
+  },
+  {
+    "rule_id": "sensitive_content_no_cache_control",
+    "title": "业务 location 缺少 Cache-Control no-store（敏感数据可能被中间缓存）",
+    "severity": "medium",
+    "match_type": "equals",
+    "field": "sensitive_no_cache_control",
+    "value": true,
+    "remediation": "对包含敏感数据的 location 添加 add_header Cache-Control \"no-store, no-cache, must-revalidate\" always; 防止中间缓存保存敏感数据。"
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "suppress_users": ["unknown"],
+  "trusted_src_subnets": ["202.104.136.0/24", "172.31.160.0/24"],
+  "deprioritize_trigger_types": ["multi_source_burst"],
+  "brute_force_threshold": 5,
+  "brute_force_window_seconds": 300,
+  "concurrent_session_threshold": 3,
+  "concurrent_session_window_seconds": 60,
+  "data_exfiltration_bytes_threshold": 1073741824,
+  "data_exfiltration_ratio_threshold": 10,
+  "long_session_threshold_minutes": 480,
+  "privilege_path_patterns": ["/etc/", "/root/", "/var/log/", "/.ssh/", "/admin/", "/backup/", "/config/", "/secret/", "/credential/", "/key/"],
+  "sensitive_file_patterns": [".conf", ".cfg", ".key", ".pem", ".crt", ".env", ".secret", ".password", ".credentials", ".ssh", ".bak", ".sql", ".db", ".xlsx", ".csv"],
+  "crawl_path_patterns": ["/", "/etc/", "/home/", "/var/", "/tmp/", "/opt/", "/usr/"],
+  "max_crawl_depth": 3,
+  "abnormal_transfer_ratio": 3,
+  "login_failure_rate_threshold": 0.5,
+  "dormant_account_days": 30,
+  "new_ip_first_time_score": 30,
+  "cross_user_shared_ip_threshold": 3,
+  "_instructions": {
+    "brute_force_threshold": "同一用户/IP 在窗口时间内登录失败次数达到此值触发暴力破解告警",
+    "concurrent_session_threshold": "同一用户同时活跃会话数达到此值触发并发会话告警",
+    "data_exfiltration_bytes_threshold": "单次传输超过此字节量触发数据外泄告警（默认 1GB）",
+    "data_exfiltration_ratio_threshold": "本次传输量/用户平均传输量超过此倍数触发数据外泄告警",
+    "long_session_threshold_minutes": "会话时长超过此分钟数触发长会话告警（默认 8小时）",
+    "privilege_path_patterns": "访问这些路径模式时触发特权路径告警",
+    "sensitive_file_patterns": "传输/访问这些后缀的文件时触发敏感文件告警",
+    "crawl_path_patterns": "在短时间内访问多个这些路径时触发爬取行为告警",
+    "dormant_account_days": "用户超过此天数无活动后突然出现时触发休眠账户告警",
+    "cross_user_shared_ip_threshold": "同一 IP 被超过此数量的不同用户使用时触发跨用户共享 IP 告警"
+  }
+}

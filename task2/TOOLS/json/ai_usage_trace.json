@@ -1,0 +1,18 @@
+{
+  "confidence": "medium",
+  "created_at": "2026-05-28T02:18:00+00:00",
+  "evidence_refs": [],
+  "manual_review_required": false,
+  "model_runs": [],
+  "notes": "",
+  "operator": "wenlongy",
+  "policy": {
+    "manual_review_required_for_high_risk_sections": true,
+    "structured_json_as_context_only": true,
+    "task1_external_llm_allowed": false
+  },
+  "run_id": "review_task2_hist2",
+  "source_name": "build_manifests.py",
+  "source_type": "script",
+  "task_id": "task2"
+}

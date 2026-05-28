@@ -1,0 +1,7 @@
+severity=medium user=farms_warn_ruisuiyh session=2689379 type=session_behavioral_deviation reasons=action deviation,auth deviation,client deviation,source deviation
+severity=medium user=mms_cmb session=2689385 type=session_behavioral_deviation reasons=action deviation,auth deviation,client deviation,source deviation
+severity=medium user=farms_warn_dongyayh session=2689397 type=session_behavioral_deviation reasons=action deviation,auth deviation,client deviation,source deviation
+severity=high user=mms_cmb session=2689999 type=session_behavioral_deviation reasons=action deviation,auth deviation,client deviation,failure deviation,source deviation
+severity=medium user=alice session=sess-1 type=session_behavioral_deviation reasons=action deviation,path deviation,source deviation
+severity=medium user=bob session=sess-2 type=session_behavioral_deviation reasons=action deviation,path deviation,source deviation
+severity=high user=alice session=sess-9 type=session_behavioral_deviation reasons=action deviation,failure deviation,path deviation,source deviation

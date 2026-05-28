@@ -1,0 +1,31 @@
+{
+  "confidence": "medium",
+  "created_at": "2026-05-28T02:18:00+00:00",
+  "evidence_refs": [],
+  "hosts": [
+    {
+      "host": "task3/TOOLS/evidence/sample_nginx_T.txt",
+      "ports": [],
+      "roles": [
+        "nginx"
+      ]
+    }
+  ],
+  "listeners": [
+    "listen 443 ssl",
+    "listen 80"
+  ],
+  "manual_review_required": false,
+  "modules": [],
+  "nginx_version": "",
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "review_task3_evidence2",
+  "server_blocks": [
+    "server_name demo.local",
+    "server_name secure.demo.local"
+  ],
+  "source_name": "build_inventory.py",
+  "source_type": "script",
+  "task_id": "task3"
+}

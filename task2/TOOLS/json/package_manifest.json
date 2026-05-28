@@ -1,0 +1,86 @@
+{
+  "confidence": "medium",
+  "created_at": "2026-05-28T02:18:02+00:00",
+  "evidence_refs": [],
+  "files": [
+    {
+      "path": "alerts/alert_output.log",
+      "size": 1065
+    },
+    {
+      "path": "json/ai_usage_trace.json",
+      "size": 478
+    },
+    {
+      "path": "json/llm_context_input.json",
+      "size": 20198
+    },
+    {
+      "path": "json/llm_prompt_input.md",
+      "size": 146
+    },
+    {
+      "path": "json/task2_alerts.json",
+      "size": 16922
+    },
+    {
+      "path": "json/task2_anomaly_scores.json",
+      "size": 9126
+    },
+    {
+      "path": "json/task2_anomaly_scores.ndjson",
+      "size": 5850
+    },
+    {
+      "path": "json/task2_baseline_events.ndjson",
+      "size": 6102
+    },
+    {
+      "path": "json/task2_baseline_views.json",
+      "size": 2287
+    },
+    {
+      "path": "json/task2_events.json",
+      "size": 14512
+    },
+    {
+      "path": "json/task2_events.ndjson",
+      "size": 5310
+    },
+    {
+      "path": "json/task2_log_ingest_manifest.json",
+      "size": 2170
+    },
+    {
+      "path": "json/task2_report_context.json",
+      "size": 20199
+    },
+    {
+      "path": "json/task2_session_anomaly_scores.ndjson",
+      "size": 427
+    },
+    {
+      "path": "json/task2_session_views.json",
+      "size": 9735
+    },
+    {
+      "path": "json/task2_session_views.ndjson",
+      "size": 3422
+    },
+    {
+      "path": "json/task2_user_baselines.json",
+      "size": 6780
+    },
+    {
+      "path": "json/tool_manifest.json",
+      "size": 921
+    }
+  ],
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "review_task2_hist2",
+  "source_name": "build_manifests.py",
+  "source_type": "script",
+  "task_id": "task2"
+}

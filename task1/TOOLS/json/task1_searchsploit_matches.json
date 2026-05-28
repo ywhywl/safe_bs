@@ -1,0 +1,36 @@
+{
+  "confidence": "medium",
+  "created_at": "2026-05-28T06:12:21+00:00",
+  "evidence_refs": [],
+  "manual_review_required": false,
+  "matches": [
+    {
+      "available": true,
+      "query": "OpenSSH 8.2",
+      "results": [],
+      "stderr": ""
+    },
+    {
+      "available": true,
+      "query": "OpenSSH 9.3",
+      "results": [],
+      "stderr": ""
+    }
+  ],
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "review_task1_batch_120.133.131.110",
+  "search_queries": [
+    "OpenSSH 8.2",
+    "OpenSSH 9.3"
+  ],
+  "searchsploit_available": true,
+  "searchsploit_bin": "/Users/wenlongy/dev/src/exploitdb/searchsploit",
+  "source_name": "query_searchsploit.py",
+  "source_type": "script",
+  "summary": {
+    "OpenSSH 8.2": [],
+    "OpenSSH 9.3": []
+  },
+  "task_id": "task1"
+}

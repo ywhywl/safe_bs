@@ -1,0 +1,74 @@
+{
+  "candidate_vulnerabilities": [
+    {
+      "cve": "CVE-2015-3306",
+      "description": "ProFTPD 1.3.5 mod_copy Remote Command Execution - unauthenticated file copy via FTP SITE CPFR/CPTO",
+      "severity": "critical",
+      "cvss": 9.8,
+      "confidence": "high",
+      "exploit_ids": ["EDB-36742", "EDB-49908", "EDB-37262", "EDB-36803"],
+      "current_exploitability": "FTP port not accessible from external network",
+      "potential_exploitability": "Directly exploitable if FTP port becomes reachable or from internal network"
+    },
+    {
+      "cve": "CVE-2011-1137",
+      "description": "ProFTPD mod_sftp Integer Overflow Denial of Service",
+      "severity": "high",
+      "cvss": 7.5,
+      "confidence": "medium",
+      "exploit_ids": ["EDB-16129"],
+      "current_exploitability": "Original PoC does not crash server; long strings cause timeout on target 109",
+      "validation_result": "Application error response - may be partially patched"
+    },
+    {
+      "cve": "CVE-2010-4221",
+      "description": "ProFTPD Telnet IAC Buffer Overflow (1.3.2rc3-1.3.3b)",
+      "severity": "medium",
+      "cvss": 6.8,
+      "confidence": "low",
+      "exploit_ids": ["EDB-16851", "EDB-16878", "EDB-15449"],
+      "current_exploitability": "Likely patched in 1.3.5e but unverified"
+    },
+    {
+      "cve": "CVE-2009-0543",
+      "description": "ProFTPD mod_mysql Authentication Bypass via SQL Injection",
+      "severity": "medium",
+      "cvss": 6.5,
+      "confidence": "low",
+      "exploit_ids": ["EDB-8037", "EDB-32798"],
+      "current_exploitability": "Cannot verify if mod_sql loaded; only publickey auth available"
+    },
+    {
+      "cve": "weak_crypto_config",
+      "description": "Multiple weak SSH cryptographic algorithms accepted: CBC ciphers, MD5 MACs, DH group1, DSA host keys",
+      "severity": "high",
+      "cvss": 7.4,
+      "confidence": "high",
+      "exploit_ids": [],
+      "related_cves": ["CVE-2020-14145"],
+      "current_exploitability": "Requires MITM position for active exploitation"
+    },
+    {
+      "cve": "shared_host_key",
+      "description": "All three targets use identical SSH host key - cloned configuration vulnerability",
+      "severity": "medium",
+      "cvss": 5.9,
+      "confidence": "high",
+      "current_exploitability": "Increases MITM success probability"
+    }
+  ],
+  "confidence": "high",
+  "created_at": "2026-05-28T07:08:51+00:00",
+  "evidence_refs": ["task1_recon_facts.json", "searchsploit_proftpd.json"],
+  "manual_review_required": true,
+  "notes": "Critical CVE-2015-3306 exists in software but FTP port unreachable; requires internal network access or firewall change",
+  "operator": "wenlongy",
+  "run_id": "task1_attack_20260528T070851Z",
+  "service_identity_judgment": "ProFTPD 1.3.5e mod_sftp/0.9.9 on 22/tcp",
+  "sftp_candidate_ports": [
+    {"confidence": "high", "port": "22", "product": "ProFTPD mod_sftp", "proto": "tcp", "reason": "Banner confirms mod_sftp", "service": "ssh", "version": "0.9.9"}
+  ],
+  "source_name": "build_hypotheses.py",
+  "source_type": "script",
+  "task_id": "task1"
+}

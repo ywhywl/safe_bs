@@ -1,0 +1,24 @@
+{
+  "confidence": "medium",
+  "created_at": "2026-05-28T06:12:21+00:00",
+  "events": [
+    {
+      "action_label": "initial reconnaissance completed",
+      "analyst_comment": "First version records baseline execution milestones only.",
+      "evidence_refs": [],
+      "phase": "recon",
+      "result_summary": "Raw service artifacts collected where available.",
+      "status": "completed",
+      "target": "",
+      "timestamp": "2026-05-28T06:12:21+00:00"
+    }
+  ],
+  "evidence_refs": [],
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "review_task1_batch_120.133.131.110",
+  "source_name": "record_timeline.py",
+  "source_type": "script",
+  "task_id": "task1"
+}

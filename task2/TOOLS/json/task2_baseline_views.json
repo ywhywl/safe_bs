@@ -1,0 +1,103 @@
+{
+  "confidence": "medium",
+  "created_at": "2026-05-28T02:18:01+00:00",
+  "evidence_refs": [],
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "review_task2_hist2",
+  "source_name": "build_baseline_views.py",
+  "source_type": "script",
+  "task_id": "task2",
+  "views": [
+    {
+      "common_actions": [
+        "PUT"
+      ],
+      "common_paths": [
+        "/finance/payroll.csv"
+      ],
+      "common_sources": [
+        "10.10.2.20"
+      ],
+      "generated_at": "",
+      "summary": "user=finance sample_size=1 failure_rate=0.5",
+      "suspicious_patterns_to_watch": [
+        "new source ip",
+        "new action type",
+        "access outside known hours"
+      ],
+      "typical_login_window": [
+        9
+      ],
+      "user": "finance"
+    },
+    {
+      "common_actions": [
+        "GET",
+        "LIST"
+      ],
+      "common_paths": [
+        "/dropbox",
+        "/dropbox/config.yml"
+      ],
+      "common_sources": [
+        "10.10.1.15"
+      ],
+      "generated_at": "",
+      "summary": "user=ops sample_size=2 failure_rate=0.0",
+      "suspicious_patterns_to_watch": [
+        "new source ip",
+        "new action type",
+        "access outside known hours"
+      ],
+      "typical_login_window": [
+        8,
+        9
+      ],
+      "user": "ops"
+    },
+    {
+      "common_actions": [
+        "LOGIN"
+      ],
+      "common_paths": [],
+      "common_sources": [
+        "202.104.136.69"
+      ],
+      "generated_at": "",
+      "summary": "user=tms_cmb sample_size=1 failure_rate=0.5",
+      "suspicious_patterns_to_watch": [
+        "new source ip",
+        "new action type",
+        "access outside known hours"
+      ],
+      "typical_login_window": [
+        0
+      ],
+      "user": "tms_cmb"
+    },
+    {
+      "common_actions": [
+        "SESSION_CLOSE",
+        "SESSION_OPEN"
+      ],
+      "common_paths": [],
+      "common_sources": [
+        "202.104.136.69",
+        "222.76.46.33"
+      ],
+      "generated_at": "",
+      "summary": "user=unknown sample_size=3 failure_rate=0.0",
+      "suspicious_patterns_to_watch": [
+        "new source ip",
+        "new action type",
+        "access outside known hours"
+      ],
+      "typical_login_window": [
+        0
+      ],
+      "user": "unknown"
+    }
+  ]
+}

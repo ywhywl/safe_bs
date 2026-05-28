@@ -1,0 +1,552 @@
+{
+  "alert_type_summary": {
+    "session_behavioral_deviation": 7
+  },
+  "alerts": [
+    {
+      "alert_id": "alert-1",
+      "llm_confidence": "medium",
+      "llm_explanation": "操作类型偏离历史基线；认证方式偏离历史基线；客户端版本偏离历史基线；来源地址偏离历史基线",
+      "recommended_action": "Review account activity, validate source context, and inspect the full session sequence.",
+      "session_id": "2689379",
+      "session_summary": {
+        "action_sequence": [
+          "AUTH"
+        ],
+        "event_count": 1,
+        "paths": [],
+        "src_ips": [
+          "220.248.41.29"
+        ],
+        "src_subnets": [
+          "220.248.41.0/24"
+        ]
+      },
+      "severity": "medium",
+      "status": "open",
+      "supporting_event_ids": [
+        "evt-5726a362-1"
+      ],
+      "supporting_scores": [
+        {
+          "item_id": "evt-5726a362-1",
+          "item_type": "event",
+          "manual_review_required": true,
+          "rule_hits": [
+            "source deviation",
+            "action deviation",
+            "auth deviation",
+            "client deviation"
+          ],
+          "score_action_deviation": 10,
+          "score_auth_deviation": 5,
+          "score_brute_force": 0,
+          "score_bulk_download": 0,
+          "score_client_deviation": 5,
+          "score_dormant_activation": 0,
+          "score_exfiltration": 0,
+          "score_failure_deviation": 0,
+          "score_first_time_ip": 0,
+          "score_in_out_deviation": 0,
+          "score_path_deviation": 0,
+          "score_privilege_path": 0,
+          "score_sensitive_file": 0,
+          "score_source_deviation": 40,
+          "score_time_deviation": 0,
+          "score_total": 60,
+          "score_unusual_result": 0,
+          "score_volume_deviation": 0,
+          "session_id": "2689379",
+          "threshold_hit": true,
+          "user": "farms_warn_ruisuiyh"
+        }
+      ],
+      "time_window": {
+        "end": "2026-05-20T00:00:00,018",
+        "start": "2026-05-20T00:00:00,018"
+      },
+      "trigger_reasons": [
+        "action deviation",
+        "auth deviation",
+        "client deviation",
+        "source deviation"
+      ],
+      "trigger_type": "session_behavioral_deviation",
+      "user": "farms_warn_ruisuiyh"
+    },
+    {
+      "alert_id": "alert-2",
+      "llm_confidence": "medium",
+      "llm_explanation": "操作类型偏离历史基线；认证方式偏离历史基线；客户端版本偏离历史基线；来源地址偏离历史基线",
+      "recommended_action": "Review account activity, validate source context, and inspect the full session sequence.",
+      "session_id": "2689385",
+      "session_summary": {
+        "action_sequence": [
+          "AUTH"
+        ],
+        "event_count": 1,
+        "paths": [],
+        "src_ips": [
+          "202.104.136.69"
+        ],
+        "src_subnets": [
+          "202.104.136.0/24"
+        ]
+      },
+      "severity": "medium",
+      "status": "open",
+      "supporting_event_ids": [
+        "evt-5726a362-2"
+      ],
+      "supporting_scores": [
+        {
+          "item_id": "evt-5726a362-2",
+          "item_type": "event",
+          "manual_review_required": true,
+          "rule_hits": [
+            "source deviation",
+            "action deviation",
+            "auth deviation",
+            "client deviation"
+          ],
+          "score_action_deviation": 10,
+          "score_auth_deviation": 5,
+          "score_brute_force": 0,
+          "score_bulk_download": 0,
+          "score_client_deviation": 5,
+          "score_dormant_activation": 0,
+          "score_exfiltration": 0,
+          "score_failure_deviation": 0,
+          "score_first_time_ip": 0,
+          "score_in_out_deviation": 0,
+          "score_path_deviation": 0,
+          "score_privilege_path": 0,
+          "score_sensitive_file": 0,
+          "score_source_deviation": 40,
+          "score_time_deviation": 0,
+          "score_total": 60,
+          "score_unusual_result": 0,
+          "score_volume_deviation": 0,
+          "session_id": "2689385",
+          "threshold_hit": true,
+          "user": "mms_cmb"
+        }
+      ],
+      "time_window": {
+        "end": "2026-05-20T00:00:00,223",
+        "start": "2026-05-20T00:00:00,223"
+      },
+      "trigger_reasons": [
+        "action deviation",
+        "auth deviation",
+        "client deviation",
+        "source deviation"
+      ],
+      "trigger_type": "session_behavioral_deviation",
+      "user": "mms_cmb"
+    },
+    {
+      "alert_id": "alert-3",
+      "llm_confidence": "medium",
+      "llm_explanation": "操作类型偏离历史基线；认证方式偏离历史基线；客户端版本偏离历史基线；来源地址偏离历史基线",
+      "recommended_action": "Review account activity, validate source context, and inspect the full session sequence.",
+      "session_id": "2689397",
+      "session_summary": {
+        "action_sequence": [
+          "AUTH"
+        ],
+        "event_count": 1,
+        "paths": [],
+        "src_ips": [
+          "124.74.41.42"
+        ],
+        "src_subnets": [
+          "124.74.41.0/24"
+        ]
+      },
+      "severity": "medium",
+      "status": "open",
+      "supporting_event_ids": [
+        "evt-5726a362-3"
+      ],
+      "supporting_scores": [
+        {
+          "item_id": "evt-5726a362-3",
+          "item_type": "event",
+          "manual_review_required": true,
+          "rule_hits": [
+            "source deviation",
+            "action deviation",
+            "auth deviation",
+            "client deviation"
+          ],
+          "score_action_deviation": 10,
+          "score_auth_deviation": 5,
+          "score_brute_force": 0,
+          "score_bulk_download": 0,
+          "score_client_deviation": 5,
+          "score_dormant_activation": 0,
+          "score_exfiltration": 0,
+          "score_failure_deviation": 0,
+          "score_first_time_ip": 0,
+          "score_in_out_deviation": 0,
+          "score_path_deviation": 0,
+          "score_privilege_path": 0,
+          "score_sensitive_file": 0,
+          "score_source_deviation": 40,
+          "score_time_deviation": 0,
+          "score_total": 60,
+          "score_unusual_result": 0,
+          "score_volume_deviation": 0,
+          "session_id": "2689397",
+          "threshold_hit": true,
+          "user": "farms_warn_dongyayh"
+        }
+      ],
+      "time_window": {
+        "end": "2026-05-20T00:00:00,429",
+        "start": "2026-05-20T00:00:00,429"
+      },
+      "trigger_reasons": [
+        "action deviation",
+        "auth deviation",
+        "client deviation",
+        "source deviation"
+      ],
+      "trigger_type": "session_behavioral_deviation",
+      "user": "farms_warn_dongyayh"
+    },
+    {
+      "alert_id": "alert-4",
+      "llm_confidence": "medium",
+      "llm_explanation": "操作类型偏离历史基线；认证方式偏离历史基线；客户端版本偏离历史基线；失败行为与历史失败率不一致；来源地址偏离历史基线",
+      "recommended_action": "Review account activity, validate source context, and inspect the full session sequence.",
+      "session_id": "2689999",
+      "session_summary": {
+        "action_sequence": [
+          "AUTH"
+        ],
+        "event_count": 1,
+        "paths": [],
+        "src_ips": [
+          "8.8.8.8"
+        ],
+        "src_subnets": [
+          "8.8.8.0/24"
+        ]
+      },
+      "severity": "high",
+      "status": "open",
+      "supporting_event_ids": [
+        "evt-5726a362-4"
+      ],
+      "supporting_scores": [
+        {
+          "item_id": "evt-5726a362-4",
+          "item_type": "event",
+          "manual_review_required": true,
+          "rule_hits": [
+            "source deviation",
+            "action deviation",
+            "auth deviation",
+            "client deviation",
+            "failure deviation"
+          ],
+          "score_action_deviation": 10,
+          "score_auth_deviation": 5,
+          "score_brute_force": 0,
+          "score_bulk_download": 0,
+          "score_client_deviation": 5,
+          "score_dormant_activation": 0,
+          "score_exfiltration": 0,
+          "score_failure_deviation": 25,
+          "score_first_time_ip": 0,
+          "score_in_out_deviation": 0,
+          "score_path_deviation": 0,
+          "score_privilege_path": 0,
+          "score_sensitive_file": 0,
+          "score_source_deviation": 40,
+          "score_time_deviation": 0,
+          "score_total": 85,
+          "score_unusual_result": 0,
+          "score_volume_deviation": 0,
+          "session_id": "2689999",
+          "threshold_hit": true,
+          "user": "mms_cmb"
+        }
+      ],
+      "time_window": {
+        "end": "2026-05-20T23:59:59,999",
+        "start": "2026-05-20T23:59:59,999"
+      },
+      "trigger_reasons": [
+        "action deviation",
+        "auth deviation",
+        "client deviation",
+        "failure deviation",
+        "source deviation"
+      ],
+      "trigger_type": "session_behavioral_deviation",
+      "user": "mms_cmb"
+    },
+    {
+      "alert_id": "alert-5",
+      "llm_confidence": "medium",
+      "llm_explanation": "操作类型偏离历史基线；访问路径偏离历史基线；来源地址偏离历史基线",
+      "recommended_action": "Review account activity, validate source context, and inspect the full session sequence.",
+      "session_id": "sess-1",
+      "session_summary": {
+        "action_sequence": [
+          "GET",
+          "PUT"
+        ],
+        "event_count": 2,
+        "paths": [
+          "/upload",
+          "/upload/report.txt"
+        ],
+        "src_ips": [
+          "10.0.0.10"
+        ],
+        "src_subnets": [
+          "10.0.0.0/24"
+        ]
+      },
+      "severity": "medium",
+      "status": "open",
+      "supporting_event_ids": [
+        "evt-fd73e26b-1",
+        "evt-fd73e26b-2"
+      ],
+      "supporting_scores": [
+        {
+          "item_id": "evt-fd73e26b-1",
+          "item_type": "event",
+          "manual_review_required": true,
+          "rule_hits": [
+            "source deviation",
+            "action deviation",
+            "path deviation"
+          ],
+          "score_action_deviation": 10,
+          "score_auth_deviation": 0,
+          "score_brute_force": 0,
+          "score_bulk_download": 0,
+          "score_client_deviation": 0,
+          "score_dormant_activation": 0,
+          "score_exfiltration": 0,
+          "score_failure_deviation": 0,
+          "score_first_time_ip": 0,
+          "score_in_out_deviation": 0,
+          "score_path_deviation": 10,
+          "score_privilege_path": 0,
+          "score_sensitive_file": 0,
+          "score_source_deviation": 40,
+          "score_time_deviation": 0,
+          "score_total": 60,
+          "score_unusual_result": 0,
+          "score_volume_deviation": 0,
+          "session_id": "sess-1",
+          "threshold_hit": true,
+          "user": "alice"
+        },
+        {
+          "item_id": "evt-fd73e26b-2",
+          "item_type": "event",
+          "manual_review_required": true,
+          "rule_hits": [
+            "source deviation",
+            "action deviation",
+            "path deviation"
+          ],
+          "score_action_deviation": 10,
+          "score_auth_deviation": 0,
+          "score_brute_force": 0,
+          "score_bulk_download": 0,
+          "score_client_deviation": 0,
+          "score_dormant_activation": 0,
+          "score_exfiltration": 0,
+          "score_failure_deviation": 0,
+          "score_first_time_ip": 0,
+          "score_in_out_deviation": 0,
+          "score_path_deviation": 10,
+          "score_privilege_path": 0,
+          "score_sensitive_file": 0,
+          "score_source_deviation": 40,
+          "score_time_deviation": 0,
+          "score_total": 60,
+          "score_unusual_result": 0,
+          "score_volume_deviation": 0,
+          "session_id": "sess-1",
+          "threshold_hit": true,
+          "user": "alice"
+        }
+      ],
+      "time_window": {
+        "end": "2026-05-26T09:05:00Z",
+        "start": "2026-05-26T09:00:00Z"
+      },
+      "trigger_reasons": [
+        "action deviation",
+        "path deviation",
+        "source deviation"
+      ],
+      "trigger_type": "session_behavioral_deviation",
+      "user": "alice"
+    },
+    {
+      "alert_id": "alert-6",
+      "llm_confidence": "medium",
+      "llm_explanation": "操作类型偏离历史基线；访问路径偏离历史基线；来源地址偏离历史基线",
+      "recommended_action": "Review account activity, validate source context, and inspect the full session sequence.",
+      "session_id": "sess-2",
+      "session_summary": {
+        "action_sequence": [
+          "LIST"
+        ],
+        "event_count": 1,
+        "paths": [
+          "/home/bob"
+        ],
+        "src_ips": [
+          "10.0.0.20"
+        ],
+        "src_subnets": [
+          "10.0.0.0/24"
+        ]
+      },
+      "severity": "medium",
+      "status": "open",
+      "supporting_event_ids": [
+        "evt-fd73e26b-3"
+      ],
+      "supporting_scores": [
+        {
+          "item_id": "evt-fd73e26b-3",
+          "item_type": "event",
+          "manual_review_required": true,
+          "rule_hits": [
+            "source deviation",
+            "action deviation",
+            "path deviation"
+          ],
+          "score_action_deviation": 10,
+          "score_auth_deviation": 0,
+          "score_brute_force": 0,
+          "score_bulk_download": 0,
+          "score_client_deviation": 0,
+          "score_dormant_activation": 0,
+          "score_exfiltration": 0,
+          "score_failure_deviation": 0,
+          "score_first_time_ip": 0,
+          "score_in_out_deviation": 0,
+          "score_path_deviation": 10,
+          "score_privilege_path": 0,
+          "score_sensitive_file": 0,
+          "score_source_deviation": 40,
+          "score_time_deviation": 0,
+          "score_total": 60,
+          "score_unusual_result": 0,
+          "score_volume_deviation": 0,
+          "session_id": "sess-2",
+          "threshold_hit": true,
+          "user": "bob"
+        }
+      ],
+      "time_window": {
+        "end": "2026-05-26T09:10:00Z",
+        "start": "2026-05-26T09:10:00Z"
+      },
+      "trigger_reasons": [
+        "action deviation",
+        "path deviation",
+        "source deviation"
+      ],
+      "trigger_type": "session_behavioral_deviation",
+      "user": "bob"
+    },
+    {
+      "alert_id": "alert-7",
+      "llm_confidence": "medium",
+      "llm_explanation": "操作类型偏离历史基线；失败行为与历史失败率不一致；访问路径偏离历史基线；来源地址偏离历史基线",
+      "recommended_action": "Review account activity, validate source context, and inspect the full session sequence.",
+      "session_id": "sess-9",
+      "session_summary": {
+        "action_sequence": [
+          "DELETE"
+        ],
+        "event_count": 1,
+        "paths": [
+          "/secret"
+        ],
+        "src_ips": [
+          "203.0.113.55"
+        ],
+        "src_subnets": [
+          "203.0.113.0/24"
+        ]
+      },
+      "severity": "high",
+      "status": "open",
+      "supporting_event_ids": [
+        "evt-fd73e26b-4"
+      ],
+      "supporting_scores": [
+        {
+          "item_id": "evt-fd73e26b-4",
+          "item_type": "event",
+          "manual_review_required": true,
+          "rule_hits": [
+            "source deviation",
+            "action deviation",
+            "path deviation",
+            "failure deviation"
+          ],
+          "score_action_deviation": 10,
+          "score_auth_deviation": 0,
+          "score_brute_force": 0,
+          "score_bulk_download": 0,
+          "score_client_deviation": 0,
+          "score_dormant_activation": 0,
+          "score_exfiltration": 0,
+          "score_failure_deviation": 25,
+          "score_first_time_ip": 0,
+          "score_in_out_deviation": 0,
+          "score_path_deviation": 10,
+          "score_privilege_path": 0,
+          "score_sensitive_file": 0,
+          "score_source_deviation": 40,
+          "score_time_deviation": 0,
+          "score_total": 85,
+          "score_unusual_result": 0,
+          "score_volume_deviation": 0,
+          "session_id": "sess-9",
+          "threshold_hit": true,
+          "user": "alice"
+        }
+      ],
+      "time_window": {
+        "end": "2026-05-26T23:30:00Z",
+        "start": "2026-05-26T23:30:00Z"
+      },
+      "trigger_reasons": [
+        "action deviation",
+        "failure deviation",
+        "path deviation",
+        "source deviation"
+      ],
+      "trigger_type": "session_behavioral_deviation",
+      "user": "alice"
+    }
+  ],
+  "confidence": "medium",
+  "created_at": "2026-05-28T02:18:01+00:00",
+  "evidence_refs": [],
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "review_task2_hist2",
+  "source_name": "build_alerts.py",
+  "source_type": "script",
+  "task_id": "task2"
+}

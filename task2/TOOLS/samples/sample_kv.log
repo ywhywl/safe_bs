@@ -1,0 +1,4 @@
+timestamp=2026-05-26T08:58:00Z user=ops src_ip=10.10.1.15 session_id=s-100 action=LIST path=/dropbox result=ok bytes_in=0 bytes_out=120
+timestamp=2026-05-26T09:01:00Z user=ops src_ip=10.10.1.15 session_id=s-100 action=GET path=/dropbox/config.yml result=ok bytes_in=0 bytes_out=2048
+timestamp=2026-05-26T09:03:00Z user=finance src_ip=10.10.2.20 session_id=s-200 action=PUT path=/finance/payroll.csv result=ok bytes_in=4096 bytes_out=0
+timestamp=2026-05-26T23:40:00Z user=finance src_ip=198.51.100.77 session_id=s-999 action=DELETE path=/finance/payroll.csv result=denied bytes_in=0 bytes_out=0

@@ -1,0 +1,5 @@
+{
+  "suppress_users": [],
+  "trusted_src_subnets": ["172.31.160.0/24", "202.104.136.0/24", "220.248.41.0/24", "124.74.41.0/24", "101.68.90.0/24", "113.98.240.0/24"],
+  "deprioritize_trigger_types": ["multi_source_burst"]
+}

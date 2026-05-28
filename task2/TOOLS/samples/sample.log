@@ -1,0 +1,4 @@
+2026-05-26T09:00:00Z alice 10.0.0.10 sess-1 GET /upload ok
+2026-05-26T09:05:00Z alice 10.0.0.10 sess-1 PUT /upload/report.txt ok
+2026-05-26T09:10:00Z bob 10.0.0.20 sess-2 LIST /home/bob ok
+2026-05-26T23:30:00Z alice 203.0.113.55 sess-9 DELETE /secret suspicious

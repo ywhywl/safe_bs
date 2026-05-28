@@ -1,0 +1,70 @@
+{
+  "confidence": "medium",
+  "created_at": "2026-05-28T06:12:22+00:00",
+  "evidence_refs": [],
+  "files": [
+    {
+      "path": "evidence/manual_validation_note.md",
+      "size": 312
+    },
+    {
+      "path": "json/ai_usage_trace.json",
+      "size": 493
+    },
+    {
+      "path": "json/task1_evidence_index.json",
+      "size": 1166
+    },
+    {
+      "path": "json/task1_execution_timeline.json",
+      "size": 709
+    },
+    {
+      "path": "json/task1_recon_facts.json",
+      "size": 2379
+    },
+    {
+      "path": "json/task1_report_context.json",
+      "size": 4115
+    },
+    {
+      "path": "json/task1_searchsploit_matches.json",
+      "size": 784
+    },
+    {
+      "path": "json/task1_target_profile.json",
+      "size": 1010
+    },
+    {
+      "path": "json/task1_validation_plan.json",
+      "size": 1824
+    },
+    {
+      "path": "json/task1_validation_results.json",
+      "size": 716
+    },
+    {
+      "path": "json/task1_vuln_hypotheses.json",
+      "size": 916
+    },
+    {
+      "path": "json/tool_manifest.json",
+      "size": 937
+    },
+    {
+      "path": "raw/nmap.txt",
+      "size": 150
+    },
+    {
+      "path": "raw/recon_meta.env",
+      "size": 254
+    }
+  ],
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "review_task1_batch_120.133.131.110",
+  "source_name": "build_manifests.py",
+  "source_type": "script",
+  "task_id": "task1"
+}

@@ -1,0 +1,55 @@
+{
+  "confidence": "medium",
+  "created_at": "2026-05-28T06:12:21+00:00",
+  "decision_points": [
+    {
+      "manual_review_required": true,
+      "selected_hypothesis": "",
+      "sftp_candidate_ports": [
+        "2222",
+        "10022"
+      ]
+    }
+  ],
+  "evidence_refs": [],
+  "goal": "Validate the highest priority hypothesis within the authorized boundary.",
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "rollback_or_abort_conditions": [
+    "Service identity mismatch",
+    "Evidence suggests out-of-scope impact",
+    "Target instability or risk of destructive change"
+  ],
+  "run_id": "review_task1_batch_120.133.131.110",
+  "source_name": "build_validation_plan.py",
+  "source_type": "script",
+  "task_id": "task1",
+  "validation_sequence": [
+    {
+      "evidence_to_capture": [
+        "banner",
+        "imported nmap output",
+        "service response",
+        "sftp candidate ports: ['2222', '10022']"
+      ],
+      "expected_signal": "Consistent banner, identified SSH/SFTP port, and service fingerprint alignment",
+      "objective": "Confirm target service identity and reachable protocol surface.",
+      "safety_boundary": "No destructive write or persistence",
+      "step_id": "s1",
+      "stop_condition": "Identity is inconsistent with the hypothesis"
+    },
+    {
+      "evidence_to_capture": [
+        "command transcript",
+        "response summary",
+        "screenshots if applicable"
+      ],
+      "expected_signal": "Observable validation evidence without exceeding scope",
+      "objective": "Perform minimal authorized validation aligned with the selected hypothesis.",
+      "safety_boundary": "Stop on ambiguity and require manual review",
+      "step_id": "s2",
+      "stop_condition": "Unexpected service behavior or scope violation risk"
+    }
+  ]
+}

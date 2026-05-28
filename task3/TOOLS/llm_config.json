@@ -1,0 +1,22 @@
+{
+  "llm": {
+    "mode": "external",
+    "external": {
+      "provider": "claude_code",
+      "description": "Claude Code 会话作为外网 LLM，无需 API 调用，由 skill 驱动生成报告"
+    },
+    "internal": {
+      "provider": "openai_compat",
+      "model": "glm-5.1",
+      "base_url": "",
+      "api_key": "",
+      "description": "内网私有化 LLM，OpenAI 兼容协议。填入 base_url 和 api_key 后切换 mode=internal 即生效"
+    }
+  },
+  "_instructions": {
+    "mode": "external 或 internal。external 模式下由 Claude Code skill 生成报告；internal 模式下由脚本自动调用内网 LLM API",
+    "internal.base_url": "内网 LLM API 地址，如 http://10.x.x.x:8080/v1/chat/completions",
+    "internal.api_key": "内网 LLM 的认证 token",
+    "internal.model": "内网模型名称，当前为 glm-5.1"
+  }
+}

@@ -1,0 +1,5 @@
+Nmap scan report for 120.133.131.110
+Host is up.
+PORT     STATE SERVICE VERSION
+2222/tcp open  ssh     OpenSSH 8.2
+10022/tcp open ssh     OpenSSH 9.3

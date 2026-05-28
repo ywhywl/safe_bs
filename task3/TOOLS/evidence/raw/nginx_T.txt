@@ -1,0 +1,32 @@
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+server {
+    listen 80;
+    server_name demo.local;
+    autoindex on;
+    location /admin {
+        proxy_pass http://admin_backend;
+    }
+    location / {
+        root /usr/share/nginx/html;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name secure.demo.local;
+    ssl_protocols TLSv1 TLSv1.2;
+    add_header X-Frame-Options SAMEORIGIN;
+    location /app {
+        proxy_pass http://backend;
+    }
+}
+
+upstream backend {
+    server 127.0.0.1:8080;
+}
+
+upstream admin_backend {
+    server 127.0.0.1:9000;
+}

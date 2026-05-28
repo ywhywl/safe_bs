@@ -1,0 +1,397 @@
+{
+  "confidence": "medium",
+  "created_at": "2026-05-28T02:18:01+00:00",
+  "evidence_refs": [],
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "review_task2_hist2",
+  "session_count": 7,
+  "sessions": [
+    {
+      "action_sequence": [
+        "AUTH"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-20T00:00:00,018",
+      "event_count": 1,
+      "inferred_user": "",
+      "login_failure_count": 0,
+      "login_success_count": 1,
+      "open_count": 0,
+      "paths": [],
+      "results": [
+        "ok"
+      ],
+      "session_id": "2689379",
+      "src_ips": [
+        "220.248.41.29"
+      ],
+      "start_time": "2026-05-20T00:00:00,018",
+      "summary": "session=2689379 users=['farms_warn_ruisuiyh'] inferred_user=- src_ips=['220.248.41.29'] actions=['AUTH']",
+      "unbalanced_session": false,
+      "users": [
+        "farms_warn_ruisuiyh"
+      ]
+    },
+    {
+      "action_sequence": [
+        "AUTH"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-20T00:00:00,223",
+      "event_count": 1,
+      "inferred_user": "",
+      "login_failure_count": 0,
+      "login_success_count": 1,
+      "open_count": 0,
+      "paths": [],
+      "results": [
+        "ok"
+      ],
+      "session_id": "2689385",
+      "src_ips": [
+        "202.104.136.69"
+      ],
+      "start_time": "2026-05-20T00:00:00,223",
+      "summary": "session=2689385 users=['mms_cmb'] inferred_user=- src_ips=['202.104.136.69'] actions=['AUTH']",
+      "unbalanced_session": false,
+      "users": [
+        "mms_cmb"
+      ]
+    },
+    {
+      "action_sequence": [
+        "AUTH"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-20T00:00:00,429",
+      "event_count": 1,
+      "inferred_user": "",
+      "login_failure_count": 0,
+      "login_success_count": 1,
+      "open_count": 0,
+      "paths": [],
+      "results": [
+        "ok"
+      ],
+      "session_id": "2689397",
+      "src_ips": [
+        "124.74.41.42"
+      ],
+      "start_time": "2026-05-20T00:00:00,429",
+      "summary": "session=2689397 users=['farms_warn_dongyayh'] inferred_user=- src_ips=['124.74.41.42'] actions=['AUTH']",
+      "unbalanced_session": false,
+      "users": [
+        "farms_warn_dongyayh"
+      ]
+    },
+    {
+      "action_sequence": [
+        "AUTH"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-20T23:59:59,999",
+      "event_count": 1,
+      "inferred_user": "",
+      "login_failure_count": 1,
+      "login_success_count": 0,
+      "open_count": 0,
+      "paths": [],
+      "results": [
+        "fail"
+      ],
+      "session_id": "2689999",
+      "src_ips": [
+        "8.8.8.8"
+      ],
+      "start_time": "2026-05-20T23:59:59,999",
+      "summary": "session=2689999 users=['mms_cmb'] inferred_user=- src_ips=['8.8.8.8'] actions=['AUTH']",
+      "unbalanced_session": false,
+      "users": [
+        "mms_cmb"
+      ]
+    },
+    {
+      "action_sequence": [
+        "GET",
+        "PUT"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-26T09:05:00Z",
+      "event_count": 2,
+      "inferred_user": "",
+      "login_failure_count": 0,
+      "login_success_count": 0,
+      "open_count": 0,
+      "paths": [
+        "/upload",
+        "/upload/report.txt"
+      ],
+      "results": [
+        "ok"
+      ],
+      "session_id": "sess-1",
+      "src_ips": [
+        "10.0.0.10"
+      ],
+      "start_time": "2026-05-26T09:00:00Z",
+      "summary": "session=sess-1 users=['alice'] inferred_user=- src_ips=['10.0.0.10'] actions=['GET', 'PUT']",
+      "unbalanced_session": false,
+      "users": [
+        "alice"
+      ]
+    },
+    {
+      "action_sequence": [
+        "LIST"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-26T09:10:00Z",
+      "event_count": 1,
+      "inferred_user": "",
+      "login_failure_count": 0,
+      "login_success_count": 0,
+      "open_count": 0,
+      "paths": [
+        "/home/bob"
+      ],
+      "results": [
+        "ok"
+      ],
+      "session_id": "sess-2",
+      "src_ips": [
+        "10.0.0.20"
+      ],
+      "start_time": "2026-05-26T09:10:00Z",
+      "summary": "session=sess-2 users=['bob'] inferred_user=- src_ips=['10.0.0.20'] actions=['LIST']",
+      "unbalanced_session": false,
+      "users": [
+        "bob"
+      ]
+    },
+    {
+      "action_sequence": [
+        "DELETE"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-26T23:30:00Z",
+      "event_count": 1,
+      "inferred_user": "",
+      "login_failure_count": 0,
+      "login_success_count": 0,
+      "open_count": 0,
+      "paths": [
+        "/secret"
+      ],
+      "results": [
+        "suspicious"
+      ],
+      "session_id": "sess-9",
+      "src_ips": [
+        "203.0.113.55"
+      ],
+      "start_time": "2026-05-26T23:30:00Z",
+      "summary": "session=sess-9 users=['alice'] inferred_user=- src_ips=['203.0.113.55'] actions=['DELETE']",
+      "unbalanced_session": false,
+      "users": [
+        "alice"
+      ]
+    }
+  ],
+  "sessions_preview": [
+    {
+      "action_sequence": [
+        "AUTH"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-20T00:00:00,018",
+      "event_count": 1,
+      "inferred_user": "",
+      "login_failure_count": 0,
+      "login_success_count": 1,
+      "open_count": 0,
+      "paths": [],
+      "results": [
+        "ok"
+      ],
+      "session_id": "2689379",
+      "src_ips": [
+        "220.248.41.29"
+      ],
+      "start_time": "2026-05-20T00:00:00,018",
+      "summary": "session=2689379 users=['farms_warn_ruisuiyh'] inferred_user=- src_ips=['220.248.41.29'] actions=['AUTH']",
+      "unbalanced_session": false,
+      "users": [
+        "farms_warn_ruisuiyh"
+      ]
+    },
+    {
+      "action_sequence": [
+        "AUTH"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-20T00:00:00,223",
+      "event_count": 1,
+      "inferred_user": "",
+      "login_failure_count": 0,
+      "login_success_count": 1,
+      "open_count": 0,
+      "paths": [],
+      "results": [
+        "ok"
+      ],
+      "session_id": "2689385",
+      "src_ips": [
+        "202.104.136.69"
+      ],
+      "start_time": "2026-05-20T00:00:00,223",
+      "summary": "session=2689385 users=['mms_cmb'] inferred_user=- src_ips=['202.104.136.69'] actions=['AUTH']",
+      "unbalanced_session": false,
+      "users": [
+        "mms_cmb"
+      ]
+    },
+    {
+      "action_sequence": [
+        "AUTH"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-20T00:00:00,429",
+      "event_count": 1,
+      "inferred_user": "",
+      "login_failure_count": 0,
+      "login_success_count": 1,
+      "open_count": 0,
+      "paths": [],
+      "results": [
+        "ok"
+      ],
+      "session_id": "2689397",
+      "src_ips": [
+        "124.74.41.42"
+      ],
+      "start_time": "2026-05-20T00:00:00,429",
+      "summary": "session=2689397 users=['farms_warn_dongyayh'] inferred_user=- src_ips=['124.74.41.42'] actions=['AUTH']",
+      "unbalanced_session": false,
+      "users": [
+        "farms_warn_dongyayh"
+      ]
+    },
+    {
+      "action_sequence": [
+        "AUTH"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-20T23:59:59,999",
+      "event_count": 1,
+      "inferred_user": "",
+      "login_failure_count": 1,
+      "login_success_count": 0,
+      "open_count": 0,
+      "paths": [],
+      "results": [
+        "fail"
+      ],
+      "session_id": "2689999",
+      "src_ips": [
+        "8.8.8.8"
+      ],
+      "start_time": "2026-05-20T23:59:59,999",
+      "summary": "session=2689999 users=['mms_cmb'] inferred_user=- src_ips=['8.8.8.8'] actions=['AUTH']",
+      "unbalanced_session": false,
+      "users": [
+        "mms_cmb"
+      ]
+    },
+    {
+      "action_sequence": [
+        "GET",
+        "PUT"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-26T09:05:00Z",
+      "event_count": 2,
+      "inferred_user": "",
+      "login_failure_count": 0,
+      "login_success_count": 0,
+      "open_count": 0,
+      "paths": [
+        "/upload",
+        "/upload/report.txt"
+      ],
+      "results": [
+        "ok"
+      ],
+      "session_id": "sess-1",
+      "src_ips": [
+        "10.0.0.10"
+      ],
+      "start_time": "2026-05-26T09:00:00Z",
+      "summary": "session=sess-1 users=['alice'] inferred_user=- src_ips=['10.0.0.10'] actions=['GET', 'PUT']",
+      "unbalanced_session": false,
+      "users": [
+        "alice"
+      ]
+    },
+    {
+      "action_sequence": [
+        "LIST"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-26T09:10:00Z",
+      "event_count": 1,
+      "inferred_user": "",
+      "login_failure_count": 0,
+      "login_success_count": 0,
+      "open_count": 0,
+      "paths": [
+        "/home/bob"
+      ],
+      "results": [
+        "ok"
+      ],
+      "session_id": "sess-2",
+      "src_ips": [
+        "10.0.0.20"
+      ],
+      "start_time": "2026-05-26T09:10:00Z",
+      "summary": "session=sess-2 users=['bob'] inferred_user=- src_ips=['10.0.0.20'] actions=['LIST']",
+      "unbalanced_session": false,
+      "users": [
+        "bob"
+      ]
+    },
+    {
+      "action_sequence": [
+        "DELETE"
+      ],
+      "close_count": 0,
+      "end_time": "2026-05-26T23:30:00Z",
+      "event_count": 1,
+      "inferred_user": "",
+      "login_failure_count": 0,
+      "login_success_count": 0,
+      "open_count": 0,
+      "paths": [
+        "/secret"
+      ],
+      "results": [
+        "suspicious"
+      ],
+      "session_id": "sess-9",
+      "src_ips": [
+        "203.0.113.55"
+      ],
+      "start_time": "2026-05-26T23:30:00Z",
+      "summary": "session=sess-9 users=['alice'] inferred_user=- src_ips=['203.0.113.55'] actions=['DELETE']",
+      "unbalanced_session": false,
+      "users": [
+        "alice"
+      ]
+    }
+  ],
+  "source_name": "build_session_views.py",
+  "source_type": "script",
+  "task_id": "task2"
+}

@@ -1,0 +1,9 @@
+2026-05-19 00:01:06,349 nucc-30-test-uat-app-3-dmz-9 proftpd[3943018]: 172.31.160.55 (222.76.46.33[222.76.46.33]): SSH2 session opened.
+2026-05-19 00:01:06,350 nucc-30-test-uat-app-3-dmz-9 proftpd[3943018]: 172.31.160.55 (222.76.46.33[222.76.46.33]): SSH2 session closed.
+2026-05-19 00:01:06,352 nucc-30-test-uat-app-3-dmz-9 proftpd[3943030]: 172.31.160.55 (202.104.136.69[202.104.136.69]): SSH2 session opened.
+2026-05-19 00:01:06,352 nucc-30-test-uat-app-3-dmz-9 proftpd[3943031]: 172.31.160.55 (120.76.178.245[120.76.178.245]): SSH2 session opened.
+2026-05-19 00:01:06,353 nucc-30-test-uat-app-3-dmz-9 proftpd[3943031]: 172.31.160.55 (120.76.178.245[120.76.178.245]): SSH2 session closed.
+2026-05-19 00:01:06,354 nucc-30-test-uat-app-3-dmz-9 proftpd[3943033]: 172.31.160.55 (218.93.113.110[218.93.113.110]): SSH2 session opened.
+2026-05-19 00:01:06,354 nucc-30-test-uat-app-3-dmz-9 proftpd[3943033]: 172.31.160.55 (218.93.113.110[218.93.113.110]): SSH2 session closed.
+2026-05-19 00:01:06,431 nucc-30-test-uat-app-3-dmz-9 proftpd[3943620]: 172.31.160.55 (202.104.136.69[202.104.136.69]): USER tms_cmb: Login successful
+2026-05-19 00:01:06,432 nucc-30-test-uat-app-3-dmz-9 proftpd[3943621]: 172.31.160.55 (202.104.136.69[202.104.136.69]): USER tms_cmb: Login successful

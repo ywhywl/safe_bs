@@ -1,0 +1,18 @@
+{
+  "access_mode": "readonly",
+  "collection_constraints": [
+    "no remote modification",
+    "read-only inspection"
+  ],
+  "confidence": "medium",
+  "created_at": "2026-05-28T02:18:00+00:00",
+  "evidence_refs": [],
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "review_task3_evidence2",
+  "source_name": "build_inventory.py",
+  "source_type": "script",
+  "target_host": "task3/TOOLS/evidence/sample_nginx_T.txt",
+  "task_id": "task3"
+}

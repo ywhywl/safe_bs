@@ -1,0 +1,4172 @@
+{
+  "asset_summary": [
+    {
+      "host": "task3/TOOLS/evidence/sample_nginx_T.txt",
+      "ports": [],
+      "roles": [
+        "nginx"
+      ]
+    }
+  ],
+  "confidence": "medium",
+  "config_facts": {
+    "alias_try_files_pairs_count": 0,
+    "autoindex": true,
+    "client_max_body_size_unlimited": true,
+    "confidence": "medium",
+    "config_count": 1,
+    "config_summaries": {
+      "nginx_T.txt": {
+        "listen_ports": [
+          [
+            "80"
+          ],
+          []
+        ],
+        "locations": [
+          "/admin",
+          "/",
+          "/app"
+        ],
+        "security_headers": [
+          "X-Frame-Options"
+        ],
+        "server_blocks": [
+          {
+            "has_access_log_off": false,
+            "has_allow_deny": false,
+            "has_client_max_body": false,
+            "has_https_redirect": false,
+            "has_if_in_location": false,
+            "has_limit_except": false,
+            "has_lua_access": false,
+            "has_proxy_cookie": false,
+            "has_ssl_block": false,
+            "listen": [
+              "80"
+            ],
+            "locations": [
+              "/admin",
+              "/"
+            ],
+            "options_403": false,
+            "proxy_cookie_samesite": false,
+            "proxy_cookie_secure": false,
+            "server_name": [
+              "demo.local"
+            ],
+            "ssl_has_ciphers": false,
+            "ssl_has_prefer": false,
+            "ssl_has_protocols": false
+          },
+          {
+            "has_access_log_off": false,
+            "has_allow_deny": false,
+            "has_client_max_body": false,
+            "has_https_redirect": false,
+            "has_if_in_location": false,
+            "has_limit_except": false,
+            "has_lua_access": false,
+            "has_proxy_cookie": false,
+            "has_ssl_block": true,
+            "listen": [],
+            "locations": [
+              "/app"
+            ],
+            "options_403": false,
+            "proxy_cookie_samesite": false,
+            "proxy_cookie_secure": false,
+            "server_name": [
+              "secure.demo.local"
+            ],
+            "ssl_has_ciphers": false,
+            "ssl_has_prefer": false,
+            "ssl_has_protocols": true
+          }
+        ],
+        "server_names": [
+          [
+            "demo.local"
+          ],
+          [
+            "secure.demo.local"
+          ]
+        ],
+        "server_tokens_off": false,
+        "tls_protocols": [
+          "TLSv1",
+          "TLSv1.2"
+        ]
+      }
+    },
+    "cookie_contains_org_code": false,
+    "cookie_has_samesite": false,
+    "cookie_has_secure_flag": false,
+    "created_at": "2026-05-28T02:18:00+00:00",
+    "deny_all_present": false,
+    "disable_symlinks_configured": false,
+    "duplicate_log_format_count": 0,
+    "error_page_uses_root_html": false,
+    "evidence_catalog": {
+      "nginx_T.txt": {
+        "alias_try_files_pairs_count": [],
+        "autoindex": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 7,
+            "line_text": "autoindex on;"
+          }
+        ],
+        "client_max_body_size_unlimited": [],
+        "cookie_contains_org_code": [],
+        "cookie_has_samesite": [],
+        "cookie_has_secure_flag": [],
+        "disable_symlinks_configured": [],
+        "duplicate_log_format_count": [],
+        "error_page_uses_root_html": [],
+        "has_access_log_off": [],
+        "has_empty_server_name": [],
+        "has_if_in_location": [],
+        "has_lua_shared_dict": [],
+        "has_open_redirect_risk": [],
+        "hidden_files_blocked": [],
+        "http_https_same_block": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 5,
+            "line_text": "listen 80;"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 17,
+            "line_text": "listen 443 ssl;"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 19,
+            "line_text": "ssl_protocols TLSv1 TLSv1.2;"
+          }
+        ],
+        "http_methods_limited": [],
+        "http_redirects_to_https": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 5,
+            "line_text": "listen 80;"
+          }
+        ],
+        "ip_hash_no_backup": [],
+        "limit_conn_configured": [],
+        "locations": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "log_escape_char_error": [],
+        "lua_session_partial": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "nginx_runs_as_nobody": [],
+        "ocsp_stapling_enabled": [],
+        "options_returns_403": [],
+        "proxy_buffer_configured": [],
+        "proxy_hide_headers_configured": [],
+        "proxy_pass_http_backend": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 9,
+            "line_text": "proxy_pass http://admin_backend;"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 22,
+            "line_text": "proxy_pass http://backend;"
+          }
+        ],
+        "proxy_pass_https_without_verify": [],
+        "proxy_redirect_has_invalid_value": [],
+        "proxy_timeout_configured": [],
+        "rate_limited_locations_ratio": [],
+        "real_ip_configured": [],
+        "scope_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "security_headers": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 20,
+            "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+          }
+        ],
+        "sensitive_no_cache_control": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 9,
+            "line_text": "proxy_pass http://admin_backend;"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 22,
+            "line_text": "proxy_pass http://backend;"
+          }
+        ],
+        "server_tokens_off": [],
+        "ssl_ciphers_defined": [],
+        "ssl_prefer_server_ciphers_on": [],
+        "ssl_session_cache_configured": [],
+        "status_pages_without_acl": [],
+        "tls_protocols": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 19,
+            "line_text": "ssl_protocols TLSv1 TLSv1.2;"
+          }
+        ],
+        "upload_dir_execution_blocked": [],
+        "upstream_has_duplicate_server": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 26,
+            "line_text": "upstream backend {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 27,
+            "line_text": "server 127.0.0.1:8080;"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 30,
+            "line_text": "upstream admin_backend {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 31,
+            "line_text": "server 127.0.0.1:9000;"
+          }
+        ],
+        "upstream_keepalive_configured": [],
+        "weak_cipher_keywords": [],
+        "worker_connections_value": [],
+        "worker_processes_one": []
+      }
+    },
+    "evidence_refs": [],
+    "has_access_log_off": false,
+    "has_empty_server_name": false,
+    "has_if_in_location": false,
+    "has_lua_shared_dict": false,
+    "has_open_redirect_risk": false,
+    "hidden_files_blocked": false,
+    "http_https_same_block": false,
+    "http_methods_limited": false,
+    "http_redirects_to_https": false,
+    "ip_hash_no_backup": false,
+    "limit_conn_configured": false,
+    "locations": [
+      "/admin",
+      "/",
+      "/app"
+    ],
+    "log_escape_char_error": false,
+    "lua_session_partial": false,
+    "manual_review_required": false,
+    "nginx_runs_as_nobody": false,
+    "notes": "",
+    "ocsp_stapling_enabled": false,
+    "operator": "wenlongy",
+    "options_returns_403": false,
+    "proxy_buffer_configured": false,
+    "proxy_hide_headers_configured": false,
+    "proxy_pass_http_backend": true,
+    "proxy_pass_https_without_verify": false,
+    "proxy_redirect_has_invalid_value": false,
+    "proxy_timeout_configured": false,
+    "rate_limited_locations": 0,
+    "rate_limited_locations_ratio": 0.0,
+    "real_ip_configured": false,
+    "run_id": "review_task3_evidence2",
+    "security_headers": [
+      "X-Frame-Options"
+    ],
+    "sensitive_no_cache_control": true,
+    "server_tokens_off": false,
+    "source_name": "parse_config_facts.py",
+    "source_type": "script",
+    "ssl_ciphers": "",
+    "ssl_ciphers_defined": false,
+    "ssl_prefer_server_ciphers_on": false,
+    "ssl_session_cache_configured": false,
+    "status_pages_without_acl": false,
+    "task_id": "task3",
+    "tls_protocols": [
+      "TLSv1",
+      "TLSv1.2"
+    ],
+    "total_locations": 3,
+    "upload_dir_execution_blocked": true,
+    "upstream_has_duplicate_server": false,
+    "upstream_keepalive_configured": false,
+    "upstreams": [
+      "admin_backend",
+      "backend"
+    ],
+    "weak_cipher_keywords": [],
+    "worker_connections_value": 1024,
+    "worker_processes_one": false
+  },
+  "config_files": {
+    "nginx_T.txt": "nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\nnginx: configuration file /etc/nginx/nginx.conf test is successful\n\nserver {\n    listen 80;\n    server_name demo.local;\n    autoindex on;\n    location /admin {\n        proxy_pass http://admin_backend;\n    }\n    location / {\n        root /usr/share/nginx/html;\n    }\n}\n\nserver {\n    listen 443 ssl;\n    server_name secure.demo.local;\n    ssl_protocols TLSv1 TLSv1.2;\n    add_header X-Frame-Options SAMEORIGIN;\n    location /app {\n        proxy_pass http://backend;\n    }\n}\n\nupstream backend {\n    server 127.0.0.1:8080;\n}\n\nupstream admin_backend {\n    server 127.0.0.1:9000;\n}\n"
+  },
+  "created_at": "2026-05-28T02:18:01+00:00",
+  "evidence_index": {
+    "risk_count": 29,
+    "rule_hit_count": 29,
+    "rule_hits_with_refs": [
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 19,
+            "line_text": "ssl_protocols TLSv1 TLSv1.2;"
+          }
+        ],
+        "field": "tls_protocols",
+        "observed_value": [
+          "TLSv1",
+          "TLSv1.2"
+        ],
+        "remediation": "禁用旧版 TLS，仅保留 TLSv1.2 和 TLSv1.3。",
+        "rule_id": "tls_weak_protocol",
+        "severity": "high",
+        "title": "TLS 协议版本包含不安全的旧版本"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 19,
+            "line_text": "ssl_protocols TLSv1 TLSv1.2;"
+          }
+        ],
+        "field": "tls_protocols",
+        "observed_value": [
+          "TLSv1",
+          "TLSv1.2"
+        ],
+        "remediation": "在 ssl_protocols 中加入 TLSv1.3，提升安全性和性能。",
+        "rule_id": "tls_v13_missing",
+        "severity": "medium",
+        "title": "未启用 TLSv1.3（更高效更安全的协议版本）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 20,
+            "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+          }
+        ],
+        "field": "security_headers",
+        "observed_value": [
+          "X-Frame-Options"
+        ],
+        "remediation": "在 server 或 location 块中添加 X-Content-Type-Options: nosniff 和 Content-Security-Policy 头。",
+        "rule_id": "missing_security_headers",
+        "severity": "medium",
+        "title": "缺少关键安全响应头"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 7,
+            "line_text": "autoindex on;"
+          }
+        ],
+        "field": "autoindex",
+        "observed_value": true,
+        "remediation": "除非有明确的业务需求，应关闭 autoindex。",
+        "rule_id": "autoindex_enabled",
+        "severity": "high",
+        "title": "目录列表功能已开启"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 20,
+            "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+          }
+        ],
+        "field": "security_headers",
+        "observed_value": [
+          "X-Frame-Options"
+        ],
+        "remediation": "对 HTTPS 服务添加 Strict-Transport-Security 头（建议 max-age≥63072000）。",
+        "rule_id": "missing_hsts",
+        "severity": "high",
+        "title": "缺少 Strict-Transport-Security 头"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 20,
+            "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+          }
+        ],
+        "field": "security_headers",
+        "observed_value": [
+          "X-Frame-Options"
+        ],
+        "remediation": "添加 Referrer-Policy 头以减少意外的 referrer 信息泄露。",
+        "rule_id": "missing_referrer_policy",
+        "severity": "low",
+        "title": "缺少 Referrer-Policy 头"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "server_tokens_off",
+        "observed_value": false,
+        "remediation": "设置 server_tokens off 以减少版本信息暴露。",
+        "rule_id": "server_tokens_enabled",
+        "severity": "medium",
+        "title": "server_tokens 未关闭"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "locations",
+        "observed_value": [
+          "/admin",
+          "/",
+          "/app"
+        ],
+        "remediation": "限制或加固敏感路径，确保不被广泛暴露。",
+        "rule_id": "sensitive_location_exposed",
+        "severity": "medium",
+        "title": "敏感路径对外暴露"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 5,
+            "line_text": "listen 80;"
+          }
+        ],
+        "field": "http_redirects_to_https",
+        "observed_value": false,
+        "remediation": "HTTP server 块应配置 return 301 https://$host$request_uri 重定向到 HTTPS。",
+        "rule_id": "http_no_redirect_to_https",
+        "severity": "high",
+        "title": "HTTP 监听端口未重定向到 HTTPS"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "cookie_has_secure_flag",
+        "observed_value": false,
+        "remediation": "在 proxy_cookie_path 中添加 Secure 标记，确保 cookie 仅通过 HTTPS 传输。",
+        "rule_id": "cookie_missing_secure_flag",
+        "severity": "medium",
+        "title": "proxy_cookie_path 设置缺少 Secure 标记"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "cookie_has_samesite",
+        "observed_value": false,
+        "remediation": "在 proxy_cookie_path 中添加 SameSite=Lax 或 SameSite=Strict，防止 CSRF 攻击。",
+        "rule_id": "cookie_missing_samesite",
+        "severity": "medium",
+        "title": "proxy_cookie_path 设置缺少 SameSite 属性"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "ssl_ciphers_defined",
+        "observed_value": false,
+        "remediation": "显式配置 ssl_ciphers，仅允许现代安全加密套件。",
+        "rule_id": "missing_ssl_ciphers_config",
+        "severity": "high",
+        "title": "未显式配置 ssl_ciphers（可能使用包含弱算法的默认值）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "ssl_session_cache_configured",
+        "observed_value": false,
+        "remediation": "配置 ssl_session_cache shared:SSL:10m 和 ssl_session_timeout 10m，提升 TLS 性能并安全缓存会话。",
+        "rule_id": "missing_ssl_session_cache",
+        "severity": "medium",
+        "title": "未配置 ssl_session_cache（影响 TLS 性能和会话恢复安全）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "ocsp_stapling_enabled",
+        "observed_value": false,
+        "remediation": "启用 ssl_stapling on 和 ssl_stapling_verify on，减少客户端证书验证延迟。",
+        "rule_id": "missing_ocsp_stapling",
+        "severity": "low",
+        "title": "未启用 OCSP Stapling（客户端需单独验证证书状态）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "rate_limited_locations_ratio",
+        "observed_value": 0.0,
+        "remediation": "使用 limit_req 或 limit_rate 对关键 location 配置速率限制。",
+        "rule_id": "missing_rate_limit",
+        "severity": "medium",
+        "title": "大部分 location 未配置速率限制"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "limit_conn_configured",
+        "observed_value": false,
+        "remediation": "在 http 块定义 limit_conn_zone $binary_remote_addr zone=conn_limit:10m，在 server/location 中配置 limit_conn conn_limit 100。",
+        "rule_id": "missing_conn_limit",
+        "severity": "medium",
+        "title": "未配置 limit_conn（缺少连接数限制，易受并发 DDoS）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 9,
+            "line_text": "proxy_pass http://admin_backend;"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 22,
+            "line_text": "proxy_pass http://backend;"
+          }
+        ],
+        "field": "proxy_pass_http_backend",
+        "observed_value": true,
+        "remediation": "将 proxy_pass 改为 https://，或在可信内网环境中明确标注风险。",
+        "rule_id": "proxy_pass_http_backend",
+        "severity": "medium",
+        "title": "proxy_pass 到 HTTP 后端（nginx 与后端间无加密）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "proxy_hide_headers_configured",
+        "observed_value": false,
+        "remediation": "配置 proxy_hide_header X-Powered-By; proxy_hide_header Server; 防止后端信息泄露到客户端。",
+        "rule_id": "missing_proxy_hide_headers",
+        "severity": "medium",
+        "title": "未配置 proxy_hide_header 隐藏后端响应头（X-Powered-By 等）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "http_methods_limited",
+        "observed_value": false,
+        "remediation": "使用 limit_except GET POST HEAD { deny all; } 限制非必要 HTTP 方法，尤其禁用 TRACE（防止 XST 攻击）。",
+        "rule_id": "unrestricted_http_methods",
+        "severity": "medium",
+        "title": "未限制危险 HTTP 方法（TRACE/DELETE/PUT 等可能被滥用）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "hidden_files_blocked",
+        "observed_value": false,
+        "remediation": "添加 location ~ /\\\\.{ deny all; } 阻止对所有隐藏文件的访问。",
+        "rule_id": "hidden_files_not_blocked",
+        "severity": "high",
+        "title": "未阻止对隐藏文件（.git/.env/.htaccess）的访问"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "disable_symlinks_configured",
+        "observed_value": false,
+        "remediation": "配置 disable_symlinks on 或 disable_symlinks if_not_owner，防止通过符号链接访问意外文件。",
+        "rule_id": "missing_disable_symlinks",
+        "severity": "low",
+        "title": "未配置 disable_symlinks（符号链接可能暴露意外文件）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "client_max_body_size_unlimited",
+        "observed_value": true,
+        "remediation": "在 http 或 server 块设置合理的 client_max_body_size（如 20m），防止恶意大文件上传耗尽资源。",
+        "rule_id": "client_max_body_size_unlimited",
+        "severity": "medium",
+        "title": "部分 server 未设置 client_max_body_size（允许超大文件上传）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "proxy_timeout_configured",
+        "observed_value": false,
+        "remediation": "配置 proxy_connect_timeout 5s; proxy_read_timeout 30s; proxy_send_timeout 30s; 合理控制后端超时。",
+        "rule_id": "missing_proxy_timeout_config",
+        "severity": "low",
+        "title": "未显式配置 proxy_connect/read/send_timeout（使用默认 60s 可能过长）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "worker_connections_value",
+        "observed_value": 1024,
+        "remediation": "将 worker_connections 提升到 4096 或更高，配合 worker_processes 提升并发能力。",
+        "rule_id": "worker_connections_low",
+        "severity": "low",
+        "title": "worker_connections 仅为 1024（并发能力偏低）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "upstream_keepalive_configured",
+        "observed_value": false,
+        "remediation": "在 upstream 块中添加 keepalive 32; 并在 proxy_set_header 中设置 Connection \"\"; 实现长连接复用。",
+        "rule_id": "missing_keepalive_to_upstream",
+        "severity": "low",
+        "title": "未配置 upstream keepalive（每次请求新建连接，性能浪费）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "real_ip_configured",
+        "observed_value": false,
+        "remediation": "配置 set_real_ip_from 10.0.0.0/8; 和 real_ip_header X-Forwarded-For; 确保日志和访问控制基于真实 IP。",
+        "rule_id": "missing_real_ip_from_proxy",
+        "severity": "medium",
+        "title": "未配置 set_real_ip_from（无法从代理层获取真实客户端 IP）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "ssl_prefer_server_ciphers_on",
+        "observed_value": false,
+        "remediation": "配置 ssl_prefer_server_ciphers on; 确保服务端优先选择强加密套件，而非让客户端选择。",
+        "rule_id": "missing_ssl_prefer_server_ciphers",
+        "severity": "medium",
+        "title": "未配置 ssl_prefer_server_ciphers on（客户端可能选择弱套件）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 4,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 8,
+            "line_text": "location /admin {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 11,
+            "line_text": "location / {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 16,
+            "line_text": "server {"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 21,
+            "line_text": "location /app {"
+          }
+        ],
+        "field": "proxy_buffer_configured",
+        "observed_value": false,
+        "remediation": "配置 proxy_buffer_size 8k; proxy_buffers 8 8k; 防止后端大响应头溢出缓冲区。",
+        "rule_id": "missing_buffer_config",
+        "severity": "low",
+        "title": "未显式配置 proxy_buffer_size/proxy_buffers（默认值可能导致大头部溢出）"
+      },
+      {
+        "evidence_refs": [
+          {
+            "file": "nginx_T.txt",
+            "line_no": 9,
+            "line_text": "proxy_pass http://admin_backend;"
+          },
+          {
+            "file": "nginx_T.txt",
+            "line_no": 22,
+            "line_text": "proxy_pass http://backend;"
+          }
+        ],
+        "field": "sensitive_no_cache_control",
+        "observed_value": true,
+        "remediation": "对包含敏感数据的 location 添加 add_header Cache-Control \"no-store, no-cache, must-revalidate\" always; 防止中间缓存保存敏感数据。",
+        "rule_id": "sensitive_content_no_cache_control",
+        "severity": "medium",
+        "title": "业务 location 缺少 Cache-Control no-store（敏感数据可能被中间缓存）"
+      }
+    ]
+  },
+  "evidence_refs": [],
+  "high_risks": [
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 19,
+              "line_text": "ssl_protocols TLSv1 TLSv1.2;"
+            }
+          ],
+          "field": "tls_protocols",
+          "observed_value": [
+            "TLSv1",
+            "TLSv1.2"
+          ]
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "禁用旧版 TLS，仅保留 TLSv1.2 和 TLSv1.3。",
+      "risk_id": "risk-1",
+      "severity": "high",
+      "status": "open",
+      "title": "TLS 协议版本包含不安全的旧版本"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 7,
+              "line_text": "autoindex on;"
+            }
+          ],
+          "field": "autoindex",
+          "observed_value": true
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "除非有明确的业务需求，应关闭 autoindex。",
+      "risk_id": "risk-4",
+      "severity": "high",
+      "status": "open",
+      "title": "目录列表功能已开启"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 20,
+              "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+            }
+          ],
+          "field": "security_headers",
+          "observed_value": [
+            "X-Frame-Options"
+          ]
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "对 HTTPS 服务添加 Strict-Transport-Security 头（建议 max-age≥63072000）。",
+      "risk_id": "risk-5",
+      "severity": "high",
+      "status": "open",
+      "title": "缺少 Strict-Transport-Security 头"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 5,
+              "line_text": "listen 80;"
+            }
+          ],
+          "field": "http_redirects_to_https",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "HTTP server 块应配置 return 301 https://$host$request_uri 重定向到 HTTPS。",
+      "risk_id": "risk-9",
+      "severity": "high",
+      "status": "open",
+      "title": "HTTP 监听端口未重定向到 HTTPS"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "ssl_ciphers_defined",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "显式配置 ssl_ciphers，仅允许现代安全加密套件。",
+      "risk_id": "risk-12",
+      "severity": "high",
+      "status": "open",
+      "title": "未显式配置 ssl_ciphers（可能使用包含弱算法的默认值）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "hidden_files_blocked",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "添加 location ~ /\\\\.{ deny all; } 阻止对所有隐藏文件的访问。",
+      "risk_id": "risk-20",
+      "severity": "high",
+      "status": "open",
+      "title": "未阻止对隐藏文件（.git/.env/.htaccess）的访问"
+    }
+  ],
+  "llm_analysis_required": true,
+  "llm_analysis_scope": [
+    "对规则命中结果做语义解释和优先级排序",
+    "识别规则未覆盖的潜在风险（如 alias+try_files 路径遍历细节、cookie 中 org_code 的业务影响）",
+    "为每个风险项补充具体的影响分析和加固建议",
+    "生成面向运维人员的可执行修复方案"
+  ],
+  "low_risks": [
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 20,
+              "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+            }
+          ],
+          "field": "security_headers",
+          "observed_value": [
+            "X-Frame-Options"
+          ]
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "添加 Referrer-Policy 头以减少意外的 referrer 信息泄露。",
+      "risk_id": "risk-6",
+      "severity": "low",
+      "status": "open",
+      "title": "缺少 Referrer-Policy 头"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "ocsp_stapling_enabled",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "启用 ssl_stapling on 和 ssl_stapling_verify on，减少客户端证书验证延迟。",
+      "risk_id": "risk-14",
+      "severity": "low",
+      "status": "open",
+      "title": "未启用 OCSP Stapling（客户端需单独验证证书状态）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "disable_symlinks_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 disable_symlinks on 或 disable_symlinks if_not_owner，防止通过符号链接访问意外文件。",
+      "risk_id": "risk-21",
+      "severity": "low",
+      "status": "open",
+      "title": "未配置 disable_symlinks（符号链接可能暴露意外文件）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "proxy_timeout_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 proxy_connect_timeout 5s; proxy_read_timeout 30s; proxy_send_timeout 30s; 合理控制后端超时。",
+      "risk_id": "risk-23",
+      "severity": "low",
+      "status": "open",
+      "title": "未显式配置 proxy_connect/read/send_timeout（使用默认 60s 可能过长）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "worker_connections_value",
+          "observed_value": 1024
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "将 worker_connections 提升到 4096 或更高，配合 worker_processes 提升并发能力。",
+      "risk_id": "risk-24",
+      "severity": "low",
+      "status": "open",
+      "title": "worker_connections 仅为 1024（并发能力偏低）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "upstream_keepalive_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 upstream 块中添加 keepalive 32; 并在 proxy_set_header 中设置 Connection \"\"; 实现长连接复用。",
+      "risk_id": "risk-25",
+      "severity": "low",
+      "status": "open",
+      "title": "未配置 upstream keepalive（每次请求新建连接，性能浪费）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "proxy_buffer_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 proxy_buffer_size 8k; proxy_buffers 8 8k; 防止后端大响应头溢出缓冲区。",
+      "risk_id": "risk-28",
+      "severity": "low",
+      "status": "open",
+      "title": "未显式配置 proxy_buffer_size/proxy_buffers（默认值可能导致大头部溢出）"
+    }
+  ],
+  "manual_review_required": false,
+  "medium_risks": [
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 19,
+              "line_text": "ssl_protocols TLSv1 TLSv1.2;"
+            }
+          ],
+          "field": "tls_protocols",
+          "observed_value": [
+            "TLSv1",
+            "TLSv1.2"
+          ]
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 ssl_protocols 中加入 TLSv1.3，提升安全性和性能。",
+      "risk_id": "risk-2",
+      "severity": "medium",
+      "status": "open",
+      "title": "未启用 TLSv1.3（更高效更安全的协议版本）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 20,
+              "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+            }
+          ],
+          "field": "security_headers",
+          "observed_value": [
+            "X-Frame-Options"
+          ]
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 server 或 location 块中添加 X-Content-Type-Options: nosniff 和 Content-Security-Policy 头。",
+      "risk_id": "risk-3",
+      "severity": "medium",
+      "status": "open",
+      "title": "缺少关键安全响应头"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "server_tokens_off",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "设置 server_tokens off 以减少版本信息暴露。",
+      "risk_id": "risk-7",
+      "severity": "medium",
+      "status": "open",
+      "title": "server_tokens 未关闭"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "locations",
+          "observed_value": [
+            "/admin",
+            "/",
+            "/app"
+          ]
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "限制或加固敏感路径，确保不被广泛暴露。",
+      "risk_id": "risk-8",
+      "severity": "medium",
+      "status": "open",
+      "title": "敏感路径对外暴露"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "cookie_has_secure_flag",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 proxy_cookie_path 中添加 Secure 标记，确保 cookie 仅通过 HTTPS 传输。",
+      "risk_id": "risk-10",
+      "severity": "medium",
+      "status": "open",
+      "title": "proxy_cookie_path 设置缺少 Secure 标记"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "cookie_has_samesite",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 proxy_cookie_path 中添加 SameSite=Lax 或 SameSite=Strict，防止 CSRF 攻击。",
+      "risk_id": "risk-11",
+      "severity": "medium",
+      "status": "open",
+      "title": "proxy_cookie_path 设置缺少 SameSite 属性"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "ssl_session_cache_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 ssl_session_cache shared:SSL:10m 和 ssl_session_timeout 10m，提升 TLS 性能并安全缓存会话。",
+      "risk_id": "risk-13",
+      "severity": "medium",
+      "status": "open",
+      "title": "未配置 ssl_session_cache（影响 TLS 性能和会话恢复安全）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "rate_limited_locations_ratio",
+          "observed_value": 0.0
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "使用 limit_req 或 limit_rate 对关键 location 配置速率限制。",
+      "risk_id": "risk-15",
+      "severity": "medium",
+      "status": "open",
+      "title": "大部分 location 未配置速率限制"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "limit_conn_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 http 块定义 limit_conn_zone $binary_remote_addr zone=conn_limit:10m，在 server/location 中配置 limit_conn conn_limit 100。",
+      "risk_id": "risk-16",
+      "severity": "medium",
+      "status": "open",
+      "title": "未配置 limit_conn（缺少连接数限制，易受并发 DDoS）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 9,
+              "line_text": "proxy_pass http://admin_backend;"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 22,
+              "line_text": "proxy_pass http://backend;"
+            }
+          ],
+          "field": "proxy_pass_http_backend",
+          "observed_value": true
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "将 proxy_pass 改为 https://，或在可信内网环境中明确标注风险。",
+      "risk_id": "risk-17",
+      "severity": "medium",
+      "status": "open",
+      "title": "proxy_pass 到 HTTP 后端（nginx 与后端间无加密）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "proxy_hide_headers_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 proxy_hide_header X-Powered-By; proxy_hide_header Server; 防止后端信息泄露到客户端。",
+      "risk_id": "risk-18",
+      "severity": "medium",
+      "status": "open",
+      "title": "未配置 proxy_hide_header 隐藏后端响应头（X-Powered-By 等）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "http_methods_limited",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "使用 limit_except GET POST HEAD { deny all; } 限制非必要 HTTP 方法，尤其禁用 TRACE（防止 XST 攻击）。",
+      "risk_id": "risk-19",
+      "severity": "medium",
+      "status": "open",
+      "title": "未限制危险 HTTP 方法（TRACE/DELETE/PUT 等可能被滥用）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "client_max_body_size_unlimited",
+          "observed_value": true
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 http 或 server 块设置合理的 client_max_body_size（如 20m），防止恶意大文件上传耗尽资源。",
+      "risk_id": "risk-22",
+      "severity": "medium",
+      "status": "open",
+      "title": "部分 server 未设置 client_max_body_size（允许超大文件上传）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "real_ip_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 set_real_ip_from 10.0.0.0/8; 和 real_ip_header X-Forwarded-For; 确保日志和访问控制基于真实 IP。",
+      "risk_id": "risk-26",
+      "severity": "medium",
+      "status": "open",
+      "title": "未配置 set_real_ip_from（无法从代理层获取真实客户端 IP）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "ssl_prefer_server_ciphers_on",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 ssl_prefer_server_ciphers on; 确保服务端优先选择强加密套件，而非让客户端选择。",
+      "risk_id": "risk-27",
+      "severity": "medium",
+      "status": "open",
+      "title": "未配置 ssl_prefer_server_ciphers on（客户端可能选择弱套件）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 9,
+              "line_text": "proxy_pass http://admin_backend;"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 22,
+              "line_text": "proxy_pass http://backend;"
+            }
+          ],
+          "field": "sensitive_no_cache_control",
+          "observed_value": true
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "对包含敏感数据的 location 添加 add_header Cache-Control \"no-store, no-cache, must-revalidate\" always; 防止中间缓存保存敏感数据。",
+      "risk_id": "risk-29",
+      "severity": "medium",
+      "status": "open",
+      "title": "业务 location 缺少 Cache-Control no-store（敏感数据可能被中间缓存）"
+    }
+  ],
+  "notes": "",
+  "operator": "wenlongy",
+  "overall_assessment": "只读巡检完成：6 高风险、16 中风险、7 低风险。",
+  "risk_summary": [
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 19,
+              "line_text": "ssl_protocols TLSv1 TLSv1.2;"
+            }
+          ],
+          "field": "tls_protocols",
+          "observed_value": [
+            "TLSv1",
+            "TLSv1.2"
+          ]
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "禁用旧版 TLS，仅保留 TLSv1.2 和 TLSv1.3。",
+      "risk_id": "risk-1",
+      "severity": "high",
+      "status": "open",
+      "title": "TLS 协议版本包含不安全的旧版本"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 19,
+              "line_text": "ssl_protocols TLSv1 TLSv1.2;"
+            }
+          ],
+          "field": "tls_protocols",
+          "observed_value": [
+            "TLSv1",
+            "TLSv1.2"
+          ]
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 ssl_protocols 中加入 TLSv1.3，提升安全性和性能。",
+      "risk_id": "risk-2",
+      "severity": "medium",
+      "status": "open",
+      "title": "未启用 TLSv1.3（更高效更安全的协议版本）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 20,
+              "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+            }
+          ],
+          "field": "security_headers",
+          "observed_value": [
+            "X-Frame-Options"
+          ]
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 server 或 location 块中添加 X-Content-Type-Options: nosniff 和 Content-Security-Policy 头。",
+      "risk_id": "risk-3",
+      "severity": "medium",
+      "status": "open",
+      "title": "缺少关键安全响应头"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 7,
+              "line_text": "autoindex on;"
+            }
+          ],
+          "field": "autoindex",
+          "observed_value": true
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "除非有明确的业务需求，应关闭 autoindex。",
+      "risk_id": "risk-4",
+      "severity": "high",
+      "status": "open",
+      "title": "目录列表功能已开启"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 20,
+              "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+            }
+          ],
+          "field": "security_headers",
+          "observed_value": [
+            "X-Frame-Options"
+          ]
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "对 HTTPS 服务添加 Strict-Transport-Security 头（建议 max-age≥63072000）。",
+      "risk_id": "risk-5",
+      "severity": "high",
+      "status": "open",
+      "title": "缺少 Strict-Transport-Security 头"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 20,
+              "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+            }
+          ],
+          "field": "security_headers",
+          "observed_value": [
+            "X-Frame-Options"
+          ]
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "添加 Referrer-Policy 头以减少意外的 referrer 信息泄露。",
+      "risk_id": "risk-6",
+      "severity": "low",
+      "status": "open",
+      "title": "缺少 Referrer-Policy 头"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "server_tokens_off",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "设置 server_tokens off 以减少版本信息暴露。",
+      "risk_id": "risk-7",
+      "severity": "medium",
+      "status": "open",
+      "title": "server_tokens 未关闭"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "locations",
+          "observed_value": [
+            "/admin",
+            "/",
+            "/app"
+          ]
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "限制或加固敏感路径，确保不被广泛暴露。",
+      "risk_id": "risk-8",
+      "severity": "medium",
+      "status": "open",
+      "title": "敏感路径对外暴露"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 5,
+              "line_text": "listen 80;"
+            }
+          ],
+          "field": "http_redirects_to_https",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "HTTP server 块应配置 return 301 https://$host$request_uri 重定向到 HTTPS。",
+      "risk_id": "risk-9",
+      "severity": "high",
+      "status": "open",
+      "title": "HTTP 监听端口未重定向到 HTTPS"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "cookie_has_secure_flag",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 proxy_cookie_path 中添加 Secure 标记，确保 cookie 仅通过 HTTPS 传输。",
+      "risk_id": "risk-10",
+      "severity": "medium",
+      "status": "open",
+      "title": "proxy_cookie_path 设置缺少 Secure 标记"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "cookie_has_samesite",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 proxy_cookie_path 中添加 SameSite=Lax 或 SameSite=Strict，防止 CSRF 攻击。",
+      "risk_id": "risk-11",
+      "severity": "medium",
+      "status": "open",
+      "title": "proxy_cookie_path 设置缺少 SameSite 属性"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "ssl_ciphers_defined",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "显式配置 ssl_ciphers，仅允许现代安全加密套件。",
+      "risk_id": "risk-12",
+      "severity": "high",
+      "status": "open",
+      "title": "未显式配置 ssl_ciphers（可能使用包含弱算法的默认值）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "ssl_session_cache_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 ssl_session_cache shared:SSL:10m 和 ssl_session_timeout 10m，提升 TLS 性能并安全缓存会话。",
+      "risk_id": "risk-13",
+      "severity": "medium",
+      "status": "open",
+      "title": "未配置 ssl_session_cache（影响 TLS 性能和会话恢复安全）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "ocsp_stapling_enabled",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "启用 ssl_stapling on 和 ssl_stapling_verify on，减少客户端证书验证延迟。",
+      "risk_id": "risk-14",
+      "severity": "low",
+      "status": "open",
+      "title": "未启用 OCSP Stapling（客户端需单独验证证书状态）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "rate_limited_locations_ratio",
+          "observed_value": 0.0
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "使用 limit_req 或 limit_rate 对关键 location 配置速率限制。",
+      "risk_id": "risk-15",
+      "severity": "medium",
+      "status": "open",
+      "title": "大部分 location 未配置速率限制"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "limit_conn_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 http 块定义 limit_conn_zone $binary_remote_addr zone=conn_limit:10m，在 server/location 中配置 limit_conn conn_limit 100。",
+      "risk_id": "risk-16",
+      "severity": "medium",
+      "status": "open",
+      "title": "未配置 limit_conn（缺少连接数限制，易受并发 DDoS）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 9,
+              "line_text": "proxy_pass http://admin_backend;"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 22,
+              "line_text": "proxy_pass http://backend;"
+            }
+          ],
+          "field": "proxy_pass_http_backend",
+          "observed_value": true
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "将 proxy_pass 改为 https://，或在可信内网环境中明确标注风险。",
+      "risk_id": "risk-17",
+      "severity": "medium",
+      "status": "open",
+      "title": "proxy_pass 到 HTTP 后端（nginx 与后端间无加密）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "proxy_hide_headers_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 proxy_hide_header X-Powered-By; proxy_hide_header Server; 防止后端信息泄露到客户端。",
+      "risk_id": "risk-18",
+      "severity": "medium",
+      "status": "open",
+      "title": "未配置 proxy_hide_header 隐藏后端响应头（X-Powered-By 等）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "http_methods_limited",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "使用 limit_except GET POST HEAD { deny all; } 限制非必要 HTTP 方法，尤其禁用 TRACE（防止 XST 攻击）。",
+      "risk_id": "risk-19",
+      "severity": "medium",
+      "status": "open",
+      "title": "未限制危险 HTTP 方法（TRACE/DELETE/PUT 等可能被滥用）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "hidden_files_blocked",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "添加 location ~ /\\\\.{ deny all; } 阻止对所有隐藏文件的访问。",
+      "risk_id": "risk-20",
+      "severity": "high",
+      "status": "open",
+      "title": "未阻止对隐藏文件（.git/.env/.htaccess）的访问"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "disable_symlinks_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 disable_symlinks on 或 disable_symlinks if_not_owner，防止通过符号链接访问意外文件。",
+      "risk_id": "risk-21",
+      "severity": "low",
+      "status": "open",
+      "title": "未配置 disable_symlinks（符号链接可能暴露意外文件）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "client_max_body_size_unlimited",
+          "observed_value": true
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 http 或 server 块设置合理的 client_max_body_size（如 20m），防止恶意大文件上传耗尽资源。",
+      "risk_id": "risk-22",
+      "severity": "medium",
+      "status": "open",
+      "title": "部分 server 未设置 client_max_body_size（允许超大文件上传）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "proxy_timeout_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 proxy_connect_timeout 5s; proxy_read_timeout 30s; proxy_send_timeout 30s; 合理控制后端超时。",
+      "risk_id": "risk-23",
+      "severity": "low",
+      "status": "open",
+      "title": "未显式配置 proxy_connect/read/send_timeout（使用默认 60s 可能过长）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "worker_connections_value",
+          "observed_value": 1024
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "将 worker_connections 提升到 4096 或更高，配合 worker_processes 提升并发能力。",
+      "risk_id": "risk-24",
+      "severity": "low",
+      "status": "open",
+      "title": "worker_connections 仅为 1024（并发能力偏低）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "upstream_keepalive_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "在 upstream 块中添加 keepalive 32; 并在 proxy_set_header 中设置 Connection \"\"; 实现长连接复用。",
+      "risk_id": "risk-25",
+      "severity": "low",
+      "status": "open",
+      "title": "未配置 upstream keepalive（每次请求新建连接，性能浪费）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "real_ip_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 set_real_ip_from 10.0.0.0/8; 和 real_ip_header X-Forwarded-For; 确保日志和访问控制基于真实 IP。",
+      "risk_id": "risk-26",
+      "severity": "medium",
+      "status": "open",
+      "title": "未配置 set_real_ip_from（无法从代理层获取真实客户端 IP）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "ssl_prefer_server_ciphers_on",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 ssl_prefer_server_ciphers on; 确保服务端优先选择强加密套件，而非让客户端选择。",
+      "risk_id": "risk-27",
+      "severity": "medium",
+      "status": "open",
+      "title": "未配置 ssl_prefer_server_ciphers on（客户端可能选择弱套件）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 4,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 8,
+              "line_text": "location /admin {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 11,
+              "line_text": "location / {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 16,
+              "line_text": "server {"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 21,
+              "line_text": "location /app {"
+            }
+          ],
+          "field": "proxy_buffer_configured",
+          "observed_value": false
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "配置 proxy_buffer_size 8k; proxy_buffers 8 8k; 防止后端大响应头溢出缓冲区。",
+      "risk_id": "risk-28",
+      "severity": "low",
+      "status": "open",
+      "title": "未显式配置 proxy_buffer_size/proxy_buffers（默认值可能导致大头部溢出）"
+    },
+    {
+      "evidence": [
+        {
+          "evidence_refs": [
+            {
+              "file": "nginx_T.txt",
+              "line_no": 9,
+              "line_text": "proxy_pass http://admin_backend;"
+            },
+            {
+              "file": "nginx_T.txt",
+              "line_no": 22,
+              "line_text": "proxy_pass http://backend;"
+            }
+          ],
+          "field": "sensitive_no_cache_control",
+          "observed_value": true
+        }
+      ],
+      "impact": "Potential hardening gap identified by rule.",
+      "remediation": "对包含敏感数据的 location 添加 add_header Cache-Control \"no-store, no-cache, must-revalidate\" always; 防止中间缓存保存敏感数据。",
+      "risk_id": "risk-29",
+      "severity": "medium",
+      "status": "open",
+      "title": "业务 location 缺少 Cache-Control no-store（敏感数据可能被中间缓存）"
+    }
+  ],
+  "roadmap": [
+    "优先处理高风险项：关闭目录浏览、修补路径遍历、统一会话校验覆盖",
+    "补齐缺失的安全响应头（HSTS、CSP、X-Content-Type-Options），并复核敏感路径的访问控制",
+    "修复 HTTP 未重定向到 HTTPS、cookie 缺少 Secure 标记、proxy_pass HTTPS 未验证证书",
+    "继续扩展规则库，覆盖鉴权、缓存、上传链路和反向代理边界"
+  ],
+  "rule_hits": [
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 19,
+          "line_text": "ssl_protocols TLSv1 TLSv1.2;"
+        }
+      ],
+      "field": "tls_protocols",
+      "observed_value": [
+        "TLSv1",
+        "TLSv1.2"
+      ],
+      "remediation": "禁用旧版 TLS，仅保留 TLSv1.2 和 TLSv1.3。",
+      "rule_id": "tls_weak_protocol",
+      "severity": "high",
+      "title": "TLS 协议版本包含不安全的旧版本"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 19,
+          "line_text": "ssl_protocols TLSv1 TLSv1.2;"
+        }
+      ],
+      "field": "tls_protocols",
+      "observed_value": [
+        "TLSv1",
+        "TLSv1.2"
+      ],
+      "remediation": "在 ssl_protocols 中加入 TLSv1.3，提升安全性和性能。",
+      "rule_id": "tls_v13_missing",
+      "severity": "medium",
+      "title": "未启用 TLSv1.3（更高效更安全的协议版本）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 20,
+          "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+        }
+      ],
+      "field": "security_headers",
+      "observed_value": [
+        "X-Frame-Options"
+      ],
+      "remediation": "在 server 或 location 块中添加 X-Content-Type-Options: nosniff 和 Content-Security-Policy 头。",
+      "rule_id": "missing_security_headers",
+      "severity": "medium",
+      "title": "缺少关键安全响应头"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 7,
+          "line_text": "autoindex on;"
+        }
+      ],
+      "field": "autoindex",
+      "observed_value": true,
+      "remediation": "除非有明确的业务需求，应关闭 autoindex。",
+      "rule_id": "autoindex_enabled",
+      "severity": "high",
+      "title": "目录列表功能已开启"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 20,
+          "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+        }
+      ],
+      "field": "security_headers",
+      "observed_value": [
+        "X-Frame-Options"
+      ],
+      "remediation": "对 HTTPS 服务添加 Strict-Transport-Security 头（建议 max-age≥63072000）。",
+      "rule_id": "missing_hsts",
+      "severity": "high",
+      "title": "缺少 Strict-Transport-Security 头"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 20,
+          "line_text": "add_header X-Frame-Options SAMEORIGIN;"
+        }
+      ],
+      "field": "security_headers",
+      "observed_value": [
+        "X-Frame-Options"
+      ],
+      "remediation": "添加 Referrer-Policy 头以减少意外的 referrer 信息泄露。",
+      "rule_id": "missing_referrer_policy",
+      "severity": "low",
+      "title": "缺少 Referrer-Policy 头"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "server_tokens_off",
+      "observed_value": false,
+      "remediation": "设置 server_tokens off 以减少版本信息暴露。",
+      "rule_id": "server_tokens_enabled",
+      "severity": "medium",
+      "title": "server_tokens 未关闭"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "locations",
+      "observed_value": [
+        "/admin",
+        "/",
+        "/app"
+      ],
+      "remediation": "限制或加固敏感路径，确保不被广泛暴露。",
+      "rule_id": "sensitive_location_exposed",
+      "severity": "medium",
+      "title": "敏感路径对外暴露"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 5,
+          "line_text": "listen 80;"
+        }
+      ],
+      "field": "http_redirects_to_https",
+      "observed_value": false,
+      "remediation": "HTTP server 块应配置 return 301 https://$host$request_uri 重定向到 HTTPS。",
+      "rule_id": "http_no_redirect_to_https",
+      "severity": "high",
+      "title": "HTTP 监听端口未重定向到 HTTPS"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "cookie_has_secure_flag",
+      "observed_value": false,
+      "remediation": "在 proxy_cookie_path 中添加 Secure 标记，确保 cookie 仅通过 HTTPS 传输。",
+      "rule_id": "cookie_missing_secure_flag",
+      "severity": "medium",
+      "title": "proxy_cookie_path 设置缺少 Secure 标记"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "cookie_has_samesite",
+      "observed_value": false,
+      "remediation": "在 proxy_cookie_path 中添加 SameSite=Lax 或 SameSite=Strict，防止 CSRF 攻击。",
+      "rule_id": "cookie_missing_samesite",
+      "severity": "medium",
+      "title": "proxy_cookie_path 设置缺少 SameSite 属性"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "ssl_ciphers_defined",
+      "observed_value": false,
+      "remediation": "显式配置 ssl_ciphers，仅允许现代安全加密套件。",
+      "rule_id": "missing_ssl_ciphers_config",
+      "severity": "high",
+      "title": "未显式配置 ssl_ciphers（可能使用包含弱算法的默认值）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "ssl_session_cache_configured",
+      "observed_value": false,
+      "remediation": "配置 ssl_session_cache shared:SSL:10m 和 ssl_session_timeout 10m，提升 TLS 性能并安全缓存会话。",
+      "rule_id": "missing_ssl_session_cache",
+      "severity": "medium",
+      "title": "未配置 ssl_session_cache（影响 TLS 性能和会话恢复安全）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "ocsp_stapling_enabled",
+      "observed_value": false,
+      "remediation": "启用 ssl_stapling on 和 ssl_stapling_verify on，减少客户端证书验证延迟。",
+      "rule_id": "missing_ocsp_stapling",
+      "severity": "low",
+      "title": "未启用 OCSP Stapling（客户端需单独验证证书状态）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "rate_limited_locations_ratio",
+      "observed_value": 0.0,
+      "remediation": "使用 limit_req 或 limit_rate 对关键 location 配置速率限制。",
+      "rule_id": "missing_rate_limit",
+      "severity": "medium",
+      "title": "大部分 location 未配置速率限制"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "limit_conn_configured",
+      "observed_value": false,
+      "remediation": "在 http 块定义 limit_conn_zone $binary_remote_addr zone=conn_limit:10m，在 server/location 中配置 limit_conn conn_limit 100。",
+      "rule_id": "missing_conn_limit",
+      "severity": "medium",
+      "title": "未配置 limit_conn（缺少连接数限制，易受并发 DDoS）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 9,
+          "line_text": "proxy_pass http://admin_backend;"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 22,
+          "line_text": "proxy_pass http://backend;"
+        }
+      ],
+      "field": "proxy_pass_http_backend",
+      "observed_value": true,
+      "remediation": "将 proxy_pass 改为 https://，或在可信内网环境中明确标注风险。",
+      "rule_id": "proxy_pass_http_backend",
+      "severity": "medium",
+      "title": "proxy_pass 到 HTTP 后端（nginx 与后端间无加密）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "proxy_hide_headers_configured",
+      "observed_value": false,
+      "remediation": "配置 proxy_hide_header X-Powered-By; proxy_hide_header Server; 防止后端信息泄露到客户端。",
+      "rule_id": "missing_proxy_hide_headers",
+      "severity": "medium",
+      "title": "未配置 proxy_hide_header 隐藏后端响应头（X-Powered-By 等）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "http_methods_limited",
+      "observed_value": false,
+      "remediation": "使用 limit_except GET POST HEAD { deny all; } 限制非必要 HTTP 方法，尤其禁用 TRACE（防止 XST 攻击）。",
+      "rule_id": "unrestricted_http_methods",
+      "severity": "medium",
+      "title": "未限制危险 HTTP 方法（TRACE/DELETE/PUT 等可能被滥用）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "hidden_files_blocked",
+      "observed_value": false,
+      "remediation": "添加 location ~ /\\\\.{ deny all; } 阻止对所有隐藏文件的访问。",
+      "rule_id": "hidden_files_not_blocked",
+      "severity": "high",
+      "title": "未阻止对隐藏文件（.git/.env/.htaccess）的访问"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "disable_symlinks_configured",
+      "observed_value": false,
+      "remediation": "配置 disable_symlinks on 或 disable_symlinks if_not_owner，防止通过符号链接访问意外文件。",
+      "rule_id": "missing_disable_symlinks",
+      "severity": "low",
+      "title": "未配置 disable_symlinks（符号链接可能暴露意外文件）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "client_max_body_size_unlimited",
+      "observed_value": true,
+      "remediation": "在 http 或 server 块设置合理的 client_max_body_size（如 20m），防止恶意大文件上传耗尽资源。",
+      "rule_id": "client_max_body_size_unlimited",
+      "severity": "medium",
+      "title": "部分 server 未设置 client_max_body_size（允许超大文件上传）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "proxy_timeout_configured",
+      "observed_value": false,
+      "remediation": "配置 proxy_connect_timeout 5s; proxy_read_timeout 30s; proxy_send_timeout 30s; 合理控制后端超时。",
+      "rule_id": "missing_proxy_timeout_config",
+      "severity": "low",
+      "title": "未显式配置 proxy_connect/read/send_timeout（使用默认 60s 可能过长）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "worker_connections_value",
+      "observed_value": 1024,
+      "remediation": "将 worker_connections 提升到 4096 或更高，配合 worker_processes 提升并发能力。",
+      "rule_id": "worker_connections_low",
+      "severity": "low",
+      "title": "worker_connections 仅为 1024（并发能力偏低）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "upstream_keepalive_configured",
+      "observed_value": false,
+      "remediation": "在 upstream 块中添加 keepalive 32; 并在 proxy_set_header 中设置 Connection \"\"; 实现长连接复用。",
+      "rule_id": "missing_keepalive_to_upstream",
+      "severity": "low",
+      "title": "未配置 upstream keepalive（每次请求新建连接，性能浪费）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "real_ip_configured",
+      "observed_value": false,
+      "remediation": "配置 set_real_ip_from 10.0.0.0/8; 和 real_ip_header X-Forwarded-For; 确保日志和访问控制基于真实 IP。",
+      "rule_id": "missing_real_ip_from_proxy",
+      "severity": "medium",
+      "title": "未配置 set_real_ip_from（无法从代理层获取真实客户端 IP）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "ssl_prefer_server_ciphers_on",
+      "observed_value": false,
+      "remediation": "配置 ssl_prefer_server_ciphers on; 确保服务端优先选择强加密套件，而非让客户端选择。",
+      "rule_id": "missing_ssl_prefer_server_ciphers",
+      "severity": "medium",
+      "title": "未配置 ssl_prefer_server_ciphers on（客户端可能选择弱套件）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 4,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 8,
+          "line_text": "location /admin {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 11,
+          "line_text": "location / {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 16,
+          "line_text": "server {"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 21,
+          "line_text": "location /app {"
+        }
+      ],
+      "field": "proxy_buffer_configured",
+      "observed_value": false,
+      "remediation": "配置 proxy_buffer_size 8k; proxy_buffers 8 8k; 防止后端大响应头溢出缓冲区。",
+      "rule_id": "missing_buffer_config",
+      "severity": "low",
+      "title": "未显式配置 proxy_buffer_size/proxy_buffers（默认值可能导致大头部溢出）"
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "nginx_T.txt",
+          "line_no": 9,
+          "line_text": "proxy_pass http://admin_backend;"
+        },
+        {
+          "file": "nginx_T.txt",
+          "line_no": 22,
+          "line_text": "proxy_pass http://backend;"
+        }
+      ],
+      "field": "sensitive_no_cache_control",
+      "observed_value": true,
+      "remediation": "对包含敏感数据的 location 添加 add_header Cache-Control \"no-store, no-cache, must-revalidate\" always; 防止中间缓存保存敏感数据。",
+      "rule_id": "sensitive_content_no_cache_control",
+      "severity": "medium",
+      "title": "业务 location 缺少 Cache-Control no-store（敏感数据可能被中间缓存）"
+    }
+  ],
+  "run_id": "review_task3_evidence2",
+  "source_name": "build_report_context.py",
+  "source_type": "script",
+  "task_id": "task3"
+}

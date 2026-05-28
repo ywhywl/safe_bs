@@ -1,0 +1,62 @@
+{
+  "confidence": "medium",
+  "created_at": "2026-05-28T02:18:01+00:00",
+  "evidence_refs": [],
+  "files": [
+    {
+      "path": "json/ai_usage_trace.json",
+      "size": 482
+    },
+    {
+      "path": "json/llm_context_input.json",
+      "size": 123083
+    },
+    {
+      "path": "json/llm_prompt_input.md",
+      "size": 1913
+    },
+    {
+      "path": "json/task3_config_facts.json",
+      "size": 9599
+    },
+    {
+      "path": "json/task3_host_profile.json",
+      "size": 480
+    },
+    {
+      "path": "json/task3_nginx_inventory.json",
+      "size": 638
+    },
+    {
+      "path": "json/task3_report_context.json",
+      "size": 123084
+    },
+    {
+      "path": "json/task3_risk_register.json",
+      "size": 30571
+    },
+    {
+      "path": "json/task3_rule_hits.json",
+      "size": 24427
+    },
+    {
+      "path": "json/tool_manifest.json",
+      "size": 925
+    },
+    {
+      "path": "raw/nginx_T.txt",
+      "size": 641
+    },
+    {
+      "path": "raw/readonly_meta.env",
+      "size": 133
+    }
+  ],
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "review_task3_evidence2",
+  "source_name": "build_manifests.py",
+  "source_type": "script",
+  "task_id": "task3"
+}
