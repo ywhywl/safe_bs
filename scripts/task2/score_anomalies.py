@@ -176,9 +176,11 @@ def main() -> None:
             # --- NEW expert-level dimensions ---
             reasons = []
 
-            # 1. First-time IP (never seen from this user)
+            # 1. First-time IP (only when source deviation is NOT already triggered)
+            # Avoids double-counting: source deviation already covers "IP not in baseline"
+            # first-time IP now means: IP is new but within a known subnet (milder deviation)
             first_time_ip_score = 0
-            if src_ip and src_ip not in src_ips and src_ips:
+            if src_ip and src_ip not in src_ips and src_ips and src_score == 0:
                 first_time_ip_score = policy.get("new_ip_first_time_score", 30)
 
             # 2. Privilege path access (accessing system/sensitive directories)
