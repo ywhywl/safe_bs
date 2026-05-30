@@ -1,0 +1,32 @@
+[2026-05-30 12:33:05] RUN_ID=verify_task2_large_default
+[2026-05-30 12:33:05] INPUT_DIR=task2/TOOLS/datasets/demo_abnormal
+[2026-05-30 12:33:05] LLM_CONFIG=/Users/wenlongy/dev/src/safe_bs/task2/TOOLS/llm_config.json
+[2026-05-30 12:33:05] START build_manifests:init
+[2026-05-30 12:33:05] DONE  build_manifests:init (0s)
+[2026-05-30 12:33:05] START ingest_logs
+[2026-05-30 12:33:05] DONE  ingest_logs (0s)
+[2026-05-30 12:33:05] START normalize_events
+[2026-05-30 12:33:05] DONE  normalize_events (0s)
+[2026-05-30 12:33:05] START build_baseline
+[2026-05-30 12:33:05] DONE  build_baseline (0s)
+[2026-05-30 12:33:05] START score_anomalies
+[2026-05-30 12:33:06] DONE  score_anomalies (1s)
+[2026-05-30 12:33:06] START build_session_views
+[2026-05-30 12:33:06] DONE  build_session_views (0s)
+[2026-05-30 12:33:06] START build_correlation_graph
+[2026-05-30 12:33:06] DONE  build_correlation_graph (0s)
+[2026-05-30 12:33:06] START build_sequence_clusters
+[2026-05-30 12:33:06] DONE  build_sequence_clusters (0s)
+[2026-05-30 12:33:06] START build_alerts
+[2026-05-30 12:33:06] DONE  build_alerts (0s)
+[2026-05-30 12:33:06] START emit_alert_log
+[2026-05-30 12:33:06] DONE  emit_alert_log (0s)
+[2026-05-30 12:33:06] START build_baseline_views
+[2026-05-30 12:33:06] DONE  build_baseline_views (0s)
+[2026-05-30 12:33:06] START build_report_context
+[2026-05-30 12:33:06] DONE  build_report_context (0s)
+[2026-05-30 12:33:06] START render_reports
+[2026-05-30 12:33:07] DONE  render_reports (0s)
+[2026-05-30 12:33:07] START build_manifests:package
+[2026-05-30 12:33:07] DONE  build_manifests:package (0s)
+[2026-05-30 12:33:07] START sync_deliverables

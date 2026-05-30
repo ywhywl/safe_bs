@@ -9,7 +9,7 @@ from pathlib import Path
 from event_io import write_ndjson_line
 from input_layout import iter_log_files, resolve_input_layout
 from lib import dump_json, load_json, make_base_record
-from log_formats import build_event_id, guess_log_format, iter_lines, parse_program_log_line, parse_runtime_pipe_line
+from log_formats import build_event_id, guess_log_format, iter_lines, parse_mod_sftp_log_line, parse_program_log_line, parse_runtime_pipe_line
 
 
 KNOWN_KEYS = {
@@ -88,9 +88,6 @@ def parse_line(line: str, idx: int, source_path: Path) -> dict:
         "result": result,
         "bytes_in": bytes_in,
         "bytes_out": bytes_out,
-        "raw_ref": {"line_no": idx, "source": str(source_path)},
-        "confidence": "medium" if kv else "low",
-        "raw_line": line.strip(),
         "event_class": "generic",
     }
 
@@ -128,10 +125,11 @@ def main() -> None:
                         event = parse_runtime_pipe_line(line, idx, path)
                     elif format_guess == "sftp_program_proftpd":
                         event = parse_program_log_line(line, idx, path)
+                    elif format_guess == "sftp_protocol_mod_sftp":
+                        event = parse_mod_sftp_log_line(line, idx, path)
                     if event is None:
                         event = parse_line(line, idx, path)
                     event = enrich_subnet(event)
-                    event["dataset_role"] = role
                     write_ndjson_line(ndjson_path, event, handle=out)
                     count += 1
                     if len(preview) < 200:

@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+from config_loader import load_active_configs
 from lib import dump_json, load_json, make_base_record
 
 
@@ -25,12 +26,10 @@ def main() -> None:
     high_risks = [risk for risk in risks.get("risks", []) if risk.get("severity") == "high"]
     medium_risks = [risk for risk in risks.get("risks", []) if risk.get("severity") == "medium"]
     low_risks = [risk for risk in risks.get("risks", []) if risk.get("severity") == "low"]
+    server_level_risks = risks.get("server_level_risks", [])
 
     # Collect raw config texts for LLM context
-    raw_configs = {}
-    for f in sorted(raw_dir.iterdir()):
-        if f.suffix in (".txt", ".conf") and f.name.startswith("ng"):
-            raw_configs[f.name] = f.read_text(encoding="utf-8")
+    raw_configs = load_active_configs(raw_dir)
 
     record = make_base_record(run_dir.name, "task3", "build_report_context.py")
     record.update(
@@ -39,7 +38,8 @@ def main() -> None:
             "config_facts": config_facts,
             "rule_hits": rule_hits.get("hits", []),
             "risk_summary": risks.get("risks", []),
-            "overall_assessment": f"只读巡检完成：{len(high_risks)} 高风险、{len(medium_risks)} 中风险、{len(low_risks)} 低风险。",
+            "server_level_risks": server_level_risks,
+            "overall_assessment": f"只读巡检完成：{len(high_risks)} 高风险、{len(medium_risks)} 中风险、{len(low_risks)} 低风险。配置来源模式：{inventory.get('config_source_mode', 'unknown')}。",
             "high_risks": high_risks,
             "medium_risks": medium_risks,
             "low_risks": low_risks,
@@ -50,6 +50,7 @@ def main() -> None:
             },
             "config_files": raw_configs,
             "roadmap": [
+                "若 nginx -T 失败，先修复配置组织错误（如 include 位置不当、顶层指令落入 http.d）并重新验证",
                 "优先处理高风险项：关闭目录浏览、修补路径遍历、统一会话校验覆盖",
                 "补齐缺失的安全响应头（HSTS、CSP、X-Content-Type-Options），并复核敏感路径的访问控制",
                 "修复 HTTP 未重定向到 HTTPS、cookie 缺少 Secure 标记、proxy_pass HTTPS 未验证证书",

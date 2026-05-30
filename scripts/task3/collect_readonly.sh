@@ -18,11 +18,16 @@ if [[ -n "${TARGET}" && -f "${TARGET}" ]]; then
   exit 0
 fi
 
+if [[ -n "${TARGET}" && -d "${TARGET}" ]]; then
+  cp -R "${TARGET}/." "${RAW_DIR}/"
+  exit 0
+fi
+
 # If local nginx is available, collect live config
 if command -v nginx >/dev/null 2>&1; then
   nginx -T > "${RAW_DIR}/nginx_T.txt" 2>"${RAW_DIR}/nginx_T.stderr" || true
   nginx -V > "${RAW_DIR}/nginx_V.txt" 2>&1 || true
-  if [[ -f "${RAW_DIR}/nginx_T.txt" ]]; then
+  if [[ -s "${RAW_DIR}/nginx_T.txt" ]]; then
     exit 0
   fi
 fi

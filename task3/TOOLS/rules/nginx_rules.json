@@ -1,5 +1,23 @@
 [
   {
+    "rule_id": "nginx_t_failed",
+    "title": "nginx -T 配置测试失败（当前配置无法完整展开）",
+    "severity": "high",
+    "match_type": "equals",
+    "field": "nginx_t_failed",
+    "value": true,
+    "remediation": "先修复导致 nginx -T 失败的配置错误，再重新展开完整配置做审计。若必须只读巡检，请同时审查主配置与所有 include 子配置。"
+  },
+  {
+    "rule_id": "user_directive_misplaced",
+    "title": "user 指令出现在错误的 include 层级（配置结构错误）",
+    "severity": "high",
+    "match_type": "equals",
+    "field": "user_directive_misplaced",
+    "value": true,
+    "remediation": "将 user 指令移动到主 nginx.conf 顶层（main context），不要放在 http.d/server/location include 文件中。"
+  },
+  {
     "rule_id": "tls_weak_protocol",
     "title": "TLS 协议版本包含不安全的旧版本",
     "severity": "high",

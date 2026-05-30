@@ -1,196 +1,320 @@
 {
-  "baseline_event_count": 9,
-  "baseline_mode": "historical_split",
+  "baseline_event_count": 20,
+  "baseline_limits": {
+    "max_actions_per_session": 8,
+    "max_daily_buckets_per_user": 120,
+    "max_ip_profile_per_user": 100,
+    "max_path_count_keys_per_user": 200,
+    "max_paths_per_user": 200,
+    "max_session_ids_per_user": 3000,
+    "max_session_sequences_per_user": 500,
+    "max_src_ips_per_user": 1000,
+    "max_src_subnets_per_user": 500
+  },
+  "baseline_mode": "single_dataset",
   "confidence": "medium",
-  "created_at": "2026-05-28T02:18:01+00:00",
+  "created_at": "2026-05-30T04:33:05+00:00",
   "cross_user_shared_ips": {},
-  "current_event_count": 8,
+  "current_event_count": 20,
   "evidence_refs": [],
+  "large_mode": true,
   "manual_review_required": false,
   "notes": "",
   "operator": "wenlongy",
-  "run_id": "review_task2_hist2",
+  "run_id": "verify_task2_large_default",
   "source_name": "build_baseline.py",
   "source_type": "script",
   "task_id": "task2",
   "users": [
     {
-      "active_days": 1,
+      "active_days": 2,
       "active_time_profile": [
         9
       ],
       "baseline_confidence": "low",
-      "first_seen": "2026-05-26T09:03:00+00:00",
+      "daily_counts": {
+        "2026-05-18": 1,
+        "2026-05-19": 1
+      },
+      "first_seen": "2026-05-18T09:00:02.115000",
       "in_out_ratio": 0.0,
       "ip_failure_profile": {},
-      "ip_success_profile": {},
-      "last_seen": "2026-05-26T23:40:00+00:00",
-      "last_updated": "",
-      "login_failure_count": 0,
-      "login_failure_rate": 0.0,
-      "login_success_count": 0,
-      "privilege_path_accesses": [],
-      "sample_size": 1,
-      "seasonality_notes": "",
-      "sensitive_file_accesses": [
-        {
-          "action": "PUT",
-          "path": "/finance/payroll.csv",
-          "src_ip": "10.10.2.20",
-          "timestamp": "2026-05-26T09:03:00Z"
-        },
-        {
-          "action": "DELETE",
-          "path": "/finance/payroll.csv",
-          "src_ip": "198.51.100.77",
-          "timestamp": "2026-05-26T23:40:00Z"
-        }
-      ],
-      "session_frequency_profile": {
-        "avg_events_per_session": 1.0,
-        "avg_session_duration_minutes": 0.0,
-        "session_count": 1,
-        "successful_event_count": 1
+      "ip_success_profile": {
+        "124.74.41.42": 2
       },
-      "top_paths": [
-        {
-          "count": 1,
-          "path": "/finance/payroll.csv"
-        }
-      ],
-      "user": "finance",
-      "usual_action_sequences": [],
-      "usual_actions": [
-        "PUT"
-      ],
-      "usual_auth_methods": [],
-      "usual_client_versions": [],
-      "usual_failure_rate": 0.5,
-      "usual_paths": [
-        "/finance/payroll.csv"
-      ],
-      "usual_results": [
-        "ok"
-      ],
-      "usual_src_ips": [
-        "10.10.2.20"
-      ],
-      "usual_src_subnets": [
-        "10.10.2.0/24"
-      ],
-      "usual_transfer_ranges": {
-        "avg_bytes_out": 0.0,
-        "avg_total_bytes": 2048.0,
-        "max_total_bytes": 4096,
-        "min_total_bytes": 0
-      }
-    },
-    {
-      "active_days": 1,
-      "active_time_profile": [
-        8,
-        9
-      ],
-      "baseline_confidence": "low",
-      "first_seen": "2026-05-26T08:58:00+00:00",
-      "in_out_ratio": 2168.0,
-      "ip_failure_profile": {},
-      "ip_success_profile": {},
-      "last_seen": "2026-05-26T09:01:00+00:00",
+      "last_seen": "2026-05-19T09:02:12.318000",
       "last_updated": "",
       "login_failure_count": 0,
       "login_failure_rate": 0.0,
-      "login_success_count": 0,
+      "login_success_count": 2,
       "privilege_path_accesses": [],
       "sample_size": 2,
       "seasonality_notes": "",
       "sensitive_file_accesses": [],
       "session_frequency_profile": {
-        "avg_events_per_session": 2.0,
-        "avg_session_duration_minutes": 0.0,
-        "session_count": 1,
+        "avg_events_per_session": 1.0,
+        "avg_session_duration_minutes": 0,
+        "session_count": 2,
         "successful_event_count": 2
       },
-      "top_paths": [
-        {
-          "count": 1,
-          "path": "/dropbox"
-        },
-        {
-          "count": 1,
-          "path": "/dropbox/config.yml"
-        }
-      ],
-      "user": "ops",
-      "usual_action_sequences": [
-        "LIST -> GET"
-      ],
+      "top_paths": [],
+      "transfer_events_summary": {
+        "count": 0,
+        "top_by_bytes": []
+      },
+      "trusted_user": false,
+      "user": "farms_warn_dongyayh",
+      "usual_action_sequences": [],
       "usual_actions": [
-        "GET",
-        "LIST"
+        "AUTH"
       ],
-      "usual_auth_methods": [],
-      "usual_client_versions": [],
+      "usual_auth_methods": [
+        "publickey"
+      ],
+      "usual_cipher_c2s": [],
+      "usual_cipher_s2c": [],
+      "usual_client_versions": [
+        "SSH-2.0-JSCH_2.27.3"
+      ],
       "usual_failure_rate": 0.0,
-      "usual_paths": [
-        "/dropbox",
-        "/dropbox/config.yml"
-      ],
+      "usual_hostkey_algorithms": [],
+      "usual_kex_algorithms": [],
+      "usual_mac_c2s": [],
+      "usual_mac_s2c": [],
+      "usual_paths": [],
+      "usual_publickey_fingerprints": [],
       "usual_results": [
         "ok"
       ],
       "usual_src_ips": [
-        "10.10.1.15"
+        "124.74.41.42"
       ],
       "usual_src_subnets": [
-        "10.10.1.0/24"
+        "124.74.41.0/24"
       ],
       "usual_transfer_ranges": {
-        "avg_bytes_out": 1084.0,
-        "avg_total_bytes": 1084.0,
-        "max_total_bytes": 2048,
-        "min_total_bytes": 120
+        "avg_bytes_out": 0.0,
+        "avg_total_bytes": 0.0,
+        "max_total_bytes": 0,
+        "min_total_bytes": 0
       }
     },
     {
-      "active_days": 1,
+      "active_days": 3,
       "active_time_profile": [
-        0
+        9
       ],
       "baseline_confidence": "low",
-      "first_seen": "2026-05-19T00:01:06.431000",
+      "daily_counts": {
+        "2026-05-18": 1,
+        "2026-05-19": 1,
+        "2026-05-20": 2
+      },
+      "first_seen": "2026-05-18T09:00:01.205000",
       "in_out_ratio": 0.0,
       "ip_failure_profile": {
-        "8.8.8.8": 1
+        "198.51.100.77": 2
       },
       "ip_success_profile": {
-        "202.104.136.69": 1
+        "220.248.41.29": 2
       },
-      "last_seen": "2026-05-19T23:59:59.001000",
+      "last_seen": "2026-05-20T23:59:59.998000",
       "last_updated": "",
-      "login_failure_count": 1,
+      "login_failure_count": 2,
       "login_failure_rate": 0.5,
-      "login_success_count": 1,
+      "login_success_count": 2,
       "privilege_path_accesses": [],
-      "sample_size": 1,
+      "sample_size": 2,
       "seasonality_notes": "",
       "sensitive_file_accesses": [],
       "session_frequency_profile": {
         "avg_events_per_session": 1.0,
-        "avg_session_duration_minutes": 0.0,
-        "session_count": 1,
-        "successful_event_count": 1
+        "avg_session_duration_minutes": 0,
+        "session_count": 2,
+        "successful_event_count": 2
       },
       "top_paths": [],
-      "user": "tms_cmb",
+      "transfer_events_summary": {
+        "count": 0,
+        "top_by_bytes": []
+      },
+      "trusted_user": false,
+      "user": "farms_warn_ruisuiyh",
       "usual_action_sequences": [],
       "usual_actions": [
+        "AUTH"
+      ],
+      "usual_auth_methods": [
+        "publickey"
+      ],
+      "usual_cipher_c2s": [],
+      "usual_cipher_s2c": [],
+      "usual_client_versions": [
+        "SSH-2.0-JSCH-0.1.72"
+      ],
+      "usual_failure_rate": 0.5,
+      "usual_hostkey_algorithms": [],
+      "usual_kex_algorithms": [],
+      "usual_mac_c2s": [],
+      "usual_mac_s2c": [],
+      "usual_paths": [],
+      "usual_publickey_fingerprints": [],
+      "usual_results": [
+        "ok"
+      ],
+      "usual_src_ips": [
+        "220.248.41.29"
+      ],
+      "usual_src_subnets": [
+        "220.248.41.0/24"
+      ],
+      "usual_transfer_ranges": {
+        "avg_bytes_out": 0.0,
+        "avg_total_bytes": 0.0,
+        "max_total_bytes": 0,
+        "min_total_bytes": 0
+      }
+    },
+    {
+      "active_days": 3,
+      "active_time_profile": [
+        9,
+        23
+      ],
+      "baseline_confidence": "low",
+      "daily_counts": {
+        "2026-05-18": 1,
+        "2026-05-19": 1,
+        "2026-05-20": 1
+      },
+      "first_seen": "2026-05-18T09:00:03.451000",
+      "in_out_ratio": 0.0,
+      "ip_failure_profile": {},
+      "ip_success_profile": {
+        "101.68.90.115": 2,
+        "203.0.113.55": 1
+      },
+      "last_seen": "2026-05-20T23:59:58.777000",
+      "last_updated": "",
+      "login_failure_count": 0,
+      "login_failure_rate": 0.0,
+      "login_success_count": 3,
+      "privilege_path_accesses": [],
+      "sample_size": 3,
+      "seasonality_notes": "",
+      "sensitive_file_accesses": [],
+      "session_frequency_profile": {
+        "avg_events_per_session": 1.0,
+        "avg_session_duration_minutes": 0,
+        "session_count": 3,
+        "successful_event_count": 3
+      },
+      "top_paths": [],
+      "transfer_events_summary": {
+        "count": 0,
+        "top_by_bytes": []
+      },
+      "trusted_user": false,
+      "user": "farms_warn_zsbank",
+      "usual_action_sequences": [],
+      "usual_actions": [
+        "AUTH"
+      ],
+      "usual_auth_methods": [
+        "publickey"
+      ],
+      "usual_cipher_c2s": [],
+      "usual_cipher_s2c": [],
+      "usual_client_versions": [
+        "SSH-2.0-JSCH-0.1.54",
+        "SSH-2.0-OpenSSH_9.9"
+      ],
+      "usual_failure_rate": 0.0,
+      "usual_hostkey_algorithms": [],
+      "usual_kex_algorithms": [],
+      "usual_mac_c2s": [],
+      "usual_mac_s2c": [],
+      "usual_paths": [],
+      "usual_publickey_fingerprints": [],
+      "usual_results": [
+        "ok"
+      ],
+      "usual_src_ips": [
+        "101.68.90.115",
+        "203.0.113.55"
+      ],
+      "usual_src_subnets": [
+        "101.68.90.0/24",
+        "203.0.113.0/24"
+      ],
+      "usual_transfer_ranges": {
+        "avg_bytes_out": 0.0,
+        "avg_total_bytes": 0.0,
+        "max_total_bytes": 0,
+        "min_total_bytes": 0
+      }
+    },
+    {
+      "active_days": 3,
+      "active_time_profile": [
+        9
+      ],
+      "baseline_confidence": "low",
+      "daily_counts": {
+        "2026-05-18": 2,
+        "2026-05-19": 2,
+        "2026-05-20": 2
+      },
+      "first_seen": "2026-05-18T09:00:00.101000",
+      "in_out_ratio": 0.0,
+      "ip_failure_profile": {
+        "8.8.8.8": 2
+      },
+      "ip_success_profile": {
+        "202.104.136.69": 4
+      },
+      "last_seen": "2026-05-20T23:59:59.999000",
+      "last_updated": "",
+      "login_failure_count": 2,
+      "login_failure_rate": 0.3333,
+      "login_success_count": 4,
+      "privilege_path_accesses": [],
+      "sample_size": 4,
+      "seasonality_notes": "",
+      "sensitive_file_accesses": [],
+      "session_frequency_profile": {
+        "avg_events_per_session": 1.0,
+        "avg_session_duration_minutes": 0,
+        "session_count": 4,
+        "successful_event_count": 4
+      },
+      "top_paths": [],
+      "transfer_events_summary": {
+        "count": 0,
+        "top_by_bytes": []
+      },
+      "trusted_user": false,
+      "user": "mms_cmb",
+      "usual_action_sequences": [],
+      "usual_actions": [
+        "AUTH",
         "LOGIN"
       ],
-      "usual_auth_methods": [],
-      "usual_client_versions": [],
-      "usual_failure_rate": 0.5,
+      "usual_auth_methods": [
+        "publickey"
+      ],
+      "usual_cipher_c2s": [],
+      "usual_cipher_s2c": [],
+      "usual_client_versions": [
+        "SSH-2.0-JSCH-0.1.54"
+      ],
+      "usual_failure_rate": 0.3333,
+      "usual_hostkey_algorithms": [],
+      "usual_kex_algorithms": [],
+      "usual_mac_c2s": [],
+      "usual_mac_s2c": [],
       "usual_paths": [],
+      "usual_publickey_fingerprints": [],
       "usual_results": [
         "ok"
       ],
@@ -208,31 +332,42 @@
       }
     },
     {
-      "active_days": 1,
+      "active_days": 3,
       "active_time_profile": [
-        0
+        9,
+        23
       ],
-      "baseline_confidence": "low",
-      "first_seen": "2026-05-19T00:01:06.349000",
+      "baseline_confidence": "medium",
+      "daily_counts": {
+        "2026-05-18": 2,
+        "2026-05-19": 2,
+        "2026-05-20": 1
+      },
+      "first_seen": "2026-05-18T09:00:00.202000",
       "in_out_ratio": 0.0,
       "ip_failure_profile": {},
       "ip_success_profile": {},
-      "last_seen": "2026-05-19T00:01:06.352000",
+      "last_seen": "2026-05-20T23:59:58.003000",
       "last_updated": "",
       "login_failure_count": 0,
       "login_failure_rate": 0.0,
       "login_success_count": 0,
       "privilege_path_accesses": [],
-      "sample_size": 3,
+      "sample_size": 5,
       "seasonality_notes": "",
       "sensitive_file_accesses": [],
       "session_frequency_profile": {
-        "avg_events_per_session": 1.5,
-        "avg_session_duration_minutes": 0.0,
-        "session_count": 2,
-        "successful_event_count": 3
+        "avg_events_per_session": 1.67,
+        "avg_session_duration_minutes": 0,
+        "session_count": 3,
+        "successful_event_count": 5
       },
       "top_paths": [],
+      "transfer_events_summary": {
+        "count": 0,
+        "top_by_bytes": []
+      },
+      "trusted_user": false,
       "user": "unknown",
       "usual_action_sequences": [
         "SESSION_OPEN -> SESSION_CLOSE"
@@ -242,19 +377,26 @@
         "SESSION_OPEN"
       ],
       "usual_auth_methods": [],
+      "usual_cipher_c2s": [],
+      "usual_cipher_s2c": [],
       "usual_client_versions": [],
       "usual_failure_rate": 0.0,
+      "usual_hostkey_algorithms": [],
+      "usual_kex_algorithms": [],
+      "usual_mac_c2s": [],
+      "usual_mac_s2c": [],
       "usual_paths": [],
+      "usual_publickey_fingerprints": [],
       "usual_results": [
         "ok"
       ],
       "usual_src_ips": [
-        "202.104.136.69",
-        "222.76.46.33"
+        "203.0.113.55",
+        "220.248.41.29"
       ],
       "usual_src_subnets": [
-        "202.104.136.0/24",
-        "222.76.46.0/24"
+        "203.0.113.0/24",
+        "220.248.41.0/24"
       ],
       "usual_transfer_ranges": {
         "avg_bytes_out": 0.0,

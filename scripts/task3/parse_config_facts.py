@@ -6,6 +6,7 @@ import argparse
 import re
 from pathlib import Path
 
+from config_loader import load_active_configs
 from lib import dump_json, make_base_record, read_text
 
 
@@ -45,13 +46,7 @@ def find_deny_all(content: str) -> bool:
 
 
 def read_all_configs(raw_dir: Path) -> dict[str, str]:
-    configs = {}
-    for f in sorted(raw_dir.iterdir()):
-        if f.suffix in (".txt", ".conf") and f.name.startswith("ng"):
-            configs[f.name] = read_text(f)
-    if (raw_dir / "nginx_T.txt").exists():
-        configs["nginx_T.txt"] = read_text(raw_dir / "nginx_T.txt")
-    return configs
+    return load_active_configs(raw_dir)
 
 
 def find_line_refs(content: str, patterns: list[str], filename: str) -> list[dict]:
@@ -72,6 +67,15 @@ def find_line_refs(content: str, patterns: list[str], filename: str) -> list[dic
                 )
                 break
     return refs
+
+
+def extract_context_snippet(content: str, line_no: int, radius: int = 2) -> str:
+    lines = content.splitlines()
+    if not lines or line_no < 1:
+        return ""
+    start = max(0, line_no - 1 - radius)
+    end = min(len(lines), line_no + radius)
+    return "\n".join(lines[start:end])
 
 
 def extract_server_blocks(content: str) -> list[dict]:
@@ -130,9 +134,100 @@ def extract_server_blocks(content: str) -> list[dict]:
     return servers
 
 
+def extract_server_blocks_with_meta(content: str, filename: str) -> list[dict]:
+    servers = []
+    lines = content.splitlines()
+    line_starts = []
+    cursor = 0
+    for line in lines:
+        line_starts.append(cursor)
+        cursor += len(line) + 1
+    for m in re.finditer(r"server\s*\{", content):
+        start = m.start()
+        depth = 0
+        i = start
+        while i < len(content):
+            if content[i] == "{":
+                depth += 1
+            elif content[i] == "}":
+                depth -= 1
+                if depth == 0:
+                    block = content[start:i + 1]
+                    start_line_no = 1
+                    for idx, offset in enumerate(line_starts, start=1):
+                        if offset <= start:
+                            start_line_no = idx
+                        else:
+                            break
+                    end_line_no = start_line_no + block.count("\n")
+                    listen_ports = re.findall(r"listen\s+(\S+);", block)
+                    server_name = re.findall(r"server_name\s+(.+?);", block)
+                    locations_in_block = find_location_blocks(block)
+                    tls_protocols = sorted({
+                        proto
+                        for value in find_directive_values(block, "ssl_protocols")
+                        for proto in value.split()
+                    })
+                    headers = []
+                    for value in find_directive_values(block, "add_header"):
+                        header_name = value.split()[0].strip('"').strip("'").lower()
+                        if header_name in SECURITY_HEADERS:
+                            headers.append(SECURITY_HEADERS[header_name])
+                    autoindex = any(v.split()[0] == "on" for v in find_directive_values(block, "autoindex"))
+                    server_tokens_off = find_server_tokens_off(block)
+                    has_https_redirect = bool(re.search(r"return\s+30[12]\s+https://", block))
+                    ssl_has_ciphers = bool(re.search(r"ssl_ciphers\s+", block))
+                    ssl_session_cache_configured = find_directive_exists(block, "ssl_session_cache")
+                    ocsp_stapling_enabled = bool(re.search(r"ssl_stapling\s+on", block))
+                    hidden_files_blocked = bool(re.search(r"location\s+~\s*/\\\.", block)) or bool(re.search(r"location\s+~\s+/\.", block))
+                    client_max_body_values = find_directive_values(block, "client_max_body_size")
+                    client_max_body_size_unlimited = not client_max_body_values or any(v == "0" for v in client_max_body_values)
+                    has_limit_conn = find_directive_exists(block, "limit_conn")
+                    has_limit_except = "limit_except" in block
+                    has_proxy_hide_header = find_directive_exists(block, "proxy_hide_header")
+                    has_ssl_block = bool(re.search(r"listen\s+\S+ssl", block) or re.search(r"listen\s+\S+\s+ssl", block))
+                    http_ports = {"80", "8080", "8081"}
+                    is_http_server = any(listener.split()[0].split(":")[-1] in http_ports for listener in listen_ports)
+                    security_headers = sorted(set(headers))
+                    servers.append(
+                        {
+                            "server_key": f"{filename}:{start_line_no}",
+                            "file": filename,
+                            "start_line_no": start_line_no,
+                            "end_line_no": end_line_no,
+                            "server_names": server_name,
+                            "listen": listen_ports,
+                            "locations": locations_in_block,
+                            "tls_protocols": tls_protocols,
+                            "security_headers": security_headers,
+                            "autoindex": autoindex,
+                            "server_tokens_off": server_tokens_off,
+                            "http_redirects_to_https": (not is_http_server) or has_https_redirect,
+                            "ssl_ciphers_defined": ssl_has_ciphers,
+                            "ssl_session_cache_configured": ssl_session_cache_configured,
+                            "ocsp_stapling_enabled": ocsp_stapling_enabled,
+                            "hidden_files_blocked": hidden_files_blocked,
+                            "client_max_body_size_unlimited": client_max_body_size_unlimited,
+                            "limit_conn_configured": has_limit_conn,
+                            "http_methods_limited": has_limit_except,
+                            "proxy_hide_headers_configured": has_proxy_hide_header,
+                            "ssl_prefer_server_ciphers_on": bool(re.search(r"ssl_prefer_server_ciphers\s+on", block)),
+                            "status_pages_without_acl": len(re.findall(r"location\s+(?:=)?\s*(/status|/vstatus|/healthcheck|/health_status|/healthcheck\.html)", block)) > 0 and not bool(re.search(r"allow\s+", block)),
+                            "is_http_server": is_http_server,
+                            "has_ssl_block": has_ssl_block,
+                            "context_snippet": extract_context_snippet(content, start_line_no),
+                        }
+                    )
+                    break
+            i += 1
+    return servers
+
+
 def extract_all_facts(configs: dict[str, str]) -> dict:
-    combined = "\n".join(configs.values())
+    config_texts = {name: content for name, content in configs.items() if not name.endswith(".stderr")}
+    combined = "\n".join(config_texts.values())
     server_blocks = extract_server_blocks(combined)
+    nginx_t_stderr = configs.get("nginx_T.stderr", "")
 
     # --- Basic facts ---
     autoindex = any(v.split()[0] == "on" for v in find_directive_values(combined, "autoindex"))
@@ -173,6 +268,10 @@ def extract_all_facts(configs: dict[str, str]) -> dict:
 
     # --- Server name ---
     has_empty_server_name = bool(re.search(r"server_name\s+;", combined))
+
+    # --- Config test failure / structural issues ---
+    nginx_t_failed = "test failed" in nginx_t_stderr.lower() or "[emerg]" in nginx_t_stderr.lower()
+    user_directive_misplaced = "\"user\" directive is not allowed here" in nginx_t_stderr.lower()
 
     # --- Cookie ---
     cookie_has_secure_flag = bool(re.search(r"proxy_cookie_path.*Secure", combined))
@@ -314,8 +413,10 @@ def extract_all_facts(configs: dict[str, str]) -> dict:
     # --- Per-config summaries ---
     config_summaries = {}
     evidence_catalog = {}
-    for name, content in configs.items():
+    server_level_facts = []
+    for name, content in config_texts.items():
         cfg_servers = extract_server_blocks(content)
+        server_level_facts.extend(extract_server_blocks_with_meta(content, name))
         cfg_listens = [s["listen"] for s in cfg_servers]
         cfg_tls = sorted({
             proto
@@ -407,6 +508,8 @@ def extract_all_facts(configs: dict[str, str]) -> dict:
         "http_redirects_to_https": http_redirects_to_https,
         "http_https_same_block": http_https_same_block,
         "has_empty_server_name": has_empty_server_name,
+        "nginx_t_failed": nginx_t_failed,
+        "user_directive_misplaced": user_directive_misplaced,
         "cookie_has_secure_flag": cookie_has_secure_flag,
         "cookie_has_samesite": cookie_has_samesite,
         "cookie_contains_org_code": cookie_contains_org_code,
@@ -445,9 +548,10 @@ def extract_all_facts(configs: dict[str, str]) -> dict:
         "sensitive_no_cache_control": sensitive_no_cache_control,
         "total_locations": total_locations,
         "rate_limited_locations": rate_limited_locations,
-        "config_count": len(configs),
+        "config_count": len(config_texts),
         "config_summaries": config_summaries,
         "evidence_catalog": evidence_catalog,
+        "server_level_facts": server_level_facts,
     }
 
 

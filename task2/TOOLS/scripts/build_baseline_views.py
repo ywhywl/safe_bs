@@ -26,10 +26,21 @@ def main() -> None:
                 "common_sources": item.get("usual_src_ips", []),
                 "common_paths": item.get("usual_paths", []),
                 "common_actions": item.get("usual_actions", []),
+                "common_clients": item.get("usual_client_versions", []),
+                "common_protocol_security": {
+                    "kex": item.get("usual_kex_algorithms", []),
+                    "hostkey": item.get("usual_hostkey_algorithms", []),
+                    "cipher_c2s": item.get("usual_cipher_c2s", []),
+                    "cipher_s2c": item.get("usual_cipher_s2c", []),
+                    "mac_c2s": item.get("usual_mac_c2s", []),
+                    "mac_s2c": item.get("usual_mac_s2c", []),
+                },
                 "suspicious_patterns_to_watch": [
                     "new source ip",
                     "new action type",
                     "access outside known hours",
+                    "weak ssh/sftp algorithm negotiation",
+                    "legacy client fingerprint drift",
                 ],
                 "generated_at": "",
             }

@@ -1,82 +1,118 @@
 {
-  "ai_usage_summary": "LLM 仅用于解释和文档生成，不参与最终告警判定。",
+  "ai_usage_summary": "LLM 用于告警解释、关联推理和攻击叙事生成。异常判定和关联发现由脚本确定性产出，LLM 仅负责语义化解释和叙事串联，所有结论必须可追溯到脚本输出字段。",
   "alert_summary": {
-    "count": 7,
+    "count": 10,
     "types": {
-      "session_behavioral_deviation": 7
+      "account_risk_aggregation": 2,
+      "anomalous_source": 4,
+      "correlated_attack_cluster": 3,
+      "session_state_anomaly": 1
     }
   },
   "baseline_method_summary": "基于成功事件构建用户画像，覆盖来源 IP/网段、常见动作/路径、活跃时段、认证方式、客户端版本、传输体量范围、进出比率、历史失败率、特权路径访问、敏感文件访问、登录成败按IP统计、跨用户共享IP。若输入目录包含 baseline/ 与 current/，则优先使用 baseline/ 构建历史基线，仅对 current/ 打分。",
   "baseline_summary": {
-    "baseline_event_count": 9,
-    "current_event_count": 8,
-    "mode": "historical_split"
+    "baseline_event_count": 20,
+    "current_event_count": 20,
+    "mode": "single_dataset"
   },
   "confidence": "medium",
-  "created_at": "2026-05-28T02:18:01+00:00",
+  "correlation_insights": [
+    {
+      "cluster_id": "ip-cluster-001",
+      "severity": "high",
+      "summary": "IP集群 ip-cluster-001: 4个IP共享用户['farms_warn_ruisuiyh', 'farms_warn_zsbank']",
+      "type": "ip_cluster"
+    },
+    {
+      "cluster_id": "ip-cluster-002",
+      "severity": "medium",
+      "summary": "IP集群 ip-cluster-002: 2个IP共享用户['mms_cmb']",
+      "type": "ip_cluster"
+    },
+    {
+      "cluster_id": "seq-cluster-001",
+      "severity": "medium",
+      "summary": "跨用户序列模式: 用户['farms_warn_ruisuiyh', 'mms_cmb']执行相同序列['AUTH']",
+      "type": "cross_user_sequence"
+    }
+  ],
+  "created_at": "2026-05-30T04:33:06+00:00",
   "dataset_summary": {
-    "baseline_sources": [
-      {
-        "format_guess": "sftp_program_proftpd",
-        "line_count": 5,
-        "path": "/private/tmp/task2_hist_case/baseline/proftpd_program_sample.log",
-        "role": "baseline"
-      },
-      {
-        "format_guess": "key_value",
-        "line_count": 4,
-        "path": "/private/tmp/task2_hist_case/baseline/sample_kv.log",
-        "role": "baseline"
-      }
-    ],
+    "baseline_sources": [],
     "current_sources": [
       {
-        "format_guess": "sftp_runtime_pipe",
-        "line_count": 4,
-        "path": "/private/tmp/task2_hist_case/current/runtime_pipe_sample.log",
+        "format_guess": "sftp_program_proftpd",
+        "line_count": 9,
+        "path": "task2/TOOLS/datasets/demo_abnormal/proftpd_program.log",
         "role": "current"
       },
       {
-        "format_guess": "plain_text",
-        "line_count": 4,
-        "path": "/private/tmp/task2_hist_case/current/sample.log",
+        "format_guess": "sftp_runtime_pipe",
+        "line_count": 11,
+        "path": "task2/TOOLS/datasets/demo_abnormal/runtime_pipe.log",
         "role": "current"
       }
     ],
-    "mode": "historical_split",
+    "large_mode": true,
+    "mode": "single_dataset",
     "sources": [
       {
-        "format_guess": "sftp_runtime_pipe",
-        "line_count": 4,
-        "path": "/private/tmp/task2_hist_case/current/runtime_pipe_sample.log",
-        "role": "current"
-      },
-      {
-        "format_guess": "plain_text",
-        "line_count": 4,
-        "path": "/private/tmp/task2_hist_case/current/sample.log",
-        "role": "current"
-      },
-      {
         "format_guess": "sftp_program_proftpd",
-        "line_count": 5,
-        "path": "/private/tmp/task2_hist_case/baseline/proftpd_program_sample.log",
-        "role": "baseline"
+        "line_count": 9,
+        "path": "task2/TOOLS/datasets/demo_abnormal/proftpd_program.log",
+        "role": "current"
       },
       {
-        "format_guess": "key_value",
-        "line_count": 4,
-        "path": "/private/tmp/task2_hist_case/baseline/sample_kv.log",
-        "role": "baseline"
+        "format_guess": "sftp_runtime_pipe",
+        "line_count": 11,
+        "path": "task2/TOOLS/datasets/demo_abnormal/runtime_pipe.log",
+        "role": "current"
       }
     ]
   },
-  "detection_logic_summary": "采用确定性多维打分，事件级 17 维度（来源偏离、动作偏离、路径偏离、认证偏离、客户端偏离、时段偏离、失败偏离、体量偏离、首次来源IP、特权路径、敏感文件、数据外泄指标、批量下载、进出比偏离、暴力破解、休眠账户激活、异常结果类型），会话级 5 维度（长会话、多IP会话、爬取行为、会话数据外泄、孤立会话），外加暴力破解集群和跨用户共享IP检测。总分 ≥ 60 触发告警，并结合可信网段和降优先级策略调整严重等级。休眠账户按当前事件与历史 last_seen 间隔天数判定。",
+  "detection_logic_summary": "采用四层确定性架构：(1) 历史基线对比：若输入目录包含 baseline/ 与 current/，则只用 baseline/ 建立历史用户画像，对 current/ 逐条评分，满足“以某一天/某几天基准日志对比新日志”的要求。(2) 事件级多维打分：来源偏离、动作偏离、路径偏离、认证偏离、客户端偏离、时段偏离、失败偏离、体量偏离、首次来源IP、特权路径、敏感文件、数据外泄指标、批量下载、进出比偏离、暴力破解、休眠账户激活、异常结果类型；并新增 SSH/SFTP 协议安全维度：弱 KEX、弱 hostkey、弱 cipher、弱 MAC、协议协商偏离、老旧客户端指纹偏离。(3) 会话与关联分析：会话级 5 维度、IP关联图、跨用户IP模式、LCS 行为序列聚类。(4) 风险输出：默认按账户风险聚合，并保留会话级和关联级明细。LLM 仅负责将脚本产出的告警、IP集群和序列模式串联为攻击叙事。",
   "evidence_refs": [],
+  "ip_correlation_summary": {
+    "anomalous_clusters": [
+      {
+        "cluster_id": "ip-cluster-001",
+        "ip_count": 4,
+        "ips": [
+          "101.68.90.115",
+          "198.51.100.77",
+          "203.0.113.55",
+          "220.248.41.29"
+        ],
+        "shared_users": [
+          "farms_warn_ruisuiyh",
+          "farms_warn_zsbank"
+        ]
+      },
+      {
+        "cluster_id": "ip-cluster-002",
+        "ip_count": 2,
+        "ips": [
+          "202.104.136.69",
+          "8.8.8.8"
+        ],
+        "shared_users": [
+          "mms_cmb"
+        ]
+      }
+    ],
+    "anomalous_ip_count": 2,
+    "cross_user_patterns": [],
+    "ip_cluster_count": 2,
+    "key_findings": [
+      "检测到 2 个IP关联集群"
+    ],
+    "total_ip_nodes": 7
+  },
   "limitations": [
     "阈值仍采用启发式设置，尚未针对更大规模历史样本做调优",
     "会话级检测依赖 SESSION_OPEN/CLOSE 动作，日志格式不全时可能漏检",
-    "暴力破解检测基于滑动窗口，密集慢速攻击可能不触发"
+    "暴力破解检测基于滑动窗口，密集慢速攻击可能不触发",
+    "开启 TASK2_LARGE_MODE=1 时，会对路径画像、序列聚类样本和关联图候选规模做截断，以换取 16G 机器上的稳定运行"
   ],
   "manual_review_required": false,
   "manual_usage_summary": "人工复核时应结合 baseline_views、session_views 和 alert_output.log 查看完整上下文。",
@@ -85,229 +121,12 @@
   "representative_cases": [
     {
       "alert_id": "alert-1",
-      "llm_confidence": "medium",
-      "llm_explanation": "操作类型偏离历史基线；认证方式偏离历史基线；客户端版本偏离历史基线；来源地址偏离历史基线",
-      "recommended_action": "Review account activity, validate source context, and inspect the full session sequence.",
-      "session_id": "2689379",
+      "correlation_data": null,
+      "llm_explanation": "认证方式偏离历史基线；客户端版本偏离历史基线；失败行为与历史失败率不一致；首次出现的新来源IP地址；来源地址偏离历史基线；访问时段偏离历史基线；异常结果类型",
+      "recommended_action": "Verify source IP legitimacy, check VPN/proxy logs, confirm user location.",
+      "session_id": "3999001",
       "session_summary": {
-        "action_sequence": [
-          "AUTH"
-        ],
         "event_count": 1,
-        "paths": [],
-        "src_ips": [
-          "220.248.41.29"
-        ],
-        "src_subnets": [
-          "220.248.41.0/24"
-        ]
-      },
-      "severity": "medium",
-      "status": "open",
-      "supporting_event_ids": [
-        "evt-5726a362-1"
-      ],
-      "supporting_scores": [
-        {
-          "item_id": "evt-5726a362-1",
-          "item_type": "event",
-          "manual_review_required": true,
-          "rule_hits": [
-            "source deviation",
-            "action deviation",
-            "auth deviation",
-            "client deviation"
-          ],
-          "score_action_deviation": 10,
-          "score_auth_deviation": 5,
-          "score_brute_force": 0,
-          "score_bulk_download": 0,
-          "score_client_deviation": 5,
-          "score_dormant_activation": 0,
-          "score_exfiltration": 0,
-          "score_failure_deviation": 0,
-          "score_first_time_ip": 0,
-          "score_in_out_deviation": 0,
-          "score_path_deviation": 0,
-          "score_privilege_path": 0,
-          "score_sensitive_file": 0,
-          "score_source_deviation": 40,
-          "score_time_deviation": 0,
-          "score_total": 60,
-          "score_unusual_result": 0,
-          "score_volume_deviation": 0,
-          "session_id": "2689379",
-          "threshold_hit": true,
-          "user": "farms_warn_ruisuiyh"
-        }
-      ],
-      "time_window": {
-        "end": "2026-05-20T00:00:00,018",
-        "start": "2026-05-20T00:00:00,018"
-      },
-      "trigger_reasons": [
-        "action deviation",
-        "auth deviation",
-        "client deviation",
-        "source deviation"
-      ],
-      "trigger_type": "session_behavioral_deviation",
-      "user": "farms_warn_ruisuiyh"
-    },
-    {
-      "alert_id": "alert-2",
-      "llm_confidence": "medium",
-      "llm_explanation": "操作类型偏离历史基线；认证方式偏离历史基线；客户端版本偏离历史基线；来源地址偏离历史基线",
-      "recommended_action": "Review account activity, validate source context, and inspect the full session sequence.",
-      "session_id": "2689385",
-      "session_summary": {
-        "action_sequence": [
-          "AUTH"
-        ],
-        "event_count": 1,
-        "paths": [],
-        "src_ips": [
-          "202.104.136.69"
-        ],
-        "src_subnets": [
-          "202.104.136.0/24"
-        ]
-      },
-      "severity": "medium",
-      "status": "open",
-      "supporting_event_ids": [
-        "evt-5726a362-2"
-      ],
-      "supporting_scores": [
-        {
-          "item_id": "evt-5726a362-2",
-          "item_type": "event",
-          "manual_review_required": true,
-          "rule_hits": [
-            "source deviation",
-            "action deviation",
-            "auth deviation",
-            "client deviation"
-          ],
-          "score_action_deviation": 10,
-          "score_auth_deviation": 5,
-          "score_brute_force": 0,
-          "score_bulk_download": 0,
-          "score_client_deviation": 5,
-          "score_dormant_activation": 0,
-          "score_exfiltration": 0,
-          "score_failure_deviation": 0,
-          "score_first_time_ip": 0,
-          "score_in_out_deviation": 0,
-          "score_path_deviation": 0,
-          "score_privilege_path": 0,
-          "score_sensitive_file": 0,
-          "score_source_deviation": 40,
-          "score_time_deviation": 0,
-          "score_total": 60,
-          "score_unusual_result": 0,
-          "score_volume_deviation": 0,
-          "session_id": "2689385",
-          "threshold_hit": true,
-          "user": "mms_cmb"
-        }
-      ],
-      "time_window": {
-        "end": "2026-05-20T00:00:00,223",
-        "start": "2026-05-20T00:00:00,223"
-      },
-      "trigger_reasons": [
-        "action deviation",
-        "auth deviation",
-        "client deviation",
-        "source deviation"
-      ],
-      "trigger_type": "session_behavioral_deviation",
-      "user": "mms_cmb"
-    },
-    {
-      "alert_id": "alert-3",
-      "llm_confidence": "medium",
-      "llm_explanation": "操作类型偏离历史基线；认证方式偏离历史基线；客户端版本偏离历史基线；来源地址偏离历史基线",
-      "recommended_action": "Review account activity, validate source context, and inspect the full session sequence.",
-      "session_id": "2689397",
-      "session_summary": {
-        "action_sequence": [
-          "AUTH"
-        ],
-        "event_count": 1,
-        "paths": [],
-        "src_ips": [
-          "124.74.41.42"
-        ],
-        "src_subnets": [
-          "124.74.41.0/24"
-        ]
-      },
-      "severity": "medium",
-      "status": "open",
-      "supporting_event_ids": [
-        "evt-5726a362-3"
-      ],
-      "supporting_scores": [
-        {
-          "item_id": "evt-5726a362-3",
-          "item_type": "event",
-          "manual_review_required": true,
-          "rule_hits": [
-            "source deviation",
-            "action deviation",
-            "auth deviation",
-            "client deviation"
-          ],
-          "score_action_deviation": 10,
-          "score_auth_deviation": 5,
-          "score_brute_force": 0,
-          "score_bulk_download": 0,
-          "score_client_deviation": 5,
-          "score_dormant_activation": 0,
-          "score_exfiltration": 0,
-          "score_failure_deviation": 0,
-          "score_first_time_ip": 0,
-          "score_in_out_deviation": 0,
-          "score_path_deviation": 0,
-          "score_privilege_path": 0,
-          "score_sensitive_file": 0,
-          "score_source_deviation": 40,
-          "score_time_deviation": 0,
-          "score_total": 60,
-          "score_unusual_result": 0,
-          "score_volume_deviation": 0,
-          "session_id": "2689397",
-          "threshold_hit": true,
-          "user": "farms_warn_dongyayh"
-        }
-      ],
-      "time_window": {
-        "end": "2026-05-20T00:00:00,429",
-        "start": "2026-05-20T00:00:00,429"
-      },
-      "trigger_reasons": [
-        "action deviation",
-        "auth deviation",
-        "client deviation",
-        "source deviation"
-      ],
-      "trigger_type": "session_behavioral_deviation",
-      "user": "farms_warn_dongyayh"
-    },
-    {
-      "alert_id": "alert-4",
-      "llm_confidence": "medium",
-      "llm_explanation": "操作类型偏离历史基线；认证方式偏离历史基线；客户端版本偏离历史基线；失败行为与历史失败率不一致；来源地址偏离历史基线",
-      "recommended_action": "Review account activity, validate source context, and inspect the full session sequence.",
-      "session_id": "2689999",
-      "session_summary": {
-        "action_sequence": [
-          "AUTH"
-        ],
-        "event_count": 1,
-        "paths": [],
         "src_ips": [
           "8.8.8.8"
         ],
@@ -316,191 +135,374 @@
         ]
       },
       "severity": "high",
-      "status": "open",
-      "supporting_event_ids": [
-        "evt-5726a362-4"
-      ],
-      "supporting_scores": [
-        {
-          "item_id": "evt-5726a362-4",
-          "item_type": "event",
-          "manual_review_required": true,
-          "rule_hits": [
-            "source deviation",
-            "action deviation",
-            "auth deviation",
-            "client deviation",
-            "failure deviation"
-          ],
-          "score_action_deviation": 10,
-          "score_auth_deviation": 5,
-          "score_brute_force": 0,
-          "score_bulk_download": 0,
-          "score_client_deviation": 5,
-          "score_dormant_activation": 0,
-          "score_exfiltration": 0,
-          "score_failure_deviation": 25,
-          "score_first_time_ip": 0,
-          "score_in_out_deviation": 0,
-          "score_path_deviation": 0,
-          "score_privilege_path": 0,
-          "score_sensitive_file": 0,
-          "score_source_deviation": 40,
-          "score_time_deviation": 0,
-          "score_total": 85,
-          "score_unusual_result": 0,
-          "score_volume_deviation": 0,
-          "session_id": "2689999",
-          "threshold_hit": true,
-          "user": "mms_cmb"
-        }
-      ],
-      "time_window": {
-        "end": "2026-05-20T23:59:59,999",
-        "start": "2026-05-20T23:59:59,999"
-      },
       "trigger_reasons": [
+        "auth deviation",
+        "client deviation",
+        "failure deviation",
+        "first-time source IP",
+        "source deviation",
+        "time deviation",
+        "unusual result type"
+      ],
+      "trigger_type": "anomalous_source",
+      "user": "mms_cmb"
+    },
+    {
+      "alert_id": "alert-2",
+      "correlation_data": null,
+      "llm_explanation": "认证方式偏离历史基线；客户端版本偏离历史基线；失败行为与历史失败率不一致；首次出现的新来源IP地址；来源地址偏离历史基线；访问时段偏离历史基线；异常结果类型",
+      "recommended_action": "Verify source IP legitimacy, check VPN/proxy logs, confirm user location.",
+      "session_id": "3999002",
+      "session_summary": {
+        "event_count": 1,
+        "src_ips": [
+          "198.51.100.77"
+        ],
+        "src_subnets": [
+          "198.51.100.0/24"
+        ]
+      },
+      "severity": "high",
+      "trigger_reasons": [
+        "auth deviation",
+        "client deviation",
+        "failure deviation",
+        "first-time source IP",
+        "source deviation",
+        "time deviation",
+        "unusual result type"
+      ],
+      "trigger_type": "anomalous_source",
+      "user": "farms_warn_ruisuiyh"
+    },
+    {
+      "alert_id": "alert-3",
+      "correlation_data": null,
+      "llm_explanation": "失败行为与历史失败率不一致；首次出现的新来源IP地址；来源地址偏离历史基线；访问时段偏离历史基线；异常结果类型",
+      "recommended_action": "Verify source IP legitimacy, check VPN/proxy logs, confirm user location.",
+      "session_id": "4999001",
+      "session_summary": {
+        "event_count": 1,
+        "src_ips": [
+          "8.8.8.8"
+        ],
+        "src_subnets": [
+          "8.8.8.0/24"
+        ]
+      },
+      "severity": "high",
+      "trigger_reasons": [
+        "failure deviation",
+        "first-time source IP",
+        "source deviation",
+        "time deviation",
+        "unusual result type"
+      ],
+      "trigger_type": "anomalous_source",
+      "user": "mms_cmb"
+    },
+    {
+      "alert_id": "alert-4",
+      "correlation_data": null,
+      "llm_explanation": "操作类型偏离历史基线；失败行为与历史失败率不一致；首次出现的新来源IP地址；来源地址偏离历史基线；访问时段偏离历史基线；异常结果类型",
+      "recommended_action": "Verify source IP legitimacy, check VPN/proxy logs, confirm user location.",
+      "session_id": "4999002",
+      "session_summary": {
+        "event_count": 1,
+        "src_ips": [
+          "198.51.100.77"
+        ],
+        "src_subnets": [
+          "198.51.100.0/24"
+        ]
+      },
+      "severity": "high",
+      "trigger_reasons": [
+        "action deviation",
+        "failure deviation",
+        "first-time source IP",
+        "source deviation",
+        "time deviation",
+        "unusual result type"
+      ],
+      "trigger_type": "anomalous_source",
+      "user": "farms_warn_ruisuiyh"
+    },
+    {
+      "alert_id": "alert-5",
+      "correlation_data": null,
+      "llm_explanation": "会话出现打开未关闭或开闭不平衡现象",
+      "recommended_action": "Review whether the session ended normally and inspect the associated client source.",
+      "session_id": "4999003",
+      "session_summary": {
+        "action_sequence": [
+          "SESSION_OPEN"
+        ],
+        "close_count": 0,
+        "event_count": 1,
+        "open_count": 1,
+        "paths": [],
+        "src_ips": [
+          "203.0.113.55"
+        ]
+      },
+      "severity": "medium",
+      "trigger_reasons": [
+        "session imbalance"
+      ],
+      "trigger_type": "session_state_anomaly",
+      "user": "farms_warn_zsbank"
+    },
+    {
+      "alert_id": "alert-6",
+      "correlation_data": null,
+      "llm_explanation": "同一账户在同一时间窗口内聚合出多类异常，账户整体风险升高；该账户在当前窗口内关联 2 条异常告警。",
+      "recommended_action": "Review the account as a whole across all related sessions, source IPs, authentication attempts, and negotiated protocol parameters.",
+      "session_id": "account-risk:farms_warn_ruisuiyh",
+      "session_summary": {
+        "alert_count": 2,
+        "high_count": 2,
+        "related_alert_ids": [
+          "alert-2",
+          "alert-4"
+        ]
+      },
+      "severity": "high",
+      "trigger_reasons": [
+        "account risk aggregation",
         "action deviation",
         "auth deviation",
         "client deviation",
         "failure deviation",
-        "source deviation"
+        "first-time source IP",
+        "source deviation",
+        "time deviation",
+        "unusual result type"
       ],
-      "trigger_type": "session_behavioral_deviation",
+      "trigger_type": "account_risk_aggregation",
+      "user": "farms_warn_ruisuiyh"
+    },
+    {
+      "alert_id": "alert-7",
+      "correlation_data": null,
+      "llm_explanation": "同一账户在同一时间窗口内聚合出多类异常，账户整体风险升高；该账户在当前窗口内关联 2 条异常告警。",
+      "recommended_action": "Review the account as a whole across all related sessions, source IPs, authentication attempts, and negotiated protocol parameters.",
+      "session_id": "account-risk:mms_cmb",
+      "session_summary": {
+        "alert_count": 2,
+        "high_count": 2,
+        "related_alert_ids": [
+          "alert-1",
+          "alert-3"
+        ]
+      },
+      "severity": "high",
+      "trigger_reasons": [
+        "account risk aggregation",
+        "auth deviation",
+        "client deviation",
+        "failure deviation",
+        "first-time source IP",
+        "source deviation",
+        "time deviation",
+        "unusual result type"
+      ],
+      "trigger_type": "account_risk_aggregation",
       "user": "mms_cmb"
     },
     {
-      "alert_id": "alert-5",
-      "llm_confidence": "medium",
-      "llm_explanation": "操作类型偏离历史基线；访问路径偏离历史基线；来源地址偏离历史基线",
-      "recommended_action": "Review account activity, validate source context, and inspect the full session sequence.",
-      "session_id": "sess-1",
+      "alert_id": "alert-8",
+      "correlation_data": {
+        "cluster_id": "ip-cluster-001",
+        "cluster_ips": [
+          "101.68.90.115",
+          "198.51.100.77",
+          "203.0.113.55",
+          "220.248.41.29"
+        ],
+        "related_alert_ids": [
+          "alert-2",
+          "alert-4"
+        ],
+        "shared_users": [
+          "farms_warn_ruisuiyh",
+          "farms_warn_zsbank"
+        ],
+        "total_events": 12
+      },
+      "llm_explanation": "IP集群 ip-cluster-001 关联 4 个IP，共享用户 ['farms_warn_ruisuiyh', 'farms_warn_zsbank']。2 条已有告警与此集群关联。",
+      "recommended_action": "Investigate correlated activity across multiple sessions sharing the same IP infrastructure. Check for shared attacker infrastructure or credential reuse.",
+      "session_id": "correlated-cluster:ip-cluster-001",
       "session_summary": {
-        "action_sequence": [
-          "GET",
-          "PUT"
+        "cluster_id": "ip-cluster-001",
+        "ip_count": 4,
+        "ips": [
+          "101.68.90.115",
+          "198.51.100.77",
+          "203.0.113.55",
+          "220.248.41.29"
         ],
-        "event_count": 2,
-        "paths": [
-          "/upload",
-          "/upload/report.txt"
+        "shared_users": [
+          "farms_warn_ruisuiyh",
+          "farms_warn_zsbank"
+        ]
+      },
+      "severity": "high",
+      "trigger_reasons": [
+        "correlated IP cluster"
+      ],
+      "trigger_type": "correlated_attack_cluster",
+      "user": "multiple"
+    },
+    {
+      "alert_id": "alert-9",
+      "correlation_data": {
+        "cluster_id": "ip-cluster-002",
+        "cluster_ips": [
+          "202.104.136.69",
+          "8.8.8.8"
         ],
-        "src_ips": [
-          "10.0.0.10"
+        "related_alert_ids": [
+          "alert-1",
+          "alert-3"
         ],
-        "src_subnets": [
-          "10.0.0.0/24"
+        "shared_users": [
+          "mms_cmb"
+        ],
+        "total_events": 6
+      },
+      "llm_explanation": "IP集群 ip-cluster-002 关联 2 个IP，共享用户 ['mms_cmb']。2 条已有告警与此集群关联。",
+      "recommended_action": "Investigate correlated activity across multiple sessions sharing the same IP infrastructure. Check for shared attacker infrastructure or credential reuse.",
+      "session_id": "correlated-cluster:ip-cluster-002",
+      "session_summary": {
+        "cluster_id": "ip-cluster-002",
+        "ip_count": 2,
+        "ips": [
+          "202.104.136.69",
+          "8.8.8.8"
+        ],
+        "shared_users": [
+          "mms_cmb"
+        ]
+      },
+      "severity": "high",
+      "trigger_reasons": [
+        "correlated IP cluster"
+      ],
+      "trigger_type": "correlated_attack_cluster",
+      "user": "multiple"
+    },
+    {
+      "alert_id": "alert-10",
+      "correlation_data": {
+        "cluster_id": "seq-cluster-001",
+        "pattern_type": "shared_anomalous_sequence",
+        "related_alert_ids": [
+          "alert-1",
+          "alert-2",
+          "alert-3",
+          "alert-4"
+        ],
+        "sequence": [
+          "AUTH"
+        ],
+        "shared_users": [
+          "farms_warn_ruisuiyh",
+          "mms_cmb"
+        ]
+      },
+      "llm_explanation": "跨用户序列模式: 2 个用户执行序列 ['AUTH']。2 个不同用户执行了相同的异常认证序列",
+      "recommended_action": "Multiple users performed the same anomalous action sequence. Investigate for shared attacker tooling, credential theft, or coordinated activity.",
+      "session_id": "correlated-seq:seq-cluster-001",
+      "session_summary": {
+        "cluster_id": "seq-cluster-001",
+        "sequence": [
+          "AUTH"
+        ],
+        "session_ids": [
+          "3999001",
+          "3999002",
+          "4999002",
+          "4999001"
+        ],
+        "users": [
+          "farms_warn_ruisuiyh",
+          "mms_cmb"
         ]
       },
       "severity": "medium",
-      "status": "open",
-      "supporting_event_ids": [
-        "evt-fd73e26b-1",
-        "evt-fd73e26b-2"
-      ],
-      "supporting_scores": [
-        {
-          "item_id": "evt-fd73e26b-1",
-          "item_type": "event",
-          "manual_review_required": true,
-          "rule_hits": [
-            "source deviation",
-            "action deviation",
-            "path deviation"
-          ],
-          "score_action_deviation": 10,
-          "score_auth_deviation": 0,
-          "score_brute_force": 0,
-          "score_bulk_download": 0,
-          "score_client_deviation": 0,
-          "score_dormant_activation": 0,
-          "score_exfiltration": 0,
-          "score_failure_deviation": 0,
-          "score_first_time_ip": 0,
-          "score_in_out_deviation": 0,
-          "score_path_deviation": 10,
-          "score_privilege_path": 0,
-          "score_sensitive_file": 0,
-          "score_source_deviation": 40,
-          "score_time_deviation": 0,
-          "score_total": 60,
-          "score_unusual_result": 0,
-          "score_volume_deviation": 0,
-          "session_id": "sess-1",
-          "threshold_hit": true,
-          "user": "alice"
-        },
-        {
-          "item_id": "evt-fd73e26b-2",
-          "item_type": "event",
-          "manual_review_required": true,
-          "rule_hits": [
-            "source deviation",
-            "action deviation",
-            "path deviation"
-          ],
-          "score_action_deviation": 10,
-          "score_auth_deviation": 0,
-          "score_brute_force": 0,
-          "score_bulk_download": 0,
-          "score_client_deviation": 0,
-          "score_dormant_activation": 0,
-          "score_exfiltration": 0,
-          "score_failure_deviation": 0,
-          "score_first_time_ip": 0,
-          "score_in_out_deviation": 0,
-          "score_path_deviation": 10,
-          "score_privilege_path": 0,
-          "score_sensitive_file": 0,
-          "score_source_deviation": 40,
-          "score_time_deviation": 0,
-          "score_total": 60,
-          "score_unusual_result": 0,
-          "score_volume_deviation": 0,
-          "session_id": "sess-1",
-          "threshold_hit": true,
-          "user": "alice"
-        }
-      ],
-      "time_window": {
-        "end": "2026-05-26T09:05:00Z",
-        "start": "2026-05-26T09:00:00Z"
-      },
       "trigger_reasons": [
-        "action deviation",
-        "path deviation",
-        "source deviation"
+        "correlated action sequence"
       ],
-      "trigger_type": "session_behavioral_deviation",
-      "user": "alice"
+      "trigger_type": "correlated_attack_cluster",
+      "user": "multiple"
     }
   ],
-  "run_id": "review_task2_hist2",
+  "run_id": "verify_task2_large_default",
+  "sequence_cluster_summary": {
+    "anomalous_patterns": [
+      {
+        "affected_users": [
+          "farms_warn_dongyayh",
+          "farms_warn_ruisuiyh",
+          "farms_warn_zsbank",
+          "mms_cmb"
+        ],
+        "max_score": 140,
+        "pattern_id": "pattern-001",
+        "sequence": [
+          "AUTH"
+        ]
+      }
+    ],
+    "anomalous_sessions": 4,
+    "cross_user_pattern_count": 1,
+    "cross_user_patterns": [
+      {
+        "cluster_id": "seq-cluster-001",
+        "sequence": [
+          "AUTH"
+        ],
+        "users": [
+          "farms_warn_ruisuiyh",
+          "mms_cmb"
+        ]
+      }
+    ],
+    "key_findings": [
+      "检测到 1 个跨用户行为序列模式"
+    ],
+    "total_sessions_analyzed": 18
+  },
   "session_summary": {
-    "count": 7,
+    "count": 18,
     "representative_sessions": [
       {
         "action_sequence": [
           "AUTH"
         ],
-        "close_count": 0,
-        "end_time": "2026-05-20T00:00:00,018",
-        "event_count": 1,
-        "inferred_user": "",
-        "login_failure_count": 0,
-        "login_success_count": 1,
-        "open_count": 0,
-        "paths": [],
-        "results": [
-          "ok"
+        "end_time": "2026-05-18T09:00:00,101",
+        "session_id": "3001001",
+        "src_ips": [
+          "202.104.136.69"
         ],
-        "session_id": "2689379",
+        "start_time": "2026-05-18T09:00:00,101",
+        "summary": "session=3001001 users=['mms_cmb'] inferred_user=mms_cmb src_ips=['202.104.136.69'] actions=['AUTH']",
+        "users": [
+          "mms_cmb"
+        ]
+      },
+      {
+        "action_sequence": [
+          "AUTH"
+        ],
+        "end_time": "2026-05-18T09:00:01,205",
+        "session_id": "3001002",
         "src_ips": [
           "220.248.41.29"
         ],
-        "start_time": "2026-05-20T00:00:00,018",
-        "summary": "session=2689379 users=['farms_warn_ruisuiyh'] inferred_user=- src_ips=['220.248.41.29'] actions=['AUTH']",
-        "unbalanced_session": false,
+        "start_time": "2026-05-18T09:00:01,205",
+        "summary": "session=3001002 users=['farms_warn_ruisuiyh'] inferred_user=farms_warn_ruisuiyh src_ips=['220.248.41.29'] actions=['AUTH']",
         "users": [
           "farms_warn_ruisuiyh"
         ]
@@ -509,50 +511,13 @@
         "action_sequence": [
           "AUTH"
         ],
-        "close_count": 0,
-        "end_time": "2026-05-20T00:00:00,223",
-        "event_count": 1,
-        "inferred_user": "",
-        "login_failure_count": 0,
-        "login_success_count": 1,
-        "open_count": 0,
-        "paths": [],
-        "results": [
-          "ok"
-        ],
-        "session_id": "2689385",
-        "src_ips": [
-          "202.104.136.69"
-        ],
-        "start_time": "2026-05-20T00:00:00,223",
-        "summary": "session=2689385 users=['mms_cmb'] inferred_user=- src_ips=['202.104.136.69'] actions=['AUTH']",
-        "unbalanced_session": false,
-        "users": [
-          "mms_cmb"
-        ]
-      },
-      {
-        "action_sequence": [
-          "AUTH"
-        ],
-        "close_count": 0,
-        "end_time": "2026-05-20T00:00:00,429",
-        "event_count": 1,
-        "inferred_user": "",
-        "login_failure_count": 0,
-        "login_success_count": 1,
-        "open_count": 0,
-        "paths": [],
-        "results": [
-          "ok"
-        ],
-        "session_id": "2689397",
+        "end_time": "2026-05-18T09:00:02,115",
+        "session_id": "3001003",
         "src_ips": [
           "124.74.41.42"
         ],
-        "start_time": "2026-05-20T00:00:00,429",
-        "summary": "session=2689397 users=['farms_warn_dongyayh'] inferred_user=- src_ips=['124.74.41.42'] actions=['AUTH']",
-        "unbalanced_session": false,
+        "start_time": "2026-05-18T09:00:02,115",
+        "summary": "session=3001003 users=['farms_warn_dongyayh'] inferred_user=farms_warn_dongyayh src_ips=['124.74.41.42'] actions=['AUTH']",
         "users": [
           "farms_warn_dongyayh"
         ]
@@ -561,56 +526,105 @@
         "action_sequence": [
           "AUTH"
         ],
-        "close_count": 0,
-        "end_time": "2026-05-20T23:59:59,999",
-        "event_count": 1,
-        "inferred_user": "",
-        "login_failure_count": 1,
-        "login_success_count": 0,
-        "open_count": 0,
-        "paths": [],
-        "results": [
-          "fail"
-        ],
-        "session_id": "2689999",
+        "end_time": "2026-05-18T09:00:03,451",
+        "session_id": "3001004",
         "src_ips": [
-          "8.8.8.8"
+          "101.68.90.115"
         ],
-        "start_time": "2026-05-20T23:59:59,999",
-        "summary": "session=2689999 users=['mms_cmb'] inferred_user=- src_ips=['8.8.8.8'] actions=['AUTH']",
-        "unbalanced_session": false,
+        "start_time": "2026-05-18T09:00:03,451",
+        "summary": "session=3001004 users=['farms_warn_zsbank'] inferred_user=farms_warn_zsbank src_ips=['101.68.90.115'] actions=['AUTH']",
+        "users": [
+          "farms_warn_zsbank"
+        ]
+      },
+      {
+        "action_sequence": [
+          "AUTH"
+        ],
+        "end_time": "2026-05-19T09:02:10,301",
+        "session_id": "3002001",
+        "src_ips": [
+          "202.104.136.69"
+        ],
+        "start_time": "2026-05-19T09:02:10,301",
+        "summary": "session=3002001 users=['mms_cmb'] inferred_user=mms_cmb src_ips=['202.104.136.69'] actions=['AUTH']",
         "users": [
           "mms_cmb"
         ]
       },
       {
         "action_sequence": [
-          "GET",
-          "PUT"
+          "AUTH"
         ],
-        "close_count": 0,
-        "end_time": "2026-05-26T09:05:00Z",
-        "event_count": 2,
-        "inferred_user": "",
-        "login_failure_count": 0,
-        "login_success_count": 0,
-        "open_count": 0,
-        "paths": [
-          "/upload",
-          "/upload/report.txt"
-        ],
-        "results": [
-          "ok"
-        ],
-        "session_id": "sess-1",
+        "end_time": "2026-05-19T09:02:11,309",
+        "session_id": "3002002",
         "src_ips": [
-          "10.0.0.10"
+          "220.248.41.29"
         ],
-        "start_time": "2026-05-26T09:00:00Z",
-        "summary": "session=sess-1 users=['alice'] inferred_user=- src_ips=['10.0.0.10'] actions=['GET', 'PUT']",
-        "unbalanced_session": false,
+        "start_time": "2026-05-19T09:02:11,309",
+        "summary": "session=3002002 users=['farms_warn_ruisuiyh'] inferred_user=farms_warn_ruisuiyh src_ips=['220.248.41.29'] actions=['AUTH']",
         "users": [
-          "alice"
+          "farms_warn_ruisuiyh"
+        ]
+      },
+      {
+        "action_sequence": [
+          "AUTH"
+        ],
+        "end_time": "2026-05-19T09:02:12,318",
+        "session_id": "3002003",
+        "src_ips": [
+          "124.74.41.42"
+        ],
+        "start_time": "2026-05-19T09:02:12,318",
+        "summary": "session=3002003 users=['farms_warn_dongyayh'] inferred_user=farms_warn_dongyayh src_ips=['124.74.41.42'] actions=['AUTH']",
+        "users": [
+          "farms_warn_dongyayh"
+        ]
+      },
+      {
+        "action_sequence": [
+          "AUTH"
+        ],
+        "end_time": "2026-05-19T09:02:13,327",
+        "session_id": "3002004",
+        "src_ips": [
+          "101.68.90.115"
+        ],
+        "start_time": "2026-05-19T09:02:13,327",
+        "summary": "session=3002004 users=['farms_warn_zsbank'] inferred_user=farms_warn_zsbank src_ips=['101.68.90.115'] actions=['AUTH']",
+        "users": [
+          "farms_warn_zsbank"
+        ]
+      },
+      {
+        "action_sequence": [
+          "AUTH"
+        ],
+        "end_time": "2026-05-20T23:59:59,999",
+        "session_id": "3999001",
+        "src_ips": [
+          "8.8.8.8"
+        ],
+        "start_time": "2026-05-20T23:59:59,999",
+        "summary": "session=3999001 users=['mms_cmb'] inferred_user=mms_cmb src_ips=['8.8.8.8'] actions=['AUTH']",
+        "users": [
+          "mms_cmb"
+        ]
+      },
+      {
+        "action_sequence": [
+          "AUTH"
+        ],
+        "end_time": "2026-05-20T23:59:59,998",
+        "session_id": "3999002",
+        "src_ips": [
+          "198.51.100.77"
+        ],
+        "start_time": "2026-05-20T23:59:59,998",
+        "summary": "session=3999002 users=['farms_warn_ruisuiyh'] inferred_user=farms_warn_ruisuiyh src_ips=['198.51.100.77'] actions=['AUTH']",
+        "users": [
+          "farms_warn_ruisuiyh"
         ]
       }
     ]
@@ -618,15 +632,17 @@
   "source_name": "build_report_context.py",
   "source_type": "script",
   "strengths": [
-    "确定性多维评分，22维覆盖来源/行为/数据/会话四层",
-    "支持 baseline/current 分离，避免当前窗口污染历史基线",
-    "可解释且可追溯：每条告警附带触发原因和打分明细",
+    "确定性多维评分，覆盖来源/行为/数据/会话/协议安全五层",
+    "支持 baseline/current 分离，满足以基准日志对比新日志的要求",
+    "第三类 mod_sftp 协议日志纳入统一画像，可识别弱算法、协商漂移、老旧客户端指纹",
+    "默认按账户风险聚合输出，更贴近实际安全运营视角，同时保留会话级证据",
+    "IP关联图和序列聚类提供跨实体关联发现，突破单用户基线局限",
+    "可解释且可追溯：每条告警附带触发原因和打分明细，关联发现可追溯到IP集群和序列模式",
     "本地 JSON 管线，内网 LLM 双模式",
-    "噪声策略可调：可信网段降级、降优先级类型、抑制用户"
+    "噪声策略和白名单可调：可信网段、可信用户、可信客户端、算法策略均可配置",
+    "LLM 语义化串联脚本产出的孤立告警为攻击叙事，限制幻觉"
   ],
   "supported_formats": [
-    "key_value",
-    "plain_text",
     "sftp_program_proftpd",
     "sftp_runtime_pipe"
   ],

@@ -6,6 +6,7 @@ import argparse
 import re
 from pathlib import Path
 
+from config_loader import has_expanded_nginx_t, load_active_configs
 from lib import dump_json, make_base_record, read_text
 
 
@@ -18,27 +19,23 @@ def parse_nginx_version(raw_dir: Path) -> str:
     return match.group(1) if match else ""
 
 
-def parse_listeners(raw_dir: Path) -> list[str]:
-    path = raw_dir / "nginx_T.txt"
-    if not path.exists():
-        return []
+def parse_listeners(configs: dict[str, str]) -> list[str]:
     listeners = []
-    for line in read_text(path).splitlines():
-        stripped = line.strip()
-        if stripped.startswith("listen "):
-            listeners.append(stripped.removesuffix(";"))
+    for content in configs.values():
+        for line in content.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("listen "):
+                listeners.append(stripped.removesuffix(";"))
     return sorted(set(listeners))
 
 
-def parse_server_names(raw_dir: Path) -> list[str]:
-    path = raw_dir / "nginx_T.txt"
-    if not path.exists():
-        return []
+def parse_server_names(configs: dict[str, str]) -> list[str]:
     names = []
-    for line in read_text(path).splitlines():
-        stripped = line.strip()
-        if stripped.startswith("server_name "):
-            names.append(stripped.removesuffix(";"))
+    for content in configs.values():
+        for line in content.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("server_name "):
+                names.append(stripped.removesuffix(";"))
     return names
 
 
@@ -51,14 +48,16 @@ def main() -> None:
     run_dir = Path(args.run_dir)
     json_dir = run_dir / "task3" / "json"
     raw_dir = run_dir / "task3" / "raw"
+    configs = load_active_configs(raw_dir, include_stderr=False)
     record = make_base_record(run_dir.name, "task3", "build_inventory.py")
     record.update(
         {
             "hosts": [{"host": args.target, "roles": ["nginx"], "ports": []}],
             "nginx_version": parse_nginx_version(raw_dir),
             "modules": [],
-            "listeners": parse_listeners(raw_dir),
-            "server_blocks": parse_server_names(raw_dir),
+            "listeners": parse_listeners(configs),
+            "server_blocks": parse_server_names(configs),
+            "config_source_mode": "expanded_nginx_t" if has_expanded_nginx_t(raw_dir) else "raw_config_dir",
         }
     )
     dump_json(json_dir / "task3_nginx_inventory.json", record)

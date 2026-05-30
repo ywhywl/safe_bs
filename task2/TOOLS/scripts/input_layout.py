@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import json
 
 
 CURRENT_DIR_NAMES = ("current", "detect", "analysis")
@@ -53,3 +54,47 @@ def iter_log_files(directory: Path) -> list[Path]:
         if path.is_file() and path.suffix.lower() != ".json":
             files.append(path)
     return files
+
+
+def load_noise_policy(policy_path: Path | None) -> dict:
+    default_policy = {
+        "suppress_users": [],
+        "trusted_src_subnets": [],
+        "deprioritize_trigger_types": [],
+        "trusted_users": [],
+        "trusted_client_versions": [],
+        "account_risk_strategy": "account",
+        "business_hours_by_user": {},
+        "sensitive_path_prefixes": [
+            "/etc/",
+            "/root/",
+            "/var/log/",
+            "/.ssh/",
+            "/admin/",
+            "/backup/",
+            "/config/",
+            "/secret/",
+            "/credential/",
+            "/key/",
+        ],
+        "expected_algorithms": {
+            "forbidden_kex": [
+                "diffie-hellman-group1-sha1",
+                "diffie-hellman-group14-sha1",
+                "diffie-hellman-group-exchange-sha1",
+                "rsa1024-sha1",
+            ],
+            "forbidden_hostkeys": ["ssh-dss", "ssh-rsa"],
+            "forbidden_ciphers": ["aes128-cbc", "aes192-cbc", "aes256-cbc", "3des-cbc"],
+            "forbidden_macs": ["hmac-md5", "hmac-md5-96", "hmac-sha1", "hmac-sha1-96"],
+        },
+    }
+    if policy_path is None or not policy_path.exists():
+        return default_policy
+    data = json.loads(policy_path.read_text(encoding="utf-8"))
+    merged = dict(default_policy)
+    merged.update(data)
+    expected = dict(default_policy["expected_algorithms"])
+    expected.update(data.get("expected_algorithms", {}))
+    merged["expected_algorithms"] = expected
+    return merged

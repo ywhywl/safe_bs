@@ -10,6 +10,9 @@
   - 典型特征：`|||||` 分隔，包含 `AuthSuccess/AuthFailure`、`publickey/password`、`SSH-2.0-*`、用户名等字段
 - `sftp` 程序日志
   - 典型特征：`proftpd[...]`，包含 `SSH2 session opened/closed`、`USER xxx: Login successful/failed`
+- `mod_sftp` 协议协商与认证日志
+  - 典型特征：`mod_sftp/0.9.9[...]` 或对齐续行 `[...]`
+  - 可抽取字段：客户端版本、KEX、hostkey、cipher、MAC、USERAUTH 请求、publickey 指纹、SFTP 子系统、REALPATH/读偏移异常等
 
 ## 2. 内网部署要求
 
@@ -85,11 +88,20 @@
 ```json
 {
   "suppress_users": ["unknown"],
+  "trusted_users": ["batch_sync_user"],
+  "trusted_client_versions": ["SSH-2.0-OpenSSH_8.4"],
   "trusted_src_subnets": [
     "202.104.136.0/24",
     "172.31.160.0/24"
   ],
-  "deprioritize_trigger_types": ["multi_source_burst"]
+  "deprioritize_trigger_types": ["multi_source_burst"],
+  "account_risk_strategy": "account",
+  "expected_algorithms": {
+    "forbidden_kex": ["diffie-hellman-group1-sha1"],
+    "forbidden_hostkeys": ["ssh-dss", "ssh-rsa"],
+    "forbidden_ciphers": ["aes128-cbc", "aes192-cbc", "aes256-cbc"],
+    "forbidden_macs": ["hmac-md5", "hmac-md5-96", "hmac-sha1", "hmac-sha1-96"]
+  }
 }
 ```
 
@@ -100,9 +112,19 @@
 - `trusted_src_subnets`
   - 业务已知可信出口网段
   - 命中这些网段时，部分保守告警会被降级
+- `trusted_users`
+  - 业务已知可信账户
+- `trusted_client_versions`
+  - 业务认可的客户端版本白名单
 - `deprioritize_trigger_types`
   - 需要降低等级的触发类型
   - 当前可用于压低 `multi_source_burst`
+- `account_risk_strategy`
+  - 默认 `account`
+  - 表示最终输出优先按账户风险归并
+- `expected_algorithms`
+  - 定义明确不安全的 KEX / hostkey / cipher / MAC
+  - 命中后可直接触发协议安全类告警
 
 ## 6. 运行方式
 
@@ -118,6 +140,19 @@ RUN_ID=task2_case_001 ./bin/run_task2.sh /data/task2_case_001
 - 第二个参数是日志目录
 - 若目录内存在 `baseline/` 和 `current/`，脚本会优先使用 `baseline/` 构建历史基线，仅对 `current/` 触发检测
 - 若没有拆分目录，则保持旧行为：同一批数据内建基线并打分
+- 当前版本默认开启大数据模式 `TASK2_LARGE_MODE=1`，用于避免大日志场景下基线、关联图和序列聚类阶段无约束膨胀。
+- 对 5G 级以上日志，在 16G 内存机器上建议保持默认值，或显式指定：
+
+```bash
+TASK2_LARGE_MODE=1 RUN_ID=task2_case_001 ./bin/run_task2.sh /data/task2_case_001
+```
+
+- 大数据模式会限制每用户路径画像、序列聚类样本数、关联图候选规模和部分明细输出，目标是优先保证任务能稳定完成
+- 若数据规模较小、希望保留更多细节，可手动关闭：
+
+```bash
+TASK2_LARGE_MODE=0 RUN_ID=task2_case_small ./bin/run_task2.sh /data/task2_case_small
+```
 
 ## 7. 输出结果位置
 
@@ -215,12 +250,15 @@ runs/<RUN_ID>/task2/alerts/
 - 来源网段偏离
 - 认证方式偏离
 - 客户端版本偏离
+- 协议协商偏离（KEX / hostkey / cipher / MAC）
+- 明确弱算法检测
 - 动作偏离
 - 路径偏离
 - 夜间或非常见时段偏离
 - 登录失败偏离
 - 会话开闭不平衡
 - 同一用户短时间多源并发
+- 默认账户风险聚合
 
 ## 10. 常见问题
 

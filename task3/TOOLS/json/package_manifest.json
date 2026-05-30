@@ -1,6 +1,6 @@
 {
   "confidence": "medium",
-  "created_at": "2026-05-28T02:18:01+00:00",
+  "created_at": "2026-05-29T15:46:18+00:00",
   "evidence_refs": [],
   "files": [
     {
@@ -9,7 +9,7 @@
     },
     {
       "path": "json/llm_context_input.json",
-      "size": 123083
+      "size": 98401
     },
     {
       "path": "json/llm_prompt_input.md",
@@ -17,45 +17,49 @@
     },
     {
       "path": "json/task3_config_facts.json",
-      "size": 9599
+      "size": 9207
     },
     {
       "path": "json/task3_host_profile.json",
-      "size": 480
+      "size": 474
     },
     {
       "path": "json/task3_nginx_inventory.json",
-      "size": 638
+      "size": 606
     },
     {
       "path": "json/task3_report_context.json",
-      "size": 123084
+      "size": 98402
     },
     {
       "path": "json/task3_risk_register.json",
-      "size": 30571
+      "size": 30713
     },
     {
       "path": "json/task3_rule_hits.json",
-      "size": 24427
+      "size": 19910
     },
     {
       "path": "json/tool_manifest.json",
-      "size": 925
+      "size": 942
     },
     {
-      "path": "raw/nginx_T.txt",
-      "size": 641
+      "path": "raw/http.d/nginx1.conf",
+      "size": 76
+    },
+    {
+      "path": "raw/nginx.conf",
+      "size": 111
     },
     {
       "path": "raw/readonly_meta.env",
-      "size": 133
+      "size": 127
     }
   ],
   "manual_review_required": false,
   "notes": "",
   "operator": "wenlongy",
-  "run_id": "review_task3_evidence2",
+  "run_id": "verify_task3_composite",
   "source_name": "build_manifests.py",
   "source_type": "script",
   "task_id": "task3"

@@ -5,14 +5,14 @@
     "read-only inspection"
   ],
   "confidence": "medium",
-  "created_at": "2026-05-28T02:18:00+00:00",
+  "created_at": "2026-05-29T15:46:17+00:00",
   "evidence_refs": [],
   "manual_review_required": false,
   "notes": "",
   "operator": "wenlongy",
-  "run_id": "review_task3_evidence2",
+  "run_id": "verify_task3_composite",
   "source_name": "build_inventory.py",
   "source_type": "script",
-  "target_host": "task3/TOOLS/evidence/sample_nginx_T.txt",
+  "target_host": "/private/tmp/task3_confdir_nested",
   "task_id": "task3"
 }

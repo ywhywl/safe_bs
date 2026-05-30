@@ -1,10 +1,11 @@
 {
   "confidence": "medium",
-  "created_at": "2026-05-28T02:18:00+00:00",
+  "config_source_mode": "raw_config_dir",
+  "created_at": "2026-05-29T15:46:17+00:00",
   "evidence_refs": [],
   "hosts": [
     {
-      "host": "task3/TOOLS/evidence/sample_nginx_T.txt",
+      "host": "/private/tmp/task3_confdir_nested",
       "ports": [],
       "roles": [
         "nginx"
@@ -12,7 +13,6 @@
     }
   ],
   "listeners": [
-    "listen 443 ssl",
     "listen 80"
   ],
   "manual_review_required": false,
@@ -20,10 +20,9 @@
   "nginx_version": "",
   "notes": "",
   "operator": "wenlongy",
-  "run_id": "review_task3_evidence2",
+  "run_id": "verify_task3_composite",
   "server_blocks": [
-    "server_name demo.local",
-    "server_name secure.demo.local"
+    "server_name _"
   ],
   "source_name": "build_inventory.py",
   "source_type": "script",

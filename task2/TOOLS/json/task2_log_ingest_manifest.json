@@ -1,63 +1,38 @@
 {
-  "baseline_input_dir": "/private/tmp/task2_hist_case/baseline",
-  "baseline_log_sources": [
-    {
-      "format_guess": "sftp_program_proftpd",
-      "line_count": 5,
-      "path": "/private/tmp/task2_hist_case/baseline/proftpd_program_sample.log",
-      "role": "baseline"
-    },
-    {
-      "format_guess": "key_value",
-      "line_count": 4,
-      "path": "/private/tmp/task2_hist_case/baseline/sample_kv.log",
-      "role": "baseline"
-    }
-  ],
+  "baseline_input_dir": "",
+  "baseline_log_sources": [],
   "confidence": "medium",
-  "created_at": "2026-05-28T02:18:00+00:00",
-  "current_input_dir": "/private/tmp/task2_hist_case/current",
+  "created_at": "2026-05-30T04:33:05+00:00",
+  "current_input_dir": "task2/TOOLS/datasets/demo_abnormal",
   "current_log_sources": [
     {
-      "format_guess": "sftp_runtime_pipe",
-      "line_count": 4,
-      "path": "/private/tmp/task2_hist_case/current/runtime_pipe_sample.log",
+      "format_guess": "sftp_program_proftpd",
+      "line_count": 9,
+      "path": "task2/TOOLS/datasets/demo_abnormal/proftpd_program.log",
       "role": "current"
     },
     {
-      "format_guess": "plain_text",
-      "line_count": 4,
-      "path": "/private/tmp/task2_hist_case/current/sample.log",
+      "format_guess": "sftp_runtime_pipe",
+      "line_count": 11,
+      "path": "task2/TOOLS/datasets/demo_abnormal/runtime_pipe.log",
       "role": "current"
     }
   ],
-  "dataset_mode": "historical_split",
+  "dataset_mode": "single_dataset",
   "evidence_refs": [],
-  "input_root": "/private/tmp/task2_hist_case",
+  "input_root": "task2/TOOLS/datasets/demo_abnormal",
   "log_sources": [
     {
-      "format_guess": "sftp_runtime_pipe",
-      "line_count": 4,
-      "path": "/private/tmp/task2_hist_case/current/runtime_pipe_sample.log",
-      "role": "current"
-    },
-    {
-      "format_guess": "plain_text",
-      "line_count": 4,
-      "path": "/private/tmp/task2_hist_case/current/sample.log",
-      "role": "current"
-    },
-    {
       "format_guess": "sftp_program_proftpd",
-      "line_count": 5,
-      "path": "/private/tmp/task2_hist_case/baseline/proftpd_program_sample.log",
-      "role": "baseline"
+      "line_count": 9,
+      "path": "task2/TOOLS/datasets/demo_abnormal/proftpd_program.log",
+      "role": "current"
     },
     {
-      "format_guess": "key_value",
-      "line_count": 4,
-      "path": "/private/tmp/task2_hist_case/baseline/sample_kv.log",
-      "role": "baseline"
+      "format_guess": "sftp_runtime_pipe",
+      "line_count": 11,
+      "path": "task2/TOOLS/datasets/demo_abnormal/runtime_pipe.log",
+      "role": "current"
     }
   ],
   "manual_review_required": false,
@@ -70,8 +45,8 @@
   "notes": "",
   "operator": "wenlongy",
   "parse_errors": [],
-  "policy_path": "",
-  "run_id": "review_task2_hist2",
+  "policy_path": "task2/TOOLS/datasets/demo_abnormal/noise_policy.json",
+  "run_id": "verify_task2_large_default",
   "source_name": "ingest_logs.py",
   "source_type": "script",
   "task_id": "task2"

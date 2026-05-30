@@ -1,11 +1,11 @@
 {
   "confidence": "medium",
-  "created_at": "2026-05-28T02:18:00+00:00",
+  "created_at": "2026-05-30T04:33:05+00:00",
   "evidence_refs": [],
   "manual_review_required": false,
   "notes": "",
   "operator": "wenlongy",
-  "run_id": "review_task2_hist2",
+  "run_id": "verify_task2_large_default",
   "source_name": "build_manifests.py",
   "source_type": "script",
   "task_id": "task2",
@@ -32,7 +32,7 @@
     },
     {
       "name": "nmap",
-      "path": null,
+      "path": "/usr/local/bin/nmap",
       "required": false
     },
     {

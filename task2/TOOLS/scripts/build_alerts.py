@@ -8,7 +8,7 @@ from datetime import datetime
 from pathlib import Path
 
 from event_io import iter_ndjson
-from input_layout import resolve_input_layout
+from input_layout import load_noise_policy, resolve_input_layout
 from lib import dump_json, load_json, make_base_record
 
 
@@ -39,6 +39,14 @@ REASON_LABELS = {
     "orphan session": "孤立会话（会话打开但未正常关闭）",
     "login brute force": "登录暴力破解（同一IP对同一用户短时间多次失败）",
     "cross-user shared IP": "跨用户共享IP（同一IP被多个不同用户使用）",
+    "weak kex algorithm": "使用了不安全的密钥交换算法",
+    "weak hostkey algorithm": "使用了不安全的主机密钥算法",
+    "weak cipher algorithm": "使用了不安全的加密算法",
+    "weak mac algorithm": "使用了不安全的MAC算法",
+    "protocol negotiation deviation": "协议协商参数偏离历史基线",
+    "correlated IP cluster": "多个告警共享同一IP基础设施集群，可能存在关联攻击",
+    "correlated action sequence": "多个用户执行相同的异常操作序列，可能存在共享攻击工具或凭证泄露",
+    "account risk aggregation": "同一账户在同一时间窗口内聚合出多类异常，账户整体风险升高",
 }
 
 
@@ -73,47 +81,97 @@ def main() -> None:
     run_dir = Path(args.run_dir)
     json_dir = run_dir / "task2" / "json"
     layout = resolve_input_layout(Path(args.input_dir))
-    noise_policy = load_json(layout.policy_path, {"suppress_users": [], "trusted_src_subnets": [], "deprioritize_trigger_types": []}) if layout.policy_path else {"suppress_users": [], "trusted_src_subnets": [], "deprioritize_trigger_types": []}
+    noise_policy = load_noise_policy(layout.policy_path)
     suppress_users = set(noise_policy.get("suppress_users", []))
     trusted_src_subnets = set(noise_policy.get("trusted_src_subnets", []))
     deprioritize_types = set(noise_policy.get("deprioritize_trigger_types", []))
     multi_source_window = int(noise_policy.get("concurrent_session_window_seconds", 60))
+    account_risk_strategy = noise_policy.get("account_risk_strategy", "account")
 
-    scores = list(iter_ndjson(json_dir / "task2_anomaly_scores.ndjson"))
+    grouped = defaultdict(
+        lambda: {
+            "user": "unknown",
+            "start": "",
+            "end": "",
+            "reasons": set(),
+            "event_ids": [],
+            "supporting_scores": [],
+            "max_score": 0,
+            "src_ips": set(),
+            "src_subnets": set(),
+            "event_count": 0,
+        }
+    )
+    for item in iter_ndjson(json_dir / "task2_anomaly_scores.ndjson"):
+        if not item.get("threshold_hit"):
+            continue
+        session_id = item.get("session_id", "") or f"user:{item.get('user')}"
+        group = grouped[session_id]
+        user = item.get("user", "unknown")
+        if group["user"] in {"", "unknown"} and user not in {"", "unknown"}:
+            group["user"] = user
+        ts = item.get("timestamp", "")
+        if ts and (not group["start"] or ts < group["start"]):
+            group["start"] = ts
+        if ts and (not group["end"] or ts > group["end"]):
+            group["end"] = ts
+        group["reasons"].update(item.get("rule_hits", []))
+        if len(group["event_ids"]) < 100:
+            group["event_ids"].append(item.get("item_id"))
+        if len(group["supporting_scores"]) < 100:
+            group["supporting_scores"].append(
+                {
+                    "item_id": item.get("item_id"),
+                    "score_total": item.get("score_total"),
+                    "rule_hits": item.get("rule_hits"),
+                    "threshold_hit": item.get("threshold_hit"),
+                }
+            )
+        group["max_score"] = max(group["max_score"], item.get("score_total", 0))
+        if item.get("src_ip"):
+            group["src_ips"].add(item.get("src_ip"))
+        if item.get("src_subnet"):
+            group["src_subnets"].add(item.get("src_subnet"))
+        group["event_count"] += 1
+
     session_scores = list(iter_ndjson(json_dir / "task2_session_anomaly_scores.ndjson"))
-    events = {event.get("event_id"): event for event in iter_ndjson(json_dir / "task2_events.ndjson")}
-    session_views_json = load_json(json_dir / "task2_session_views.json", {})
-    sessions_data = session_views_json.get("sessions")
-    if not sessions_data:
-        sessions_data = list(iter_ndjson(json_dir / "task2_session_views.ndjson"))
-    session_views = {session.get("session_id"): session for session in sessions_data}
+    session_views = {}
+    for session in iter_ndjson(json_dir / "task2_session_views.ndjson"):
+        sid = session.get("session_id")
+        if sid:
+            session_views[sid] = {
+                "session_id": sid,
+                "users": session.get("users", []),
+                "inferred_user": session.get("inferred_user", ""),
+                "start_time": session.get("start_time", ""),
+                "end_time": session.get("end_time", ""),
+                "src_ips": session.get("src_ips", []),
+                "action_sequence": session.get("action_sequence", [])[:50],
+                "paths": session.get("paths", [])[:50],
+                "event_count": session.get("event_count", 0),
+                "open_count": session.get("open_count", 0),
+                "close_count": session.get("close_count", 0),
+                "unbalanced_session": session.get("unbalanced_session", False),
+            }
     scores_meta = load_json(json_dir / "task2_anomaly_scores.json", {})
+    ip_correlation = load_json(json_dir / "task2_ip_correlation.json", {})
+    sequence_clusters = load_json(json_dir / "task2_sequence_clusters.json", {})
 
     alerts = []
     alert_idx = 0
 
-    # --- Event-level alerts (grouped by session) ---
-    grouped = defaultdict(list)
-    for item in scores:
-        if not item.get("threshold_hit"):
-            continue
-        event = events.get(item.get("item_id"), {})
-        session_id = event.get("session_id") or f"user:{item.get('user')}"
-        grouped[session_id].append((item, event))
-
-    for session_id, items in sorted(grouped.items()):
-        user = items[0][0].get("user")
+    # --- Event-level alerts (grouped by session, using score fields only) ---
+    for session_id, group in sorted(grouped.items()):
+        user = group["user"]
         if user in suppress_users:
             continue
         alert_idx += 1
-        reasons = sorted({reason for item, _ in items for reason in item.get("rule_hits", [])})
+        reasons = sorted(group["reasons"])
         explanation = explain_reasons(reasons)
-        event_ids = [item.get("item_id") for item, _ in items]
-        src_ips = sorted({event.get("src_ip", "unknown") for _, event in items})
-        src_subnets = sorted({event.get("src_subnet", "") for _, event in items if event.get("src_subnet")})
-        action_sequence = [event.get("action", "") for _, event in items if event.get("action")]
-        path_set = sorted({event.get("path", "") for _, event in items if event.get("path")})
-        max_score = max(item.get("score_total", 0) for item, _ in items)
+        event_ids = group["event_ids"]
+        max_score = group["max_score"]
+        src_ips = sorted(group["src_ips"])
+        src_subnets = sorted(group["src_subnets"])
 
         # Determine trigger_type based on reasons
         trigger_type = "session_behavioral_deviation"
@@ -123,6 +181,8 @@ def main() -> None:
             trigger_type = "data_exfiltration"
         elif any(r in reasons for r in ["privilege path access", "sensitive file access"]):
             trigger_type = "sensitive_access"
+        elif any(r in reasons for r in ["weak kex algorithm", "weak hostkey algorithm", "weak cipher algorithm", "weak mac algorithm", "protocol negotiation deviation"]):
+            trigger_type = "protocol_security_risk"
         elif any(r in reasons for r in ["first-time source IP"]):
             trigger_type = "anomalous_source"
         elif any(r in reasons for r in ["dormant account activation"]):
@@ -137,24 +197,23 @@ def main() -> None:
                 "user": user,
                 "session_id": session_id,
                 "time_window": {
-                    "start": items[0][1].get("timestamp", ""),
-                    "end": items[-1][1].get("timestamp", ""),
+                    "start": group["start"],
+                    "end": group["end"],
                 },
                 "trigger_type": trigger_type,
                 "trigger_reasons": reasons,
                 "supporting_event_ids": event_ids,
-                "supporting_scores": [item for item, _ in items],
+                "supporting_scores": group["supporting_scores"],
                 "session_summary": {
                     "src_ips": src_ips,
                     "src_subnets": src_subnets,
-                    "action_sequence": action_sequence,
-                    "paths": path_set,
-                    "event_count": len(items),
+                    "event_count": group["event_count"],
                 },
                 "recommended_action": {
                     "login_brute_force": "Block source IP, force password reset for affected user, review login policies.",
                     "data_exfiltration": "Review outbound data, inspect accessed paths, verify authorization for large transfers.",
                     "sensitive_access": "Review access authorization for privileged paths, check file integrity.",
+                    "protocol_security_risk": "Review negotiated SSH/SFTP algorithms and client software version. Consider disabling weak KEX/cipher/MAC and updating legacy clients.",
                     "anomalous_source": "Verify source IP legitimacy, check VPN/proxy logs, confirm user location.",
                     "dormant_activation": "Review account status, verify authorization, check if legitimate return to work.",
                     "session_behavioral_deviation": "Review account activity, validate source context, and inspect the full session sequence.",
@@ -175,7 +234,9 @@ def main() -> None:
         alert_idx += 1
         reasons = item.get("rule_hits", [])
         trigger_type = "session_anomaly"
-        if "crawl behavior" in reasons:
+        if any(r in reasons for r in ["weak kex algorithm", "weak hostkey algorithm", "weak cipher algorithm", "weak mac algorithm", "protocol negotiation deviation"]):
+            trigger_type = "protocol_security_risk"
+        elif "crawl behavior" in reasons:
             trigger_type = "crawl_behavior"
         elif "session data exfiltration" in reasons:
             trigger_type = "session_data_exfiltration"
@@ -210,6 +271,7 @@ def main() -> None:
                 },
                 "recommended_action": {
                     "crawl_behavior": "Check if user is performing authorized directory scanning. Block or rate-limit if unauthorized.",
+                    "protocol_security_risk": "Review negotiated SSH/SFTP algorithms and client software version for this session. Disable weak KEX/hostkey/cipher/MAC and verify whether the client is an outdated automation component.",
                     "session_data_exfiltration": "Review session data volume, inspect all transferred files, verify authorization.",
                     "long_session": "Check session legitimacy, verify if user was actually active throughout. Investigate persistent connections.",
                     "orphan_session": "Review session logs, check if session was abnormally terminated. Investigate potential session hijacking.",
@@ -358,6 +420,121 @@ def main() -> None:
                 "llm_confidence": "medium",
             }
         )
+
+    # --- Account risk aggregation (default output strategy) ---
+    if account_risk_strategy == "account":
+        by_user_alerts: dict[str, list[dict]] = defaultdict(list)
+        for alert in alerts:
+            user = alert.get("user", "")
+            if not user or user in {"unknown", "multiple"}:
+                continue
+            by_user_alerts[user].append(alert)
+        for user, user_alerts in sorted(by_user_alerts.items()):
+            high_count = sum(1 for a in user_alerts if a.get("severity") == "high")
+            if len(user_alerts) < 2:
+                continue
+            trigger_reasons = sorted({reason for a in user_alerts for reason in a.get("trigger_reasons", [])})
+            alert_idx += 1
+            alerts.append(
+                {
+                    "alert_id": f"alert-{alert_idx}",
+                    "severity": "high" if high_count >= 1 or len(user_alerts) >= 3 else "medium",
+                    "user": user,
+                    "session_id": f"account-risk:{user}",
+                    "time_window": {"start": "", "end": ""},
+                    "trigger_type": "account_risk_aggregation",
+                    "trigger_reasons": ["account risk aggregation"] + trigger_reasons[:8],
+                    "supporting_event_ids": [],
+                    "supporting_scores": [],
+                    "session_summary": {
+                        "related_alert_ids": [a.get("alert_id") for a in user_alerts],
+                        "alert_count": len(user_alerts),
+                        "high_count": high_count,
+                    },
+                    "recommended_action": "Review the account as a whole across all related sessions, source IPs, authentication attempts, and negotiated protocol parameters.",
+                    "status": "open",
+                    "llm_explanation": explain_reasons(["account risk aggregation"]) + f"；该账户在当前窗口内关联 {len(user_alerts)} 条异常告警。",
+                    "llm_confidence": "medium",
+                }
+            )
+
+    # --- Correlated attack cluster alerts (from IP correlation graph) ---
+    for cluster in ip_correlation.get("ip_clusters", []):
+        if not cluster.get("is_anomalous_cluster"):
+            continue
+        alert_idx += 1
+        related_alert_ids = []
+        cluster_sessions = set(cluster.get("alert_session_ids", []))
+        for existing_alert in alerts:
+            if existing_alert.get("session_id") in cluster_sessions:
+                related_alert_ids.append(existing_alert["alert_id"])
+
+        alerts.append({
+            "alert_id": f"alert-{alert_idx}",
+            "severity": "high" if len(related_alert_ids) >= 2 else "medium",
+            "user": "multiple",
+            "session_id": f"correlated-cluster:{cluster.get('cluster_id')}",
+            "time_window": {"start": "", "end": ""},
+            "trigger_type": "correlated_attack_cluster",
+            "trigger_reasons": ["correlated IP cluster"],
+            "supporting_event_ids": [],
+            "supporting_scores": [],
+            "correlation_data": {
+                "cluster_id": cluster.get("cluster_id"),
+                "cluster_ips": cluster.get("ips", []),
+                "shared_users": cluster.get("shared_users", []),
+                "related_alert_ids": related_alert_ids,
+                "total_events": cluster.get("total_events", 0),
+            },
+            "session_summary": {
+                "cluster_id": cluster.get("cluster_id"),
+                "ip_count": len(cluster.get("ips", [])),
+                "ips": cluster.get("ips", []),
+                "shared_users": cluster.get("shared_users", []),
+            },
+            "recommended_action": "Investigate correlated activity across multiple sessions sharing the same IP infrastructure. Check for shared attacker infrastructure or credential reuse.",
+            "status": "open",
+            "llm_explanation": f"IP集群 {cluster.get('cluster_id')} 关联 {len(cluster.get('ips', []))} 个IP，共享用户 {cluster.get('shared_users', [])}。{len(related_alert_ids)} 条已有告警与此集群关联。",
+            "llm_confidence": "medium",
+        })
+
+    # --- Cross-user sequence pattern alerts ---
+    for pattern in sequence_clusters.get("cross_user_patterns", []):
+        alert_idx += 1
+        related_alert_ids = []
+        pattern_sessions = set(pattern.get("session_ids", []))
+        for existing_alert in alerts:
+            if existing_alert.get("session_id") in pattern_sessions:
+                related_alert_ids.append(existing_alert["alert_id"])
+
+        alerts.append({
+            "alert_id": f"alert-{alert_idx}",
+            "severity": "high" if len(pattern.get("users", [])) >= 3 else "medium",
+            "user": "multiple",
+            "session_id": f"correlated-seq:{pattern.get('cluster_id')}",
+            "time_window": {"start": "", "end": ""},
+            "trigger_type": "correlated_attack_cluster",
+            "trigger_reasons": ["correlated action sequence"],
+            "supporting_event_ids": [],
+            "supporting_scores": [],
+            "correlation_data": {
+                "cluster_id": pattern.get("cluster_id"),
+                "pattern_type": pattern.get("pattern_type"),
+                "shared_users": pattern.get("users", []),
+                "sequence": pattern.get("sequence", []),
+                "related_alert_ids": related_alert_ids,
+            },
+            "session_summary": {
+                "cluster_id": pattern.get("cluster_id"),
+                "users": pattern.get("users", []),
+                "session_ids": pattern.get("session_ids", []),
+                "sequence": pattern.get("sequence", []),
+            },
+            "recommended_action": "Multiple users performed the same anomalous action sequence. Investigate for shared attacker tooling, credential theft, or coordinated activity.",
+            "status": "open",
+            "llm_explanation": f"跨用户序列模式: {len(pattern.get('users', []))} 个用户执行序列 {pattern.get('sequence', [])}。{pattern.get('interpretation_hint', '')}",
+            "llm_confidence": "medium",
+        })
 
     record = make_base_record(run_dir.name, "task2", "build_alerts.py")
     record["alerts"] = alerts

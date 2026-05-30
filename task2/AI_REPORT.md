@@ -3,20 +3,20 @@
 ## 使用的模型与工具
 
 外网 LLM (Claude Code skill)。
-异常评分脚本: score_anomalies.py（确定性多维打分，阈值 >= 60）。
+异常评分脚本: score_anomalies.py（行为异常 + 协议安全异常的确定性多维打分）。
 
 ## AI 参与环节
 
-告警解释和文档生成。LLM 模式: 外网 LLM (Claude Code skill)。
-异常结论只能来自脚本打分，LLM 不参与最终判定。
+告警解释、关联推理和攻击叙事生成。LLM 模式: 外网 LLM (Claude Code skill)。
+异常判定、基线比对、协议安全判断和关联发现由脚本确定性产出，LLM 只做语义化解释与叙事串联。
 
 ## 输入材料与中间数据
 
-task2_report_context.json、task2_alerts.json、task2_baseline_views.json、task2_session_views.ndjson
+task2_report_context.json、task2_alerts.json、task2_baseline_views.json、task2_session_views.ndjson、task2_ip_correlation.json、task2_sequence_clusters.json
 
 ## 关键提示策略
 
-强调 LLM 不直接改动异常判定结果，只负责解释和文档。异常结论必须可追溯到脚本评分。
+强调 LLM 不自行推断未由脚本提供的关联关系，所有结论必须可追溯到脚本评分和关联数据。LLM 负责把基线比对结果、协议安全异常、IP集群和序列模式串联为攻击叙事。
 
 ## AI 产出与人工修正
 
@@ -24,16 +24,16 @@ task2_report_context.json、task2_alerts.json、task2_baseline_views.json、task
 
 ## 有效实践总结
 
-两层架构：脚本确定性打分 + LLM 解释文档。JSON 中间态有利于限制幻觉。
+四层架构：历史基线对比 + 脚本确定性打分 + 脚本确定性关联发现 + LLM 语义化解释与攻击叙事。JSON 中间态有利于限制幻觉，关联数据提供跨实体推理的依据。
 
 ## 局限性
 
-阈值仍采用启发式设置，尚未针对更大规模历史样本做调优；会话级检测依赖 SESSION_OPEN/CLOSE 动作，日志格式不全时可能漏检；暴力破解检测基于滑动窗口，密集慢速攻击可能不触发
+阈值仍采用启发式设置，尚未针对更大规模历史样本做调优；会话级检测依赖 SESSION_OPEN/CLOSE 动作，日志格式不全时可能漏检；暴力破解检测基于滑动窗口，密集慢速攻击可能不触发；开启 TASK2_LARGE_MODE=1 时，会对路径画像、序列聚类样本和关联图候选规模做截断，以换取 16G 机器上的稳定运行
 
 ## 工具评价
 
-LLM: 外网 LLM (Claude Code skill)。适合做解释与文档，不适合作为核心判定。
+LLM: 外网 LLM (Claude Code skill)。适合做告警解释、关联推理和攻击叙事，不适合作为核心判定或关联发现。
 
 ## 可复用沉淀
 
-基线/告警 JSON 结构、评分维度和阈值、LLM 客户端（外网/内网双模式）、task2 skill。
+baseline/current 对比目录模式、第三类 mod_sftp 协议日志解析、基线/告警/关联 JSON 结构、行为+协议安全评分维度、IP关联图和序列聚类算法、账户风险聚合策略、LLM 客户端（外网/内网双模式）、task2 skill。

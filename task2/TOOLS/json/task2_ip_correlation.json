@@ -1,0 +1,346 @@
+{
+  "anomalous_ip_count": 2,
+  "anomalous_ip_nodes": [
+    {
+      "anomalous_event_count": 2,
+      "ip": "198.51.100.77",
+      "reasons": [
+        "action deviation",
+        "auth deviation",
+        "client deviation",
+        "failure deviation",
+        "first-time source IP",
+        "source deviation",
+        "time deviation",
+        "unusual result type"
+      ],
+      "subnet": "198.51.100.0/24",
+      "users": [
+        "farms_warn_ruisuiyh"
+      ]
+    },
+    {
+      "anomalous_event_count": 2,
+      "ip": "8.8.8.8",
+      "reasons": [
+        "auth deviation",
+        "client deviation",
+        "failure deviation",
+        "first-time source IP",
+        "source deviation",
+        "time deviation",
+        "unusual result type"
+      ],
+      "subnet": "8.8.8.0/24",
+      "users": [
+        "mms_cmb"
+      ]
+    }
+  ],
+  "confidence": "medium",
+  "correlation_limits": {
+    "max_candidate_ips_per_subnet": 10,
+    "max_candidate_ips_per_user": 10,
+    "max_paths_per_ip": 10,
+    "max_sessions_per_ip": 10,
+    "max_time_samples_per_user_ip": 50
+  },
+  "created_at": "2026-05-30T04:33:06+00:00",
+  "cross_user_ip_patterns": [],
+  "evidence_refs": [],
+  "ip_cluster_count": 2,
+  "ip_clusters": [
+    {
+      "alert_session_ids": [
+        "3999002",
+        "4999002"
+      ],
+      "cluster_id": "ip-cluster-001",
+      "ips": [
+        "101.68.90.115",
+        "198.51.100.77",
+        "203.0.113.55",
+        "220.248.41.29"
+      ],
+      "is_anomalous_cluster": true,
+      "session_count": 10,
+      "shared_users": [
+        "farms_warn_ruisuiyh",
+        "farms_warn_zsbank"
+      ],
+      "total_events": 12
+    },
+    {
+      "alert_session_ids": [
+        "3999001",
+        "4999001"
+      ],
+      "cluster_id": "ip-cluster-002",
+      "ips": [
+        "202.104.136.69",
+        "8.8.8.8"
+      ],
+      "is_anomalous_cluster": true,
+      "session_count": 6,
+      "shared_users": [
+        "mms_cmb"
+      ],
+      "total_events": 6
+    }
+  ],
+  "ip_edges": [
+    {
+      "edge_types": [
+        "shared_user"
+      ],
+      "ip_a": "101.68.90.115",
+      "ip_b": "203.0.113.55",
+      "max_time_gap_seconds": null,
+      "shared_sessions": [],
+      "shared_users": [
+        "farms_warn_zsbank"
+      ]
+    },
+    {
+      "edge_types": [
+        "shared_user"
+      ],
+      "ip_a": "198.51.100.77",
+      "ip_b": "220.248.41.29",
+      "max_time_gap_seconds": null,
+      "shared_sessions": [],
+      "shared_users": [
+        "farms_warn_ruisuiyh"
+      ]
+    },
+    {
+      "edge_types": [
+        "shared_user"
+      ],
+      "ip_a": "202.104.136.69",
+      "ip_b": "8.8.8.8",
+      "max_time_gap_seconds": null,
+      "shared_sessions": [],
+      "shared_users": [
+        "mms_cmb"
+      ]
+    },
+    {
+      "edge_types": [
+        "shared_user"
+      ],
+      "ip_a": "203.0.113.55",
+      "ip_b": "220.248.41.29",
+      "max_time_gap_seconds": null,
+      "shared_sessions": [],
+      "shared_users": [
+        "unknown"
+      ]
+    }
+  ],
+  "ip_nodes": [
+    {
+      "action_types": [
+        "AUTH"
+      ],
+      "anomalous_event_ids": [],
+      "event_count": 2,
+      "ip": "101.68.90.115",
+      "is_anomalous": false,
+      "paths": [],
+      "result_distribution": {
+        "ok": 2
+      },
+      "sessions": [
+        "3001004",
+        "3002004"
+      ],
+      "subnet": "101.68.90.0/24",
+      "time_range": {
+        "end": "2026-05-19T09:02:13.327000",
+        "start": "2026-05-18T09:00:03.451000"
+      },
+      "users": [
+        "farms_warn_zsbank"
+      ]
+    },
+    {
+      "action_types": [
+        "AUTH"
+      ],
+      "anomalous_event_ids": [],
+      "event_count": 2,
+      "ip": "124.74.41.42",
+      "is_anomalous": false,
+      "paths": [],
+      "result_distribution": {
+        "ok": 2
+      },
+      "sessions": [
+        "3001003",
+        "3002003"
+      ],
+      "subnet": "124.74.41.0/24",
+      "time_range": {
+        "end": "2026-05-19T09:02:12.318000",
+        "start": "2026-05-18T09:00:02.115000"
+      },
+      "users": [
+        "farms_warn_dongyayh"
+      ]
+    },
+    {
+      "action_types": [
+        "AUTH",
+        "LOGIN"
+      ],
+      "anomalous_event_ids": [
+        "evt-eb2103fc-8",
+        "evt-f265d477-10"
+      ],
+      "event_count": 2,
+      "ip": "198.51.100.77",
+      "is_anomalous": true,
+      "paths": [],
+      "result_distribution": {
+        "fail": 2
+      },
+      "sessions": [
+        "3999002",
+        "4999002"
+      ],
+      "subnet": "198.51.100.0/24",
+      "time_range": {
+        "end": "2026-05-20T23:59:59.998000",
+        "start": "2026-05-20T23:59:58.002000"
+      },
+      "users": [
+        "farms_warn_ruisuiyh"
+      ]
+    },
+    {
+      "action_types": [
+        "AUTH",
+        "LOGIN"
+      ],
+      "anomalous_event_ids": [],
+      "event_count": 4,
+      "ip": "202.104.136.69",
+      "is_anomalous": false,
+      "paths": [],
+      "result_distribution": {
+        "ok": 4
+      },
+      "sessions": [
+        "3001001",
+        "3002001",
+        "4100001",
+        "4200001"
+      ],
+      "subnet": "202.104.136.0/24",
+      "time_range": {
+        "end": "2026-05-19T09:02:10.301000",
+        "start": "2026-05-18T09:00:00.101000"
+      },
+      "users": [
+        "mms_cmb"
+      ]
+    },
+    {
+      "action_types": [
+        "AUTH",
+        "SESSION_OPEN"
+      ],
+      "anomalous_event_ids": [],
+      "event_count": 2,
+      "ip": "203.0.113.55",
+      "is_anomalous": false,
+      "paths": [],
+      "result_distribution": {
+        "ok": 2
+      },
+      "sessions": [
+        "3999003",
+        "4999003"
+      ],
+      "subnet": "203.0.113.0/24",
+      "time_range": {
+        "end": "2026-05-20T23:59:58.777000",
+        "start": "2026-05-20T23:59:58.003000"
+      },
+      "users": [
+        "farms_warn_zsbank",
+        "unknown"
+      ]
+    },
+    {
+      "action_types": [
+        "AUTH",
+        "SESSION_CLOSE",
+        "SESSION_OPEN"
+      ],
+      "anomalous_event_ids": [],
+      "event_count": 6,
+      "ip": "220.248.41.29",
+      "is_anomalous": false,
+      "paths": [],
+      "result_distribution": {
+        "ok": 6
+      },
+      "sessions": [
+        "3001002",
+        "3002002",
+        "4100002",
+        "4200002"
+      ],
+      "subnet": "220.248.41.0/24",
+      "time_range": {
+        "end": "2026-05-19T09:02:11.309000",
+        "start": "2026-05-18T09:00:00.202000"
+      },
+      "users": [
+        "farms_warn_ruisuiyh",
+        "unknown"
+      ]
+    },
+    {
+      "action_types": [
+        "AUTH",
+        "LOGIN"
+      ],
+      "anomalous_event_ids": [
+        "evt-eb2103fc-7",
+        "evt-f265d477-9"
+      ],
+      "event_count": 2,
+      "ip": "8.8.8.8",
+      "is_anomalous": true,
+      "paths": [],
+      "result_distribution": {
+        "fail": 2
+      },
+      "sessions": [
+        "3999001",
+        "4999001"
+      ],
+      "subnet": "8.8.8.0/24",
+      "time_range": {
+        "end": "2026-05-20T23:59:59.999000",
+        "start": "2026-05-20T23:59:58.001000"
+      },
+      "users": [
+        "mms_cmb"
+      ]
+    }
+  ],
+  "large_mode": true,
+  "manual_review_required": false,
+  "notes": "",
+  "operator": "wenlongy",
+  "run_id": "verify_task2_large_default",
+  "source_name": "build_correlation_graph.py",
+  "source_type": "script",
+  "task_id": "task2",
+  "total_ip_edges": 4,
+  "total_ip_nodes": 7
+}

@@ -3,23 +3,16 @@
   "autoindex": true,
   "client_max_body_size_unlimited": true,
   "confidence": "medium",
-  "config_count": 1,
+  "config_count": 2,
   "config_summaries": {
-    "nginx_T.txt": {
+    "http.d/nginx1.conf": {
       "listen_ports": [
         [
           "80"
-        ],
-        []
+        ]
       ],
-      "locations": [
-        "/admin",
-        "/",
-        "/app"
-      ],
-      "security_headers": [
-        "X-Frame-Options"
-      ],
+      "locations": [],
+      "security_headers": [],
       "server_blocks": [
         {
           "has_access_log_off": false,
@@ -34,75 +27,51 @@
           "listen": [
             "80"
           ],
-          "locations": [
-            "/admin",
-            "/"
-          ],
+          "locations": [],
           "options_403": false,
           "proxy_cookie_samesite": false,
           "proxy_cookie_secure": false,
           "server_name": [
-            "demo.local"
+            "_"
           ],
           "ssl_has_ciphers": false,
           "ssl_has_prefer": false,
           "ssl_has_protocols": false
-        },
-        {
-          "has_access_log_off": false,
-          "has_allow_deny": false,
-          "has_client_max_body": false,
-          "has_https_redirect": false,
-          "has_if_in_location": false,
-          "has_limit_except": false,
-          "has_lua_access": false,
-          "has_proxy_cookie": false,
-          "has_ssl_block": true,
-          "listen": [],
-          "locations": [
-            "/app"
-          ],
-          "options_403": false,
-          "proxy_cookie_samesite": false,
-          "proxy_cookie_secure": false,
-          "server_name": [
-            "secure.demo.local"
-          ],
-          "ssl_has_ciphers": false,
-          "ssl_has_prefer": false,
-          "ssl_has_protocols": true
         }
       ],
       "server_names": [
         [
-          "demo.local"
-        ],
-        [
-          "secure.demo.local"
+          "_"
         ]
       ],
       "server_tokens_off": false,
-      "tls_protocols": [
-        "TLSv1",
-        "TLSv1.2"
-      ]
+      "tls_protocols": []
+    },
+    "nginx.conf": {
+      "listen_ports": [],
+      "locations": [],
+      "security_headers": [],
+      "server_blocks": [],
+      "server_names": [],
+      "server_tokens_off": false,
+      "tls_protocols": []
     }
   },
   "cookie_contains_org_code": false,
   "cookie_has_samesite": false,
   "cookie_has_secure_flag": false,
-  "created_at": "2026-05-28T02:18:00+00:00",
+  "created_at": "2026-05-29T15:46:17+00:00",
   "deny_all_present": false,
   "disable_symlinks_configured": false,
   "duplicate_log_format_count": 0,
   "error_page_uses_root_html": false,
   "evidence_catalog": {
-    "nginx_T.txt": {
+    "http.d/nginx1.conf": {
       "alias_try_files_pairs_count": [],
       "autoindex": [
         {
-          "file": "nginx_T.txt",
-          "line_no": 7,
+          "file": "http.d/nginx1.conf",
+          "line_no": 5,
           "line_text": "autoindex on;"
         }
       ],
@@ -121,83 +90,36 @@
       "hidden_files_blocked": [],
       "http_https_same_block": [
         {
-          "file": "nginx_T.txt",
-          "line_no": 5,
+          "file": "http.d/nginx1.conf",
+          "line_no": 3,
           "line_text": "listen 80;"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 17,
-          "line_text": "listen 443 ssl;"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 19,
-          "line_text": "ssl_protocols TLSv1 TLSv1.2;"
         }
       ],
       "http_methods_limited": [],
       "http_redirects_to_https": [
         {
-          "file": "nginx_T.txt",
-          "line_no": 5,
+          "file": "http.d/nginx1.conf",
+          "line_no": 3,
           "line_text": "listen 80;"
         }
       ],
       "ip_hash_no_backup": [],
       "limit_conn_configured": [],
-      "locations": [
-        {
-          "file": "nginx_T.txt",
-          "line_no": 8,
-          "line_text": "location /admin {"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 11,
-          "line_text": "location / {"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 21,
-          "line_text": "location /app {"
-        }
-      ],
+      "locations": [],
       "log_escape_char_error": [],
-      "lua_session_partial": [
+      "lua_session_partial": [],
+      "nginx_runs_as_nobody": [
         {
-          "file": "nginx_T.txt",
-          "line_no": 8,
-          "line_text": "location /admin {"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 11,
-          "line_text": "location / {"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 21,
-          "line_text": "location /app {"
+          "file": "http.d/nginx1.conf",
+          "line_no": 1,
+          "line_text": "user nobody;"
         }
       ],
-      "nginx_runs_as_nobody": [],
       "ocsp_stapling_enabled": [],
       "options_returns_403": [],
       "proxy_buffer_configured": [],
       "proxy_hide_headers_configured": [],
-      "proxy_pass_http_backend": [
-        {
-          "file": "nginx_T.txt",
-          "line_no": 9,
-          "line_text": "proxy_pass http://admin_backend;"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 22,
-          "line_text": "proxy_pass http://backend;"
-        }
-      ],
+      "proxy_pass_http_backend": [],
       "proxy_pass_https_without_verify": [],
       "proxy_redirect_has_invalid_value": [],
       "proxy_timeout_configured": [],
@@ -205,99 +127,100 @@
       "real_ip_configured": [],
       "scope_refs": [
         {
-          "file": "nginx_T.txt",
-          "line_no": 4,
+          "file": "http.d/nginx1.conf",
+          "line_no": 2,
           "line_text": "server {"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 8,
-          "line_text": "location /admin {"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 11,
-          "line_text": "location / {"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 16,
-          "line_text": "server {"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 21,
-          "line_text": "location /app {"
         }
       ],
-      "security_headers": [
-        {
-          "file": "nginx_T.txt",
-          "line_no": 20,
-          "line_text": "add_header X-Frame-Options SAMEORIGIN;"
-        }
-      ],
-      "sensitive_no_cache_control": [
-        {
-          "file": "nginx_T.txt",
-          "line_no": 9,
-          "line_text": "proxy_pass http://admin_backend;"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 22,
-          "line_text": "proxy_pass http://backend;"
-        }
-      ],
+      "security_headers": [],
+      "sensitive_no_cache_control": [],
       "server_tokens_off": [],
       "ssl_ciphers_defined": [],
       "ssl_prefer_server_ciphers_on": [],
       "ssl_session_cache_configured": [],
       "status_pages_without_acl": [],
-      "tls_protocols": [
-        {
-          "file": "nginx_T.txt",
-          "line_no": 19,
-          "line_text": "ssl_protocols TLSv1 TLSv1.2;"
-        }
-      ],
+      "tls_protocols": [],
       "upload_dir_execution_blocked": [],
       "upstream_has_duplicate_server": [
         {
-          "file": "nginx_T.txt",
-          "line_no": 4,
+          "file": "http.d/nginx1.conf",
+          "line_no": 2,
           "line_text": "server {"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 16,
-          "line_text": "server {"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 26,
-          "line_text": "upstream backend {"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 27,
-          "line_text": "server 127.0.0.1:8080;"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 30,
-          "line_text": "upstream admin_backend {"
-        },
-        {
-          "file": "nginx_T.txt",
-          "line_no": 31,
-          "line_text": "server 127.0.0.1:9000;"
         }
       ],
       "upstream_keepalive_configured": [],
       "weak_cipher_keywords": [],
       "worker_connections_value": [],
       "worker_processes_one": []
+    },
+    "nginx.conf": {
+      "alias_try_files_pairs_count": [],
+      "autoindex": [],
+      "client_max_body_size_unlimited": [],
+      "cookie_contains_org_code": [],
+      "cookie_has_samesite": [],
+      "cookie_has_secure_flag": [],
+      "disable_symlinks_configured": [],
+      "duplicate_log_format_count": [],
+      "error_page_uses_root_html": [],
+      "has_access_log_off": [],
+      "has_empty_server_name": [],
+      "has_if_in_location": [],
+      "has_lua_shared_dict": [],
+      "has_open_redirect_risk": [],
+      "hidden_files_blocked": [],
+      "http_https_same_block": [],
+      "http_methods_limited": [],
+      "http_redirects_to_https": [],
+      "ip_hash_no_backup": [],
+      "limit_conn_configured": [],
+      "locations": [],
+      "log_escape_char_error": [],
+      "lua_session_partial": [],
+      "nginx_runs_as_nobody": [],
+      "ocsp_stapling_enabled": [],
+      "options_returns_403": [],
+      "proxy_buffer_configured": [],
+      "proxy_hide_headers_configured": [],
+      "proxy_pass_http_backend": [],
+      "proxy_pass_https_without_verify": [],
+      "proxy_redirect_has_invalid_value": [],
+      "proxy_timeout_configured": [],
+      "rate_limited_locations_ratio": [],
+      "real_ip_configured": [],
+      "scope_refs": [
+        {
+          "file": "nginx.conf",
+          "line_no": 3,
+          "line_text": "http {"
+        }
+      ],
+      "security_headers": [],
+      "sensitive_no_cache_control": [],
+      "server_tokens_off": [],
+      "ssl_ciphers_defined": [],
+      "ssl_prefer_server_ciphers_on": [],
+      "ssl_session_cache_configured": [],
+      "status_pages_without_acl": [],
+      "tls_protocols": [],
+      "upload_dir_execution_blocked": [],
+      "upstream_has_duplicate_server": [],
+      "upstream_keepalive_configured": [],
+      "weak_cipher_keywords": [],
+      "worker_connections_value": [
+        {
+          "file": "nginx.conf",
+          "line_no": 2,
+          "line_text": "events { worker_connections 1024; }"
+        }
+      ],
+      "worker_processes_one": [
+        {
+          "file": "nginx.conf",
+          "line_no": 1,
+          "line_text": "worker_processes  1;"
+        }
+      ]
     }
   },
   "evidence_refs": [],
@@ -312,33 +235,61 @@
   "http_redirects_to_https": false,
   "ip_hash_no_backup": false,
   "limit_conn_configured": false,
-  "locations": [
-    "/admin",
-    "/",
-    "/app"
-  ],
+  "locations": [],
   "log_escape_char_error": false,
   "lua_session_partial": false,
   "manual_review_required": false,
-  "nginx_runs_as_nobody": false,
+  "nginx_runs_as_nobody": true,
+  "nginx_t_failed": false,
   "notes": "",
   "ocsp_stapling_enabled": false,
   "operator": "wenlongy",
   "options_returns_403": false,
   "proxy_buffer_configured": false,
   "proxy_hide_headers_configured": false,
-  "proxy_pass_http_backend": true,
+  "proxy_pass_http_backend": false,
   "proxy_pass_https_without_verify": false,
   "proxy_redirect_has_invalid_value": false,
   "proxy_timeout_configured": false,
   "rate_limited_locations": 0,
   "rate_limited_locations_ratio": 0.0,
   "real_ip_configured": false,
-  "run_id": "review_task3_evidence2",
-  "security_headers": [
-    "X-Frame-Options"
+  "run_id": "verify_task3_composite",
+  "security_headers": [],
+  "sensitive_no_cache_control": false,
+  "server_level_facts": [
+    {
+      "autoindex": true,
+      "client_max_body_size_unlimited": true,
+      "context_snippet": "user nobody;\nserver {\n    listen 80;\n    server_name _;",
+      "end_line_no": 6,
+      "file": "http.d/nginx1.conf",
+      "has_ssl_block": false,
+      "hidden_files_blocked": false,
+      "http_methods_limited": false,
+      "http_redirects_to_https": false,
+      "is_http_server": true,
+      "limit_conn_configured": false,
+      "listen": [
+        "80"
+      ],
+      "locations": [],
+      "ocsp_stapling_enabled": false,
+      "proxy_hide_headers_configured": false,
+      "security_headers": [],
+      "server_key": "http.d/nginx1.conf:2",
+      "server_names": [
+        "_"
+      ],
+      "server_tokens_off": false,
+      "ssl_ciphers_defined": false,
+      "ssl_prefer_server_ciphers_on": false,
+      "ssl_session_cache_configured": false,
+      "start_line_no": 2,
+      "status_pages_without_acl": false,
+      "tls_protocols": []
+    }
   ],
-  "sensitive_no_cache_control": true,
   "server_tokens_off": false,
   "source_name": "parse_config_facts.py",
   "source_type": "script",
@@ -348,19 +299,14 @@
   "ssl_session_cache_configured": false,
   "status_pages_without_acl": false,
   "task_id": "task3",
-  "tls_protocols": [
-    "TLSv1",
-    "TLSv1.2"
-  ],
-  "total_locations": 3,
+  "tls_protocols": [],
+  "total_locations": 0,
   "upload_dir_execution_blocked": true,
   "upstream_has_duplicate_server": false,
   "upstream_keepalive_configured": false,
-  "upstreams": [
-    "admin_backend",
-    "backend"
-  ],
+  "upstreams": [],
+  "user_directive_misplaced": false,
   "weak_cipher_keywords": [],
   "worker_connections_value": 1024,
-  "worker_processes_one": false
+  "worker_processes_one": true
 }

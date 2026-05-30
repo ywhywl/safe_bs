@@ -1,85 +1,93 @@
 {
   "confidence": "medium",
-  "created_at": "2026-05-28T02:18:02+00:00",
+  "created_at": "2026-05-30T04:33:07+00:00",
   "evidence_refs": [],
   "files": [
     {
       "path": "alerts/alert_output.log",
-      "size": 1065
+      "size": 1791
+    },
+    {
+      "path": "alerts/step_timing.log",
+      "size": 1529
     },
     {
       "path": "json/ai_usage_trace.json",
-      "size": 478
+      "size": 486
     },
     {
       "path": "json/llm_context_input.json",
-      "size": 20198
+      "size": 21921
     },
     {
       "path": "json/llm_prompt_input.md",
-      "size": 146
+      "size": 978
     },
     {
       "path": "json/task2_alerts.json",
-      "size": 16922
+      "size": 14447
     },
     {
       "path": "json/task2_anomaly_scores.json",
-      "size": 9126
+      "size": 25073
     },
     {
       "path": "json/task2_anomaly_scores.ndjson",
-      "size": 5850
-    },
-    {
-      "path": "json/task2_baseline_events.ndjson",
-      "size": 6102
+      "size": 16876
     },
     {
       "path": "json/task2_baseline_views.json",
-      "size": 2287
+      "size": 4462
     },
     {
       "path": "json/task2_events.json",
-      "size": 14512
+      "size": 10327
     },
     {
       "path": "json/task2_events.ndjson",
-      "size": 5310
+      "size": 7146
+    },
+    {
+      "path": "json/task2_ip_correlation.json",
+      "size": 7318
     },
     {
       "path": "json/task2_log_ingest_manifest.json",
-      "size": 2170
+      "size": 1503
     },
     {
       "path": "json/task2_report_context.json",
-      "size": 20199
+      "size": 21922
+    },
+    {
+      "path": "json/task2_sequence_clusters.json",
+      "size": 4178
     },
     {
       "path": "json/task2_session_anomaly_scores.ndjson",
-      "size": 427
+      "size": 844
     },
     {
       "path": "json/task2_session_views.json",
-      "size": 9735
+      "size": 16560
     },
     {
       "path": "json/task2_session_views.ndjson",
-      "size": 3422
+      "size": 11364
     },
     {
       "path": "json/task2_user_baselines.json",
-      "size": 6780
+      "size": 10584
     },
     {
       "path": "json/tool_manifest.json",
-      "size": 921
+      "size": 946
     }
   ],
   "manual_review_required": false,
   "notes": "",
   "operator": "wenlongy",
-  "run_id": "review_task2_hist2",
+  "run_id": "verify_task2_large_default",
   "source_name": "build_manifests.py",
   "source_type": "script",
   "task_id": "task2"

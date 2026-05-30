@@ -1,7 +1,10 @@
-severity=medium user=farms_warn_ruisuiyh session=2689379 type=session_behavioral_deviation reasons=action deviation,auth deviation,client deviation,source deviation
-severity=medium user=mms_cmb session=2689385 type=session_behavioral_deviation reasons=action deviation,auth deviation,client deviation,source deviation
-severity=medium user=farms_warn_dongyayh session=2689397 type=session_behavioral_deviation reasons=action deviation,auth deviation,client deviation,source deviation
-severity=high user=mms_cmb session=2689999 type=session_behavioral_deviation reasons=action deviation,auth deviation,client deviation,failure deviation,source deviation
-severity=medium user=alice session=sess-1 type=session_behavioral_deviation reasons=action deviation,path deviation,source deviation
-severity=medium user=bob session=sess-2 type=session_behavioral_deviation reasons=action deviation,path deviation,source deviation
-severity=high user=alice session=sess-9 type=session_behavioral_deviation reasons=action deviation,failure deviation,path deviation,source deviation
+severity=high user=mms_cmb session=3999001 type=anomalous_source reasons=auth deviation,client deviation,failure deviation,first-time source IP,source deviation,time deviation,unusual result type
+severity=high user=farms_warn_ruisuiyh session=3999002 type=anomalous_source reasons=auth deviation,client deviation,failure deviation,first-time source IP,source deviation,time deviation,unusual result type
+severity=high user=mms_cmb session=4999001 type=anomalous_source reasons=failure deviation,first-time source IP,source deviation,time deviation,unusual result type
+severity=high user=farms_warn_ruisuiyh session=4999002 type=anomalous_source reasons=action deviation,failure deviation,first-time source IP,source deviation,time deviation,unusual result type
+severity=medium user=farms_warn_zsbank session=4999003 type=session_state_anomaly reasons=session imbalance
+severity=high user=farms_warn_ruisuiyh session=account-risk:farms_warn_ruisuiyh type=account_risk_aggregation reasons=account risk aggregation,action deviation,auth deviation,client deviation,failure deviation,first-time source IP,source deviation,time deviation,unusual result type
+severity=high user=mms_cmb session=account-risk:mms_cmb type=account_risk_aggregation reasons=account risk aggregation,auth deviation,client deviation,failure deviation,first-time source IP,source deviation,time deviation,unusual result type
+severity=high user=multiple session=correlated-cluster:ip-cluster-001 type=correlated_attack_cluster reasons=correlated IP cluster
+severity=high user=multiple session=correlated-cluster:ip-cluster-002 type=correlated_attack_cluster reasons=correlated IP cluster
+severity=medium user=multiple session=correlated-seq:seq-cluster-001 type=correlated_attack_cluster reasons=correlated action sequence

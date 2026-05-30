@@ -53,7 +53,7 @@ class InternalLLMClient:
             raise RuntimeError("urllib not available, cannot call internal LLM API")
 
         messages = [
-            {"role": "system", "content": "你是一名网络安全专家，负责分析 Nginx 配置的安全风险并生成专业的巡检报告。"},
+            {"role": "system", "content": "你是一名网络安全专家，负责分析 SFTP 日志中的异常行为并生成专业的安全巡检报告。所有结论必须可追溯到脚本输出数据，不得自行推断未由脚本提供的关联关系。"},
             {"role": "user", "content": f"{prompt}\n\n---\n\n配置数据如下：\n\n{context_data}"},
         ]
 
@@ -61,7 +61,7 @@ class InternalLLMClient:
             "model": self.model,
             "messages": messages,
             "temperature": 0.3,
-            "max_tokens": 4096,
+            "max_tokens": 8192,
         }, ensure_ascii=False)
 
         url = f"{self.base_url}/chat/completions"

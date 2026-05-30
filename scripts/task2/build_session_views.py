@@ -36,6 +36,13 @@ def main() -> None:
             "action_sequence": [],
             "paths": set(),
             "results": set(),
+            "client_versions": set(),
+            "kex_algorithms": set(),
+            "hostkey_algorithms": set(),
+            "cipher_c2s": set(),
+            "cipher_s2c": set(),
+            "mac_c2s": set(),
+            "mac_s2c": set(),
             "event_count": 0,
             "open_count": 0,
             "close_count": 0,
@@ -63,6 +70,20 @@ def main() -> None:
             item["paths"].add(event["path"])
         if event.get("result"):
             item["results"].add(event["result"])
+        if event.get("client_version"):
+            item["client_versions"].add(event["client_version"])
+        if event.get("kex_algorithm"):
+            item["kex_algorithms"].add(event["kex_algorithm"])
+        if event.get("hostkey_algorithm"):
+            item["hostkey_algorithms"].add(event["hostkey_algorithm"])
+        if event.get("cipher_c2s"):
+            item["cipher_c2s"].add(event["cipher_c2s"])
+        if event.get("cipher_s2c"):
+            item["cipher_s2c"].add(event["cipher_s2c"])
+        if event.get("mac_c2s"):
+            item["mac_c2s"].add(event["mac_c2s"])
+        if event.get("mac_s2c"):
+            item["mac_s2c"].add(event["mac_s2c"])
         if event.get("action") == "SESSION_OPEN":
             item["open_count"] += 1
         if event.get("action") == "SESSION_CLOSE":
@@ -79,11 +100,11 @@ def main() -> None:
     ndjson_path = json_dir / "task2_session_views.ndjson"
     ndjson_path.unlink(missing_ok=True)
     preview = []
-    sessions_output = []
     count = 0
     with ndjson_path.open("a", encoding="utf-8") as out:
         for session_id, item in sorted(sessions.items()):
             users = sorted(item["users"])
+            known_users = [u for u in users if u not in {"unknown", "", "USER"}]
             inferred_user = ""
             if users == ["unknown"] and len(item["src_ips"]) == 1:
                 src_ip = next(iter(item["src_ips"]))
@@ -99,6 +120,9 @@ def main() -> None:
                             best_delta = delta
                     if best is not None:
                         inferred_user = best["user"]
+            elif known_users:
+                inferred_user = known_users[0]
+                users = known_users + [u for u in users if u in {"unknown"}]
             record = {
                 "session_id": session_id,
                 "users": users,
@@ -108,6 +132,13 @@ def main() -> None:
                 "action_sequence": item["action_sequence"],
                 "paths": sorted(item["paths"]),
                 "results": sorted(item["results"]),
+                "client_versions": sorted(item["client_versions"]),
+                "kex_algorithms": sorted(item["kex_algorithms"]),
+                "hostkey_algorithms": sorted(item["hostkey_algorithms"]),
+                "cipher_c2s": sorted(item["cipher_c2s"]),
+                "cipher_s2c": sorted(item["cipher_s2c"]),
+                "mac_c2s": sorted(item["mac_c2s"]),
+                "mac_s2c": sorted(item["mac_s2c"]),
                 "event_count": item["event_count"],
                 "open_count": item["open_count"],
                 "close_count": item["close_count"],
@@ -118,14 +149,12 @@ def main() -> None:
                 "summary": f"session={session_id} users={users} inferred_user={inferred_user or '-'} src_ips={sorted(item['src_ips'])} actions={item['action_sequence']}",
             }
             write_ndjson_line(ndjson_path, record, handle=out)
-            sessions_output.append(record)
             count += 1
             if len(preview) < 200:
                 preview.append(record)
 
     record = make_base_record(run_dir.name, "task2", "build_session_views.py")
     record["session_count"] = count
-    record["sessions"] = sessions_output
     record["sessions_preview"] = preview
     dump_json(json_dir / "task2_session_views.json", record)
 
