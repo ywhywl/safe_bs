@@ -26,7 +26,7 @@
 - 行为基线需自动分析获得并提供查看方式：已实现。`task2_user_baselines.json`、`task2_baseline_views.json`、`MANUAL.md` 中均提供查看入口。
 - 行为基线可保存为 JSON：已实现。所有中间态与交付态均为 JSON/NDJSON，适合内网环境直接落地。
 - 以某一天/某几天日志对比新日志：已实现。目录支持 `baseline/` 与 `current/` 分离模式，直接对应题意中的“基准日志 vs 新日志”。
-- 大文件内网落地：已增强。支持 `TASK2_LARGE_MODE=1`，在 16G 内存机器上通过限制路径画像、序列聚类样本和关联图候选规模换取稳定运行。
+- 大文件内网落地：已增强。支持 `TASK2_LARGE_MODE=1`，在 16G 内存机器上通过限制路径画像、序列聚类样本规模换取稳定运行。
 
 ## 用户基线查看方式
 
@@ -66,14 +66,9 @@
 - 告警 alert-5: 用户 farms_warn_zsbank，推断用户 farms_warn_zsbank，会话 4999003，级别 medium，原因 ['session imbalance']，说明 会话出现打开未关闭或开闭不平衡现象
 - 告警 alert-6: 用户 farms_warn_ruisuiyh，会话 account-risk:farms_warn_ruisuiyh，级别 high，原因 ['account risk aggregation', 'action deviation', 'auth deviation', 'client deviation', 'failure deviation', 'first-time source IP', 'source deviation', 'time deviation', 'unusual result type']，说明 同一账户在同一时间窗口内聚合出多类异常，账户整体风险升高；该账户在当前窗口内关联 2 条异常告警。
 - 告警 alert-7: 用户 mms_cmb，会话 account-risk:mms_cmb，级别 high，原因 ['account risk aggregation', 'auth deviation', 'client deviation', 'failure deviation', 'first-time source IP', 'source deviation', 'time deviation', 'unusual result type']，说明 同一账户在同一时间窗口内聚合出多类异常，账户整体风险升高；该账户在当前窗口内关联 2 条异常告警。
-- 告警 alert-8: 用户 multiple，会话 correlated-cluster:ip-cluster-001，级别 high，原因 ['correlated IP cluster']，说明 IP集群 ip-cluster-001 关联 4 个IP，共享用户 ['farms_warn_ruisuiyh', 'farms_warn_zsbank']。2 条已有告警与此集群关联。
-- 告警 alert-9: 用户 multiple，会话 correlated-cluster:ip-cluster-002，级别 high，原因 ['correlated IP cluster']，说明 IP集群 ip-cluster-002 关联 2 个IP，共享用户 ['mms_cmb']。2 条已有告警与此集群关联。
 - 告警 alert-10: 用户 multiple，会话 correlated-seq:seq-cluster-001，级别 medium，原因 ['correlated action sequence']，说明 跨用户序列模式: 2 个用户执行序列 ['AUTH']。2 个不同用户执行了相同的异常认证序列
 
 ## 关联分析
-
-IP关联: - 集群 ip-cluster-001: IP ['101.68.90.115', '198.51.100.77', '203.0.113.55', '220.248.41.29'], 共享用户 ['farms_warn_ruisuiyh', 'farms_warn_zsbank'], 事件总数 12
-- 集群 ip-cluster-002: IP ['202.104.136.69', '8.8.8.8'], 共享用户 ['mms_cmb'], 事件总数 6
 
 序列模式: - 模式 seq-cluster-001: 用户 ['farms_warn_ruisuiyh', 'mms_cmb'], 序列 ['AUTH']
 - 异常模式 pattern-001: 序列 ['AUTH'], 影响用户 ['farms_warn_dongyayh', 'farms_warn_ruisuiyh', 'farms_warn_zsbank', 'mms_cmb'], 最高分数 140
@@ -85,12 +80,12 @@ IP关联: - 集群 ip-cluster-001: IP ['101.68.90.115', '198.51.100.77', '203.0.
 ## 大数据模式说明
 
 - 当前运行启用 `TASK2_LARGE_MODE=1`。
-- 脚本会限制每用户路径画像规模、限制序列聚类参与 session 数、限制关联图候选 IP 规模，避免 16G 机器在超大日志上内存失控。
-- 代价是部分长尾路径、边缘 IP 关联和低频序列模式可能被截断，因此建议先全量粗筛，再对高风险账户做小范围精跑。
+- 脚本会限制每用户路径画像规模、限制序列聚类参与 session 数，避免 16G 机器在超大日志上内存失控。
+- 代价是部分长尾路径和低频序列模式可能被截断，因此建议先全量粗筛，再对高风险账户做小范围精跑。
 
 ## 适用范围与局限
 
-阈值仍采用启发式设置，尚未针对更大规模历史样本做调优；会话级检测依赖 SESSION_OPEN/CLOSE 动作，日志格式不全时可能漏检；暴力破解检测基于滑动窗口，密集慢速攻击可能不触发；开启 TASK2_LARGE_MODE=1 时，会对路径画像、序列聚类样本和关联图候选规模做截断，以换取 16G 机器上的稳定运行
+阈值仍采用启发式设置，尚未针对更大规模历史样本做调优；会话级检测依赖 SESSION_OPEN/CLOSE 动作，日志格式不全时可能漏检；暴力破解检测基于滑动窗口，密集慢速攻击可能不触发；开启 TASK2_LARGE_MODE=1 时，会对路径画像和序列聚类样本做截断，以换取 16G 机器上的稳定运行
 
 ## 告警文件说明
 

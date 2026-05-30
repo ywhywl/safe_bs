@@ -34,7 +34,7 @@ def load_json(path: Path, default: Any | None = None) -> Any:
 
 def dump_json(path: Path, data: Any) -> None:
     ensure_dir(path.parent)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    path.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
 
 
 def env_flag(name: str, default: bool = False) -> bool:
@@ -62,21 +62,16 @@ def load_task2_runtime_config() -> dict[str, Any]:
         "baseline_max_path_count_keys_per_user": 200 if large_mode else 5000,
         "baseline_max_daily_buckets_per_user": 120 if large_mode else 1000,
         "baseline_max_ip_profile_per_user": 100 if large_mode else 2000,
-        "baseline_max_src_ips_per_user": 1000 if large_mode else 5000,
+        "baseline_max_src_ips_per_user": 200 if large_mode else 5000,
         "baseline_max_src_subnets_per_user": 500 if large_mode else 2000,
-        "baseline_max_session_ids_per_user": 3000 if large_mode else 10000,
+        "baseline_max_session_ids_per_user": 500 if large_mode else 10000,
         "baseline_max_session_sequences_per_user": 500 if large_mode else 5000,
-        "baseline_max_actions_per_session": 8 if large_mode else 16,
+        "baseline_max_actions_per_session": 16 if large_mode else 16,
         "session_preview_limit": 100 if large_mode else 200,
         "score_supporting_scores_limit": 30 if large_mode else 100,
         "score_supporting_event_ids_limit": 30 if large_mode else 100,
-        "correlation_max_paths_per_ip": 10 if large_mode else 50,
-        "correlation_max_sessions_per_ip": 10 if large_mode else 50,
-        "correlation_max_candidate_ips_per_user": 10 if large_mode else 500,
-        "correlation_max_candidate_ips_per_subnet": 10 if large_mode else 500,
-        "correlation_max_time_samples_per_user_ip": 50 if large_mode else 500,
-        "sequence_max_sessions": 1000 if large_mode else 50000,
-        "sequence_max_actions_per_session": 8 if large_mode else 200,
+                "sequence_max_sessions": 1000 if large_mode else 50000,
+        "sequence_max_actions_per_session": 16 if large_mode else 200,
         "report_representative_cases_limit": 10,
         "report_representative_sessions_limit": 10 if large_mode else 20,
     }

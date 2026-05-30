@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from event_io import iter_ndjson, write_ndjson_line
@@ -70,6 +70,18 @@ def main() -> None:
     baselines_data = load_json(json_dir / "task2_user_baselines.json", {})
     baselines = baselines_data.get("users", [])
     baseline_map = {item["user"]: item for item in baselines}
+    # Convert baseline list fields to sets for O(1) membership checks in the hot loop
+    _list_keys = [
+        "usual_src_ips", "usual_src_subnets", "usual_actions", "usual_paths",
+        "usual_auth_methods", "usual_client_versions",
+        "usual_kex_algorithms", "usual_hostkey_algorithms",
+        "usual_cipher_c2s", "usual_cipher_s2c",
+        "usual_mac_c2s", "usual_mac_s2c",
+    ]
+    for item in baselines:
+        for key in _list_keys:
+            if key in item and isinstance(item[key], list):
+                item[key] = set(item[key])
 
     # Load anomaly policy for thresholds
     brute_force_threshold = policy.get("brute_force_threshold", 5)
@@ -104,22 +116,22 @@ def main() -> None:
         for event in events:
             baseline = baseline_map.get(event.get("user"), {})
             sample_size = baseline.get("sample_size", 0)
-            active_hours = baseline.get("active_time_profile", [])
+            active_hours = baseline.get("active_time_profile", set())
             hour = parse_hour(event.get("timestamp", ""))
             src_ip = event.get("src_ip")
             src_subnet = event.get("src_subnet")
-            src_ips = baseline.get("usual_src_ips", [])
-            src_subnets = baseline.get("usual_src_subnets", [])
-            actions = baseline.get("usual_actions", [])
-            paths = baseline.get("usual_paths", [])
-            auth_methods = baseline.get("usual_auth_methods", [])
-            client_versions = baseline.get("usual_client_versions", [])
-            kex_algorithms = baseline.get("usual_kex_algorithms", [])
-            hostkey_algorithms = baseline.get("usual_hostkey_algorithms", [])
-            cipher_c2s_baseline = baseline.get("usual_cipher_c2s", [])
-            cipher_s2c_baseline = baseline.get("usual_cipher_s2c", [])
-            mac_c2s_baseline = baseline.get("usual_mac_c2s", [])
-            mac_s2c_baseline = baseline.get("usual_mac_s2c", [])
+            src_ips = baseline.get("usual_src_ips", set())
+            src_subnets = baseline.get("usual_src_subnets", set())
+            actions = baseline.get("usual_actions", set())
+            paths = baseline.get("usual_paths", set())
+            auth_methods = baseline.get("usual_auth_methods", set())
+            client_versions = baseline.get("usual_client_versions", set())
+            kex_algorithms = baseline.get("usual_kex_algorithms", set())
+            hostkey_algorithms = baseline.get("usual_hostkey_algorithms", set())
+            cipher_c2s_baseline = baseline.get("usual_cipher_c2s", set())
+            cipher_s2c_baseline = baseline.get("usual_cipher_s2c", set())
+            mac_c2s_baseline = baseline.get("usual_mac_c2s", set())
+            mac_s2c_baseline = baseline.get("usual_mac_s2c", set())
             transfer_range = baseline.get("usual_transfer_ranges", {})
             avg_total_bytes = transfer_range.get("avg_total_bytes", 0)
             avg_bytes_out = transfer_range.get("avg_bytes_out", 0)
@@ -215,6 +227,11 @@ def main() -> None:
                     login_fail_by_user_ip[key] = []
                 if ts is not None:
                     login_fail_by_user_ip[key].append((ts, event.get("event_id")))
+                    # Prune entries outside 2x the brute force window to keep list bounded
+                    cutoff = ts - timedelta(seconds=brute_force_window * 2)
+                    login_fail_by_user_ip[key] = [
+                        (t, e) for t, e in login_fail_by_user_ip[key] if t >= cutoff
+                    ]
                     # Check if failures within window exceed threshold
                     recent_failures = [t for t, _ in login_fail_by_user_ip[key] if (ts - t).total_seconds() <= brute_force_window]
                     if len(recent_failures) >= brute_force_threshold:
@@ -345,11 +362,14 @@ def main() -> None:
                 "rule_hits": reasons,
                 "manual_review_required": score >= 60,
             }
-            write_ndjson_line(ndjson_path, scored_record, handle=out)
+            # Only write anomalous events to NDJSON (threshold_hit=True)
+            # Normal events (score < 60) are still tracked in session_aggregates and the .json summary
+            if scored_record["threshold_hit"]:
+                write_ndjson_line(ndjson_path, scored_record, handle=out)
             scored_count += 1
             if scored_record["threshold_hit"]:
                 hit_count += 1
-            if len(scored_preview) < 200:
+            if scored_record["threshold_hit"] and len(scored_preview) < 200:
                 scored_preview.append(scored_record)
 
             sid = event.get("session_id") or f"user:{user}"

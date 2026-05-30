@@ -68,19 +68,19 @@ def main() -> None:
     max_sessions = runtime_config["sequence_max_sessions"]
     max_actions_per_session = runtime_config["sequence_max_actions_per_session"]
 
-    scores_meta = load_json(json_dir / "task2_anomaly_scores.json", {})
     # Build score lookup by streaming (no list storage needed)
+    # Note: anomaly_scores.json was previously loaded here but never used (dead code removed)
     session_score_map: dict[str, dict] = {}
     for item in iter_ndjson(json_dir / "task2_anomaly_scores.ndjson"):
         sid = item.get("session_id", "")
         if not sid:
             continue
-        existing = session_score_map.get(sid, {"score_total": 0, "threshold_hit": False, "rule_hits": [], "user": ""})
+        existing = session_score_map.get(sid, {"score_total": 0, "threshold_hit": False, "rule_hits": set(), "user": ""})
         if item.get("score_total", 0) > existing["score_total"]:
             existing["score_total"] = item.get("score_total", 0)
         if item.get("threshold_hit"):
             existing["threshold_hit"] = True
-        existing["rule_hits"] = sorted(set(existing.get("rule_hits", []) + item.get("rule_hits", [])))
+        existing["rule_hits"] = existing.get("rule_hits", set()) | set(item.get("rule_hits", []))
         existing["user"] = item.get("user", existing.get("user", ""))
         session_score_map[sid] = existing
 
@@ -89,12 +89,12 @@ def main() -> None:
         sid = item.get("session_id", "")
         if not sid:
             continue
-        existing = session_score_map.get(sid, {"score_total": 0, "threshold_hit": False, "rule_hits": [], "user": ""})
+        existing = session_score_map.get(sid, {"score_total": 0, "threshold_hit": False, "rule_hits": set(), "user": ""})
         if item.get("score_total", 0) > existing["score_total"]:
             existing["score_total"] = item.get("score_total", 0)
         if item.get("threshold_hit"):
             existing["threshold_hit"] = True
-        existing["rule_hits"] = sorted(set(existing.get("rule_hits", []) + item.get("rule_hits", [])))
+        existing["rule_hits"] = existing.get("rule_hits", set()) | set(item.get("rule_hits", []))
         session_score_map[sid] = existing
 
     # --- Step A: Extract and normalize action sequences ---
@@ -159,7 +159,7 @@ def main() -> None:
                 "sequence": info["normalized_sequence"],
                 "user": info["users"][0] if info["users"] else "unknown",
                 "score": score_info.get("score_total", 0),
-                "rule_hits": score_info.get("rule_hits", []),
+                "rule_hits": sorted(score_info.get("rule_hits", set())),
             })
 
     # Sort by score descending for greedy clustering

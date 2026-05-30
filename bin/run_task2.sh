@@ -41,7 +41,6 @@ run_step "normalize_events" python3 "${PROJECT_ROOT}/scripts/task2/normalize_eve
 run_step "build_baseline" python3 "${PROJECT_ROOT}/scripts/task2/build_baseline.py" --run-dir "${RUN_DIR}"
 run_step "score_anomalies" python3 "${PROJECT_ROOT}/scripts/task2/score_anomalies.py" --run-dir "${RUN_DIR}" --input-dir "${INPUT_DIR}"
 run_step "build_session_views" python3 "${PROJECT_ROOT}/scripts/task2/build_session_views.py" --run-dir "${RUN_DIR}"
-run_step "build_correlation_graph" python3 "${PROJECT_ROOT}/scripts/task2/build_correlation_graph.py" --run-dir "${RUN_DIR}"
 run_step "build_sequence_clusters" python3 "${PROJECT_ROOT}/scripts/task2/build_sequence_clusters.py" --run-dir "${RUN_DIR}"
 run_step "build_alerts" python3 "${PROJECT_ROOT}/scripts/task2/build_alerts.py" --run-dir "${RUN_DIR}" --input-dir "${INPUT_DIR}"
 run_step "emit_alert_log" python3 "${PROJECT_ROOT}/scripts/task2/emit_alert_log.py" --run-dir "${RUN_DIR}"
