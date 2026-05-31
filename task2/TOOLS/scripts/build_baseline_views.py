@@ -5,7 +5,9 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from lib import dump_json, load_json, make_base_record
+from lib import dump_json, load_json, load_task2_runtime_config, make_base_record
+
+VIEW_RENDER_LIMIT = 200  # max views stored in baseline_views.json for rendering
 
 
 def main() -> None:
@@ -15,9 +17,11 @@ def main() -> None:
 
     run_dir = Path(args.run_dir)
     json_dir = run_dir / "task2" / "json"
+    runtime_config = load_task2_runtime_config()
+    render_limit = runtime_config.get("session_preview_limit", VIEW_RENDER_LIMIT)
     baselines = load_json(json_dir / "task2_user_baselines.json", {}).get("users", [])
     views = []
-    for item in baselines:
+    for item in baselines[:render_limit]:
         # Convert sets back to sorted lists for display (baselines may have set fields after score_anomalies)
         src_ips = item.get("usual_src_ips", [])
         if isinstance(src_ips, set):
@@ -58,6 +62,8 @@ def main() -> None:
             }
         )
     record = make_base_record(run_dir.name, "task2", "build_baseline_views.py")
+    record["total_user_count"] = len(baselines)
+    record["rendered_view_count"] = len(views)
     record["views"] = views
     dump_json(json_dir / "task2_baseline_views.json", record)
 

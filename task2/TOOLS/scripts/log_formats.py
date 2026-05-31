@@ -30,8 +30,10 @@ MOD_SFTP_IP_ONLY_RE = re.compile(
 
 
 def guess_log_format(path: Path) -> str:
+    """Read first few non-empty lines to determine log format. Never reads the full file."""
     try:
         with path.open(encoding="utf-8", errors="replace") as handle:
+            checked = 0
             for line in handle:
                 stripped = line.strip()
                 if not stripped:
@@ -44,10 +46,12 @@ def guess_log_format(path: Path) -> str:
                     return "sftp_protocol_mod_sftp"
                 if "=" in stripped and "timestamp=" in stripped:
                     return "key_value"
-                return "plain_text"
+                checked += 1
+                if checked >= 5:  # only check first 5 non-empty lines
+                    return "plain_text"
+            return "plain_text"
     except OSError:
         return "unknown"
-    return "unknown"
 
 
 def normalize_timestamp(raw: str) -> str:

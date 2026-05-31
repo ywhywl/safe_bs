@@ -40,27 +40,38 @@ def summarize_sources(dataset_summary: dict) -> str:
     return "\n".join(lines)
 
 
-def summarize_views(views: list[dict]) -> str:
+MANUAL_VIEW_LIMIT = 50
+MANUAL_SESSION_LIMIT = 50
+MANUAL_ALERT_LIMIT = 50
+
+
+def summarize_views(views: list[dict], limit: int = MANUAL_VIEW_LIMIT, total_count: int | None = None) -> str:
     if not views:
         return "未生成用户基线。"
+    effective_total = total_count if total_count is not None else len(views)
     lines = []
-    for view in views:
+    for view in views[:limit]:
         lines.append(
             f"- 用户 {view.get('user')}: 常见来源 {view.get('common_sources')}, 常见动作 {view.get('common_actions')}, 常见路径 {view.get('common_paths')}, 常见时段 {view.get('typical_login_window')}, 常见客户端 {view.get('common_clients')}, 常见协议安全参数 {view.get('common_protocol_security')}"
         )
+    if effective_total > limit:
+        lines.append(f"- ... 共 {effective_total} 个用户基线，此处仅展示前 {min(len(views), limit)} 个。完整基线请查看 task2_baseline_views.json。")
     return "\n".join(lines)
 
 
-def summarize_alerts(alerts: list[dict]) -> str:
+def summarize_alerts(alerts: list[dict], limit: int = MANUAL_ALERT_LIMIT, total_count: int | None = None) -> str:
     if not alerts:
         return "当前样本未触发告警。"
+    effective_total = total_count if total_count is not None else len(alerts)
     lines = []
-    for alert in alerts:
+    for alert in alerts[:limit]:
         inferred = alert.get("inferred_user", "")
         inferred_text = f"，推断用户 {inferred}" if inferred else ""
         lines.append(
             f"- 告警 {alert.get('alert_id')}: 用户 {alert.get('user')}{inferred_text}，会话 {alert.get('session_id')}，级别 {alert.get('severity')}，原因 {alert.get('trigger_reasons')}，说明 {alert.get('llm_explanation')}"
         )
+    if effective_total > limit:
+        lines.append(f"- ... 共 {effective_total} 条告警，此处仅展示前 {min(len(alerts), limit)} 条。完整告警请查看 task2_alerts.json 和 alert_output.log。")
     return "\n".join(lines)
 
 
@@ -118,16 +129,19 @@ def _build_context_digest(context: dict) -> str:
     return _json.dumps(digest, ensure_ascii=False, indent=2)
 
 
-def summarize_sessions(sessions: list[dict]) -> str:
+def summarize_sessions(sessions: list[dict], limit: int = MANUAL_SESSION_LIMIT, total_count: int | None = None) -> str:
     if not sessions:
         return "未生成会话视图。"
+    effective_total = total_count if total_count is not None else len(sessions)
     lines = []
-    for session in sessions:
+    for session in sessions[:limit]:
         inferred = session.get("inferred_user", "")
         inferred_text = f"，推断用户 {inferred}" if inferred else ""
         lines.append(
             f"- 会话 {session.get('session_id')}: 用户 {session.get('users')}{inferred_text}，来源 {session.get('src_ips')}，动作序列 {session.get('action_sequence')}，时间范围 {session.get('start_time')} -> {session.get('end_time')}"
         )
+    if effective_total > limit:
+        lines.append(f"- ... 共 {effective_total} 个会话，此处仅展示前 {min(len(sessions), limit)} 个。完整会话请查看 task2_session_views.ndjson。")
     return "\n".join(lines)
 
 
@@ -164,6 +178,25 @@ def build_architecture_summary(context: dict) -> str:
             "```",
         ]
     )
+
+
+def build_result_access_summary(context: dict, view_count: int, session_count: int, alert_count: int) -> str:
+    """MANUAL-style result access summary — file pointers, not data dumps."""
+    lines = [
+        f"本次运行共 {view_count} 个用户基线、{session_count} 个会话、{alert_count} 条告警。",
+        "",
+        "查看方式：",
+        "- 用户基线：`task2_baseline_views.json`（每个用户的常见来源、动作、时段、客户端、协议安全参数）",
+        "- 完整基线画像：`task2_user_baselines.json`",
+        "- 会话视图：`task2_session_views.ndjson`（按 session_id 聚合，含动作序列、路径、时间范围）",
+        "- 告警列表：`task2_alerts.json`（按账户风险聚合，含触发原因、打分明细、推荐处置）",
+        "- 告警日志文件：`task2/TOOLS/alerts/alert_output.log`",
+        "- 关联序列模式：`task2_sequence_clusters.json`（跨用户行为序列聚类）",
+        "- 异常评分明细：`task2_anomaly_scores.ndjson`",
+        "",
+        "详细分析结果见 REPORT.md。",
+    ]
+    return "\n".join(lines)
 
 
 def build_data_structure_summary(context: dict) -> str:
@@ -304,10 +337,25 @@ def main() -> None:
     is_internal = isinstance(client, InternalLLMClient)
     llm_mode_desc = "内网私有化 LLM (glm-5.1)" if is_internal else "外网 LLM (Claude Code skill)"
 
-    views = load_json(json_dir / "task2_baseline_views.json", {}).get("views", [])
-    alerts = load_json(json_dir / "task2_alerts.json", {}).get("alerts", [])
+    MAX_JSON_LOAD_SIZE = 50 * 1024 * 1024  # 50MB — refuse to load JSON files larger than this
+
+    views_data = load_json(json_dir / "task2_baseline_views.json", {})
+    views = views_data.get("views", [])
+    total_view_count = len(views)
+    # For massive datasets, only keep the items we will actually render
+    if total_view_count > MANUAL_VIEW_LIMIT:
+        views = views[:MANUAL_VIEW_LIMIT]
+
+    alerts_data = load_json(json_dir / "task2_alerts.json", {})
+    alerts = alerts_data.get("alerts", [])
+    total_alert_count = len(alerts)
+    if total_alert_count > MANUAL_ALERT_LIMIT:
+        alerts = alerts[:MANUAL_ALERT_LIMIT]
+
     context = load_json(json_dir / "task2_report_context.json", {})
-    sessions = list(iter_ndjson(json_dir / "task2_session_views.ndjson"))[:50]
+    all_sessions = list(iter_ndjson(json_dir / "task2_session_views.ndjson"))
+    total_session_count = len(all_sessions)
+    sessions = all_sessions[:MANUAL_SESSION_LIMIT]
     sequence_clusters = load_json(json_dir / "task2_sequence_clusters.json", {})
     alert_count = context.get("alert_summary", {}).get("count", 0)
 
@@ -330,10 +378,7 @@ def main() -> None:
                 ("输出说明", "输出 JSON / NDJSON 中间态、结构化告警日志、用户基线视图、关联分析结果以及 MANUAL / REPORT / AI_REPORT。默认按账户风险聚合输出，同时保留会话级和关联级证据。"),
                 ("核心流程", "日志解析 -> 事件归一化 -> 历史基线生成 -> 新日志多维异常评分 -> 会话/关联分析 -> 账户风险聚合 -> 解释与文档生成。"),
                 ("题目要求映射", build_requirement_mapping(context)),
-                ("用户基线查看方式", summarize_views(views)),
-                ("会话查看方式", summarize_sessions(sessions)),
-                ("告警解释方式", summarize_alerts(alerts)),
-                ("关联分析", _summarize_sequence_clusters(sequence_clusters)),
+                ("结果查看方式", build_result_access_summary(context, total_view_count, total_session_count, total_alert_count)),
                 ("参数与阈值说明", "支持 baseline/current 对比模式。事件级加入协议安全维度：弱 KEX、弱 hostkey、弱 cipher、弱 MAC、协议协商偏离、老旧客户端指纹偏离；会话级保留 5 维度；默认按账户风险聚合输出。可信网段、可信用户、可信客户端、算法白名单/黑名单可在 noise_policy.json 调整。"),
                 ("大数据模式说明", build_large_mode_summary(context)),
                 ("适用范围与局限", summarize_list(context.get("limitations", []))),
@@ -348,13 +393,13 @@ def main() -> None:
                 ("题目要求映射", build_requirement_mapping(context)),
                 ("系统设计", build_architecture_summary(context)),
                 ("数据结构设计", build_data_structure_summary(context)),
-                ("基线建模方法", summarize_views(views)),
-                ("会话行为建模", summarize_sessions(sessions)),
+                ("基线建模方法", summarize_views(views, total_count=total_view_count)),
+                ("会话行为建模", summarize_sessions(sessions, total_count=total_session_count)),
                 ("异常识别逻辑", str(context.get("detection_logic_summary", "")) + "\n\n" + build_scoring_summary()),
                 ("行为序列聚类", _summarize_sequence_clusters(sequence_clusters)),
                 ("完整攻击故事示例", build_attack_story_example(alerts, sequence_clusters)),
                 ("亮点与创新点", build_highlights_summary(context)),
-                ("结果展示方式", f"本次运行共触发 {alert_count} 条告警。\n\n{summarize_alerts(alerts)}"),
+                ("结果展示方式", f"本次运行共触发 {alert_count} 条告警。\n\n{summarize_alerts(alerts, total_count=total_alert_count)}"),
                 ("性能与工程考虑", "解析阶段使用 NDJSON 和流式聚合，避免大日志一次性载入内存；transfer/path 明细做 top-N 截断；baseline/current 分离避免重复建模；默认账户风险聚合减少重复告警；序列聚类在大数据模式下引入截断护栏以适配 16G 机器。"),
                 ("评分标准对应与完成度", build_scoring_alignment_summary(context) + "\n\n" + build_completion_summary(context)),
                 ("准确性与可复用性分析", "异常判定和关联发现由脚本确定性产出，LLM 负责语义化解释和攻击叙事串联，所有结论可追溯到脚本评分和关联数据。结构化 JSON 产物便于回归测试、规则迭代和内网长期复用。"),
@@ -376,10 +421,7 @@ def main() -> None:
                 ("输入说明", summarize_sources(context.get("dataset_summary", {}))),
                 ("核心流程", "日志解析 -> 历史基线生成 -> 新日志异常评分 -> 会话/关联分析 -> 账户风险聚合 -> LLM 解释。"),
                 ("题目要求映射", build_requirement_mapping(context)),
-                ("用户基线查看方式", summarize_views(views)),
-                ("会话查看方式", summarize_sessions(sessions)),
-                ("告警解释方式", summarize_alerts(alerts)),
-                ("关联分析", _summarize_sequence_clusters(sequence_clusters)),
+                ("结果查看方式", build_result_access_summary(context, total_view_count, total_session_count, total_alert_count)),
                 ("参数与阈值说明", "支持 baseline/current 对比模式；事件级同时评估行为异常与协议安全异常；noise_policy.json 可配置可信用户、可信客户端、算法策略和账户风险聚合策略。"),
                 ("大数据模式说明", build_large_mode_summary(context)),
                 ("告警文件说明", "查看 task2/TOOLS/alerts/alert_output.log。"),

@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import json
+import sys
+from functools import lru_cache
 from ipaddress import ip_address
 from pathlib import Path
 
@@ -29,6 +32,7 @@ KNOWN_KEYS = {
 }
 
 
+@lru_cache(maxsize=4096)
 def parse_subnet(value: str) -> str:
     try:
         addr = ip_address(value)
@@ -93,8 +97,14 @@ def parse_line(line: str, idx: int, source_path: Path) -> dict:
 
 
 def enrich_subnet(event: dict) -> dict:
-    event["src_subnet"] = parse_subnet(event.get("src_ip", ""))
+    src_ip = event.get("src_ip", "")
+    if src_ip and not event.get("src_subnet"):
+        event["src_subnet"] = parse_subnet(src_ip)
     return event
+
+
+BATCH_FLUSH_SIZE = 10000
+PROGRESS_PRINT_INTERVAL = 100000
 
 
 def main() -> None:
@@ -115,7 +125,8 @@ def main() -> None:
         ndjson_path.unlink(missing_ok=True)
         if not paths:
             return count, format_counts, preview
-        with ndjson_path.open("a", encoding="utf-8") as out:
+        batch: list[str] = []
+        with ndjson_path.open("w", encoding="utf-8", buffering=65536) as out:
             for path in paths:
                 format_guess = guess_log_format(path)
                 format_counts[format_guess] = format_counts.get(format_guess, 0) + 1
@@ -130,10 +141,19 @@ def main() -> None:
                     if event is None:
                         event = parse_line(line, idx, path)
                     event = enrich_subnet(event)
-                    write_ndjson_line(ndjson_path, event, handle=out)
+                    batch.append(json.dumps(event, ensure_ascii=False, separators=(",", ":")))
                     count += 1
                     if len(preview) < 200:
                         preview.append(event)
+                    if len(batch) >= BATCH_FLUSH_SIZE:
+                        out.write("\n".join(batch) + "\n")
+                        batch.clear()
+                    if count % PROGRESS_PRINT_INTERVAL == 0:
+                        print(f"  [{role}] processed {count:,} events ...", file=sys.stderr, flush=True)
+                # per-file progress
+                print(f"  [{role}] finished {path.name}, total {count:,} events", file=sys.stderr, flush=True)
+            if batch:
+                out.write("\n".join(batch) + "\n")
         return count, format_counts, preview
 
     current_files = iter_log_files(layout.current_dir)

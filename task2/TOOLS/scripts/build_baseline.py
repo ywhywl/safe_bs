@@ -104,8 +104,20 @@ def main() -> None:
     SENSITIVE_EXTENSIONS = (".conf", ".cfg", ".key", ".pem", ".crt", ".env", ".secret", ".password", ".credentials", ".ssh", ".bak", ".sql", ".db", ".xlsx", ".csv")
     CRAWL_PATHS = ("/", "/etc/", "/home/", "/var/", "/tmp/", "/opt/", "/usr/")
 
+    skipped_unknown = 0
+
     for event in iter_ndjson(events_path):
         user = event.get("user", "unknown")
+
+        # Skip events with no attributable user identity.
+        # "unknown" / "" / "USER" baselines are meaningless aggregations
+        # that mix data from all sessions — no audit trail, no deviation value.
+        # These events remain in ndjson for session-level analysis but are
+        # excluded from per-user baselines.
+        if user in {"unknown", "", "USER"}:
+            skipped_unknown += 1
+            continue
+
         user_stat = stats[user]
         user_stat["total_event_count"] += 1
 
@@ -338,6 +350,7 @@ def main() -> None:
     cross_user_shared_ips = {ip: sorted(users_set) for ip, users_set in ip_user_map.items() if len(users_set) >= 3}
 
     record = make_base_record(run_dir.name, "task2", "build_baseline.py")
+    record["skipped_unknown_user_events"] = skipped_unknown
     record["baseline_mode"] = baseline_mode
     record["baseline_event_count"] = events_meta.get("baseline_event_count", 0) if baseline_events_path.exists() else events_meta.get("event_count", 0)
     record["current_event_count"] = events_meta.get("event_count", 0)
