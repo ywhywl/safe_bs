@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
@@ -47,8 +48,17 @@ def main() -> None:
         }
     )
 
+    skipped_unknown = 0
+
     for event in iter_ndjson(events_path):
         user = event.get("user", "unknown")
+
+        # Skip unattributed events — "unknown" baselines have zero audit value
+        # Also reject timestamp-like strings that leaked in via fallback parsing
+        if user in {"unknown", "", "USER"} or re.match(r"^\d{2}:\d{2}:\d{2}", user):
+            skipped_unknown += 1
+            continue
+
         stat = stats[user]
         src_ip = event.get("src_ip", "")
         src_subnet = event.get("src_subnet", "")
@@ -99,6 +109,7 @@ def main() -> None:
         )
 
     record = make_base_record(run_dir.name, "task2", "stage1_build_baseline.py")
+    record["skipped_unknown_user_events"] = skipped_unknown
     record.update(
         {
             "baseline_mode": "historical_split" if baseline_events_path.exists() else "single_dataset",

@@ -65,3 +65,54 @@
 - 弱算法标注模板（CBC/MD5/SHA1/DSA/group1）
 - ProFTPD mod_sftp 漏洞映射表
 - task1 skill、模板、JSON 模式
+
+## 工具使用方法
+
+### 独立运行（推荐）
+
+工具已自包含，无需配置外部 PYTHONPATH：
+
+```bash
+cd task1/TOOLS
+
+# 基本用法：对单个目标运行完整侦察与报告流水线
+bash run.sh <TARGET_IP>
+
+# 示例
+bash run.sh 120.133.131.108
+
+# 指定端口和授权范围
+PORTS=22 SCOPE="authorized testing only" bash run.sh 120.133.131.108
+
+# 使用已有侦察数据（跳过网络采集）
+RECON_INPUT_DIR=/path/to/raw bash run.sh 120.133.131.108
+```
+
+### 参数说明
+
+| 参数 | 方式 | 默认值 | 说明 |
+|---|---|---|---|
+| TARGET | 位置参数 $1 | 127.0.0.1 | 目标 IP 或主机名 |
+| PORTS | 环境变量 | 22 | 扫描端口，逗号分隔 |
+| SCOPE | 环境变量 | authorized testing only | 授权范围说明 |
+| WINDOW | 环境变量 | （空） | 测试时间窗口 |
+| NETWORK_PATH | 环境变量 | external | 网络路径（external/internal） |
+| RECON_INPUT_DIR | 环境变量 | （空） | 已有侦察数据目录，非空时跳过网络采集 |
+| RUN_ID | 环境变量 | 时间戳 | 运行 ID，输出写入 runs/<RUN_ID>/ |
+
+### 输出位置
+
+```text
+task1/TOOLS/runs/<RUN_ID>/task1/
+  json/          # 中间 JSON（目标画像、漏洞假设、验证结果等）
+  evidence/      # 证据文件
+  raw/           # 原始侦察输出
+task1/ATT_REPORT.md   # 攻击报告（自动刷新）
+task1/AI_REPORT.md    # AI 使用报告（自动刷新）
+```
+
+### 依赖
+
+- Python 3.9+（无需额外安装，lib.py/llm_client.py 已内置于 scripts/）
+- nc、ssh、nmap（可选，用于网络侦察；RECON_INPUT_DIR 模式下不需要）
+- searchsploit（可选，用于漏洞情报查询）

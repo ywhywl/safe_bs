@@ -11,8 +11,8 @@ from zlib import crc32
 PIPE_SPLIT_RE = re.compile(r"\|+")
 PROGRAM_LOG_RE = re.compile(
     r"^(?P<ts>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d+)\s+"
-    r"(?P<host>\S+)\s+proftpd\[(?P<pid>\d+)\]:\s+"
-    r"(?P<server_ip>\S+)\s+\((?P<client_ip>[^\[]+)\[(?P<client_ip_dup>[^\]]+)\]\):\s+"
+    r"(?P<host>\S+)\s+proftpd\[(?P<pid>\d+)\]:?\s+"
+    r"(?P<server_ip>\S+)\s+\((?P<client_ip>[^\[\(]+)[\[\(](?P<client_ip_dup>[^\]\)]+)[\]\)]\):\s+"
     r"(?P<message>.+)$"
 )
 MOD_SFTP_PREFIX_RE = re.compile(
@@ -30,8 +30,10 @@ MOD_SFTP_IP_ONLY_RE = re.compile(
 
 
 def guess_log_format(path: Path) -> str:
+    """Read first few non-empty lines to determine log format. Never reads the full file."""
     try:
         with path.open(encoding="utf-8", errors="replace") as handle:
+            checked = 0
             for line in handle:
                 stripped = line.strip()
                 if not stripped:
@@ -44,10 +46,12 @@ def guess_log_format(path: Path) -> str:
                     return "sftp_protocol_mod_sftp"
                 if "=" in stripped and "timestamp=" in stripped:
                     return "key_value"
-                return "plain_text"
+                checked += 1
+                if checked >= 5:  # only check first 5 non-empty lines
+                    return "plain_text"
+            return "plain_text"
     except OSError:
         return "unknown"
-    return "unknown"
 
 
 def normalize_timestamp(raw: str) -> str:
@@ -100,9 +104,9 @@ def parse_runtime_pipe_line(line: str, idx: int, source: Path) -> dict | None:
     message = parts[10] if len(parts) > 10 else ""
     action = "AUTH"
     result_code = result_flag
-    if "AuthSuccess" in result_flag:
+    if result_flag.lower() in {"authsuccess", "auth_success"}:
         result_code = "ok"
-    elif "AuthFail" in result_flag or "AuthFailure" in result_flag:
+    elif result_flag.lower() in {"authfail", "authfailure", "auth_fail", "auth_failure"}:
         result_code = "fail"
     return make_event(
         source,
@@ -144,7 +148,7 @@ def parse_program_log_line(line: str, idx: int, source: Path) -> dict | None:
         action = "SESSION_CLOSE"
         result = "ok"
         event_class = "session"
-    elif "login successful" in lowered:
+    elif "login successful" in lowered or "login success" in lowered:
         action = "LOGIN"
         result = "ok"
         event_class = "auth"
@@ -215,6 +219,11 @@ def parse_mod_sftp_log_line(line: str, idx: int, source: Path) -> dict | None:
             event["src_ip"] = detail["src_ip"]
             message = detail["message"]
             lowered = message.lower()
+
+    # Normalize OCR/transcription errors before keyword matching
+    lowered = re.sub(r"cl[1i]ent", "client", lowered)
+    lowered = re.sub(r"sess[1i]on", "session", lowered)
+    lowered = lowered.replace("serverencryption", "server encryption").replace("clientencryption", "client encryption")
 
     def _val() -> str:
         return message.split(":", 1)[1].strip() if ":" in message else ""

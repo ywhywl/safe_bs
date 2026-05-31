@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from functools import lru_cache
 from ipaddress import ip_address
@@ -45,6 +46,11 @@ def parse_subnet(value: str) -> str:
     return ":".join(groups[:4]) + "::/64"
 
 
+TIMESTAMP_TWO_FIELD_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d+$")
+TIMESTAMP_LOOKS_RE = re.compile(r"^\d{2}:\d{2}:\d{2}")
+IP_PATTERN_RE = re.compile(r"^\d+\.\d+\.\d+\.\d+$")
+
+
 def parse_kv_line(line: str) -> dict[str, str]:
     result = {}
     for token in line.strip().split():
@@ -70,15 +76,28 @@ def parse_line(line: str, idx: int, source_path: Path) -> dict:
         bytes_out = int(kv.get("bytes_out", "0") or "0")
     else:
         parts = line.strip().split()
-        timestamp = parts[0] if parts else ""
-        user = parts[1] if len(parts) > 1 else "unknown"
-        src_ip = parts[2] if len(parts) > 2 else "unknown"
-        session_id = parts[3] if len(parts) > 3 else ""
-        action = parts[4] if len(parts) > 4 else ""
-        path = parts[5] if len(parts) > 5 else ""
-        result = parts[6] if len(parts) > 6 else ""
-        bytes_in = int(parts[7]) if len(parts) > 7 and parts[7].isdigit() else 0
-        bytes_out = int(parts[8]) if len(parts) > 8 and parts[8].isdigit() else 0
+        # Detect timestamp spanning two space-separated parts (e.g. "2026-05-25 00:01:01,605")
+        offset = 0
+        if len(parts) >= 2 and TIMESTAMP_TWO_FIELD_RE.match(parts[0] + " " + parts[1]):
+            timestamp = parts[0] + " " + parts[1]
+            offset = 2
+        else:
+            timestamp = parts[0] if parts else ""
+
+        user = parts[offset] if len(parts) > offset else "unknown"
+        # Validate: a timestamp-like string (HH:MM:SS) is not a valid username
+        if TIMESTAMP_LOOKS_RE.match(user):
+            user = "unknown"
+        src_ip = parts[offset + 1] if len(parts) > offset + 1 else "unknown"
+        # Validate: src_ip should look like an IP address
+        if not IP_PATTERN_RE.match(src_ip):
+            src_ip = "unknown"
+        session_id = parts[offset + 2] if len(parts) > offset + 2 else ""
+        action = parts[offset + 3] if len(parts) > offset + 3 else ""
+        path = parts[offset + 4] if len(parts) > offset + 4 else ""
+        result = parts[offset + 5] if len(parts) > offset + 5 else ""
+        bytes_in = int(parts[offset + 6]) if len(parts) > offset + 6 and parts[offset + 6].isdigit() else 0
+        bytes_out = int(parts[offset + 7]) if len(parts) > offset + 7 and parts[offset + 7].isdigit() else 0
 
     return {
         "event_id": build_event_id(source_path, idx),

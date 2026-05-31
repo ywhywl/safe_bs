@@ -34,6 +34,53 @@
 - `nginx_rules.json`：规则库，负责把配置事实转换为可审计的风险命中。
 - `build_risk_register.py` / `build_report_context.py`：将命中结果组织成报告可消费的数据结构。
 
+## 工具使用方法
+
+### 独立运行（推荐）
+
+工具已自包含，无需配置外部 PYTHONPATH：
+
+```bash
+cd task3/TOOLS
+
+# 对远程目标运行（通过 SSH 采集 nginx -T 输出）
+bash run.sh <TARGET_IP_OR_HOST>
+
+# 示例：对本机运行
+bash run.sh localhost
+
+# 使用已有原始 conf 目录（无需 SSH，直接导入）
+TARGET=/path/to/nginx/conf bash run.sh /path/to/nginx/conf
+
+# 指定 LLM 配置（内网模式）
+LLM_CONFIG=/path/to/llm_config.json bash run.sh <TARGET>
+```
+
+### 参数说明
+
+| 参数 | 方式 | 默认值 | 说明 |
+|---|---|---|---|
+| TARGET | 位置参数 $1 | localhost | 目标主机 IP 或 conf 目录路径 |
+| LLM_CONFIG | 环境变量 | TOOLS/llm_config.json | LLM 配置文件路径 |
+| RUN_ID | 环境变量 | 时间戳 | 运行 ID，输出写入 runs/<RUN_ID>/ |
+
+### 输出位置
+
+```text
+task3/TOOLS/runs/<RUN_ID>/task3/
+  json/          # 中间 JSON（资产视图、配置事实、规则命中、风险清单等）
+  raw/           # 原始采集输出（nginx -T 或 conf 目录）
+  evidence/      # 证据文件
+task3/DEF_REPORT.md    # 防护报告（自动刷新）
+task3/AI_REPORT.md     # AI 使用报告（自动刷新）
+```
+
+### 依赖
+
+- Python 3.9+（lib.py/llm_client.py 已内置于 scripts/）
+- SSH 访问权限（远程模式）或本地 nginx conf 目录读取权限（本地模式）
+- `nginx -T` 命令（可选，不可用时自动切换为原始目录导入模式）
+
 ## 系统设计
 
 ```text

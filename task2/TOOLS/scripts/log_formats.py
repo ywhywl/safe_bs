@@ -11,8 +11,8 @@ from zlib import crc32
 PIPE_SPLIT_RE = re.compile(r"\|+")
 PROGRAM_LOG_RE = re.compile(
     r"^(?P<ts>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d+)\s+"
-    r"(?P<host>\S+)\s+proftpd\[(?P<pid>\d+)\]:\s+"
-    r"(?P<server_ip>\S+)\s+\((?P<client_ip>[^\[]+)\[(?P<client_ip_dup>[^\]]+)\]\):\s+"
+    r"(?P<host>\S+)\s+proftpd\[(?P<pid>\d+)\]:?\s+"
+    r"(?P<server_ip>\S+)\s+\((?P<client_ip>[^\[\(]+)[\[\(](?P<client_ip_dup>[^\]\)]+)[\]\)]\):\s+"
     r"(?P<message>.+)$"
 )
 MOD_SFTP_PREFIX_RE = re.compile(
@@ -104,9 +104,9 @@ def parse_runtime_pipe_line(line: str, idx: int, source: Path) -> dict | None:
     message = parts[10] if len(parts) > 10 else ""
     action = "AUTH"
     result_code = result_flag
-    if "AuthSuccess" in result_flag:
+    if result_flag.lower() in {"authsuccess", "auth_success"}:
         result_code = "ok"
-    elif "AuthFail" in result_flag or "AuthFailure" in result_flag:
+    elif result_flag.lower() in {"authfail", "authfailure", "auth_fail", "auth_failure"}:
         result_code = "fail"
     return make_event(
         source,
@@ -148,7 +148,7 @@ def parse_program_log_line(line: str, idx: int, source: Path) -> dict | None:
         action = "SESSION_CLOSE"
         result = "ok"
         event_class = "session"
-    elif "login successful" in lowered:
+    elif "login successful" in lowered or "login success" in lowered:
         action = "LOGIN"
         result = "ok"
         event_class = "auth"
@@ -219,6 +219,11 @@ def parse_mod_sftp_log_line(line: str, idx: int, source: Path) -> dict | None:
             event["src_ip"] = detail["src_ip"]
             message = detail["message"]
             lowered = message.lower()
+
+    # Normalize OCR/transcription errors before keyword matching
+    lowered = re.sub(r"cl[1i]ent", "client", lowered)
+    lowered = re.sub(r"sess[1i]on", "session", lowered)
+    lowered = lowered.replace("serverencryption", "server encryption").replace("clientencryption", "client encryption")
 
     def _val() -> str:
         return message.split(":", 1)[1].strip() if ":" in message else ""

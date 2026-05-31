@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -114,7 +115,8 @@ def main() -> None:
         # that mix data from all sessions — no audit trail, no deviation value.
         # These events remain in ndjson for session-level analysis but are
         # excluded from per-user baselines.
-        if user in {"unknown", "", "USER"}:
+        # Also reject timestamp-like strings that leaked in via fallback parsing.
+        if user in {"unknown", "", "USER"} or re.match(r"^\d{2}:\d{2}:\d{2}", user):
             skipped_unknown += 1
             continue
 

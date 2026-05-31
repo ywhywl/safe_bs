@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 from pathlib import Path
 
 from lib import dump_json, load_json, load_task2_runtime_config, make_base_record
@@ -22,6 +23,9 @@ def main() -> None:
     baselines = load_json(json_dir / "task2_user_baselines.json", {}).get("users", [])
     views = []
     for item in baselines[:render_limit]:
+        user = item.get("user", "")
+        if not user or user in {"unknown", "USER"} or re.match(r"^\d{2}:\d{2}:\d{2}", user):
+            continue
         # Convert sets back to sorted lists for display (baselines may have set fields after score_anomalies)
         src_ips = item.get("usual_src_ips", [])
         if isinstance(src_ips, set):

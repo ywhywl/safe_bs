@@ -3,9 +3,18 @@
 from __future__ import annotations
 
 import argparse
+import json
+import sys
 from pathlib import Path
 
 from lib import dump_json, load_json, load_task2_runtime_config, make_base_record
+
+
+MAX_ALERTS_FOR_CONTEXT = 50
+MAX_SESSIONS_FOR_CONTEXT = 50
+MAX_BASELINES_FOR_CONTEXT = 100
+MAX_CLUSTERS_FOR_CONTEXT = 20
+MAX_CONTEXT_FILE_SIZE = 50 * 1024 * 1024  # 50MB hard cap
 
 
 def main() -> None:
@@ -16,11 +25,13 @@ def main() -> None:
     run_dir = Path(args.run_dir)
     json_dir = run_dir / "task2" / "json"
     manifest = load_json(json_dir / "task2_log_ingest_manifest.json", {})
-    # Only load alert summary and top-10 alerts (full load can be multi-GB)
+    # Only load alert summary and top alerts (full load can be multi-GB)
     alerts_data = load_json(json_dir / "task2_alerts.json", {})
-    alert_count = len(alerts_data.get("alerts", []))
+    all_alerts = alerts_data.get("alerts", [])
+    alert_count = len(all_alerts)
     alert_types = alerts_data.get("alert_type_summary", {})
-    representative_alerts = alerts_data.get("alerts", [])[:10]
+    # Truncate alerts for context to prevent multi-GB context on large datasets
+    representative_alerts = all_alerts[:MAX_ALERTS_FOR_CONTEXT]
     sessions = load_json(json_dir / "task2_session_views.json", {})
     stage1_baselines = load_json(json_dir / "task2_stage1_baselines.json", {})
     stage2_scope = load_json(json_dir / "task2_stage2_scope.json", {})
@@ -68,7 +79,7 @@ def main() -> None:
                         "end_time": s.get("end_time", ""),
                         "summary": s.get("summary", ""),
                     }
-                    for s in sessions.get("sessions_preview", [])[:10]
+                    for s in sessions.get("sessions_preview", [])[:MAX_SESSIONS_FOR_CONTEXT]
                 ],
             },
             "baseline_summary": {
@@ -113,7 +124,7 @@ def main() -> None:
                         "sequence": p.get("sequence", []),
                     }
                     for p in sequence_clusters.get("cross_user_patterns", [])
-                ][:5],
+               ][:MAX_CLUSTERS_FOR_CONTEXT],
                 "anomalous_patterns": [
                     {
                         "pattern_id": p.get("pattern_id", ""),
@@ -122,10 +133,19 @@ def main() -> None:
                         "max_score": p.get("max_score", 0),
                     }
                     for p in sequence_clusters.get("anomalous_sequence_patterns", [])
-                ][:5],
+               ][:MAX_CLUSTERS_FOR_CONTEXT],
             },
             }
     )
+    # Check context size before writing — prevent multi-GB context on large datasets
+    context_json_str = json.dumps(record, ensure_ascii=False)
+    context_size = len(context_json_str.encode("utf-8"))
+    record["context_truncated"] = context_size > MAX_CONTEXT_FILE_SIZE
+    if context_size > MAX_CONTEXT_FILE_SIZE:
+        # Further strip large nested structures
+        record["representative_cases"] = record.get("representative_cases", [])[:3]
+        record["session_summary"]["representative_sessions"] = record.get("session_summary", {}).get("representative_sessions", [])[:3]
+        print(f"[WARN] Report context too large ({context_size / 1024 / 1024:.1f}MB). Stripped to fit.", file=sys.stderr, flush=True)
     dump_json(json_dir / "task2_report_context.json", record)
 
 
