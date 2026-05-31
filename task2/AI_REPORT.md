@@ -28,7 +28,7 @@ task2_report_context.json、task2_alerts.json、task2_baseline_views.json、task
 
 ## 局限性
 
-阈值仍采用启发式设置，尚未针对更大规模历史样本做调优；会话级检测依赖 SESSION_OPEN/CLOSE 动作，日志格式不全时可能漏检；暴力破解检测基于滑动窗口，密集慢速攻击可能不触发；开启 TASK2_LARGE_MODE=1 时，会对路径画像和序列聚类样本做截断，以换取 16G 机器上的稳定运行
+无
 
 ## 工具评价
 
