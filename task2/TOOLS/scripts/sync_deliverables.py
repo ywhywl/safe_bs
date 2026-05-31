@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+"""Sync deliverables from run output back to the task TOOLS directory.
+
+In the self-contained layout, scripts/skills/prompts already live inside
+taskN/TOOLS/, so we only need to copy the run-generated output (json,
+alerts, evidence, reports, etc.) back to TOOLS/ for easy access.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -36,36 +43,35 @@ def main() -> None:
 
     src_task = run_dir / task_id
     dst_tools = project_root / task_id / "TOOLS"
-    src_scripts = project_root / "scripts" / task_id
-    dst_scripts = dst_tools / "scripts"
-    src_skills = project_root / "skills"
-    dst_skills = dst_tools / "skills"
-    src_prompts = project_root / "common" / "prompts"
-    dst_prompts = dst_tools / "prompts"
 
+    # Copy run-generated JSON output
     if (src_task / "json").exists():
         copy_tree(src_task / "json", dst_tools / "json")
-    if src_scripts.exists():
-        copy_tree(src_scripts, dst_scripts)
-    if src_skills.exists():
-        copy_tree(src_skills, dst_skills)
-    if src_prompts.exists():
-        copy_tree(src_prompts, dst_prompts)
+
+    # Copy task-specific run output
     if task_id == "task1":
         if (src_task / "evidence").exists():
             copy_tree(src_task / "evidence", dst_tools / "evidence")
         if (src_task / "raw").exists():
             copy_tree(src_task / "raw", dst_tools / "evidence" / "raw")
-    if task_id == "task2" and (src_task / "alerts").exists():
-        copy_tree(src_task / "alerts", dst_tools / "alerts")
-    if task_id == "task3":
+    elif task_id == "task2":
+        if (src_task / "alerts").exists():
+            copy_tree(src_task / "alerts", dst_tools / "alerts")
+    elif task_id == "task3":
         if (src_task / "evidence").exists():
             copy_tree(src_task / "evidence", dst_tools / "evidence")
         if (src_task / "raw").exists():
             copy_tree(src_task / "raw", dst_tools / "evidence" / "raw")
-        rules_src = project_root / "task3" / "TOOLS" / "rules"
-        if rules_src.exists() and rules_src.resolve() != (dst_tools / "rules").resolve():
-            copy_tree(rules_src, dst_tools / "rules")
+        rules_src = dst_tools / "rules"
+        # rules already live in TOOLS/rules/, no need to copy from elsewhere
+
+    # Copy deliverable .md files from run dir to task root
+    for md_file in ["MANUAL.md", "REPORT.md", "AI_REPORT.md"]:
+        src_md = src_task / md_file
+        dst_md = project_root / task_id / md_file
+        if src_md.exists():
+            ensure_dir(dst_md.parent)
+            shutil.copy2(src_md, dst_md)
 
 
 if __name__ == "__main__":
