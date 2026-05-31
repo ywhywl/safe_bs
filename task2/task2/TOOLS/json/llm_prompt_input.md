@@ -1,0 +1,1 @@
+根据 task2_report_context.json 生成 REPORT.md 和 MANUAL.md。要求异常判定和关联发现以脚本结果为准，LLM 负责语义化解释和攻击叙事串联。

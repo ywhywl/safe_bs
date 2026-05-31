@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 # task2 — SFTP anomaly detection pipeline
-# Self-contained: all scripts under TOOLS/scripts/, PYTHONPATH points here
+# Self-contained: cd into TOOLS/scripts/, PYTHONPATH points here
 set -euo pipefail
 
 TOOLS_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 RUN_ID="${RUN_ID:-$(date -u +"%Y%m%dT%H%M%SZ")}"
 RUN_DIR="${PROJECT_ROOT}/runs/${RUN_ID}"
-INPUT_DIR="${1:-${PROJECT_ROOT}/task2/TOOLS/samples}"
+INPUT_DIR="${1:-${TOOLS_DIR}/samples}"
 
 LLM_CONFIG="${LLM_CONFIG:-${TOOLS_DIR}/llm_config.json}"
 
 mkdir -p "${RUN_DIR}/task2"/{json,alerts}
 
+# All scripts and Python modules live in TOOLS/scripts/
+cd "${TOOLS_DIR}/scripts"
 export PYTHONPATH="${TOOLS_DIR}/scripts"
 
 STEP_LOG="${RUN_DIR}/task2/alerts/step_timing.log"
@@ -37,6 +39,7 @@ log_step "RUN_ID=${RUN_ID}"
 log_step "INPUT_DIR=${INPUT_DIR}"
 log_step "LLM_CONFIG=${LLM_CONFIG}"
 
+run_step "build_manifests:init" python3 build_manifests.py --run-dir "${RUN_DIR}" --task-id task2 --mode init
 run_step "ingest_logs" python3 ingest_logs.py --run-dir "${RUN_DIR}" --input-dir "${INPUT_DIR}"
 run_step "normalize_events" python3 normalize_events.py --run-dir "${RUN_DIR}" --input-dir "${INPUT_DIR}"
 run_step "reattribute_session_users" python3 reattribute_session_users.py --run-dir "${RUN_DIR}"
@@ -52,3 +55,5 @@ run_step "emit_alert_log" python3 emit_alert_log.py --run-dir "${RUN_DIR}"
 run_step "build_baseline_views" python3 build_baseline_views.py --run-dir "${RUN_DIR}"
 run_step "build_report_context" python3 build_report_context.py --run-dir "${RUN_DIR}"
 run_step "render_reports" python3 render_reports.py --run-dir "${RUN_DIR}" --project-root "${PROJECT_ROOT}" --llm-config "${LLM_CONFIG}"
+run_step "build_manifests:package" python3 build_manifests.py --run-dir "${RUN_DIR}" --task-id task2 --mode package
+run_step "sync_deliverables" python3 sync_deliverables.py --run-dir "${RUN_DIR}" --project-root "${PROJECT_ROOT}" --task-id task2

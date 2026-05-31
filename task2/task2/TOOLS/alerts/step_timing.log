@@ -1,0 +1,38 @@
+[2026-05-31 16:08:14] RUN_ID=20260531T080814Z
+[2026-05-31 16:08:14] INPUT_DIR=task2/TOOLS/datasets/demo_abnormal
+[2026-05-31 16:08:14] LLM_CONFIG=/Users/wenlongy/dev/src/safe_bs/task2/TOOLS/llm_config.json
+[2026-05-31 16:08:14] START build_manifests:init
+[2026-05-31 16:08:14] DONE  build_manifests:init (0s)
+[2026-05-31 16:08:14] START ingest_logs
+[2026-05-31 16:08:14] DONE  ingest_logs (0s)
+[2026-05-31 16:08:14] START normalize_events
+[2026-05-31 16:08:14] DONE  normalize_events (0s)
+[2026-05-31 16:08:14] START reattribute_session_users
+[2026-05-31 16:08:15] DONE  reattribute_session_users (1s)
+[2026-05-31 16:08:15] START stage1_build_baseline
+[2026-05-31 16:08:15] DONE  stage1_build_baseline (0s)
+[2026-05-31 16:08:15] START stage1_detect_candidates
+[2026-05-31 16:08:15] DONE  stage1_detect_candidates (0s)
+[2026-05-31 16:08:15] START extract_stage2_scope
+[2026-05-31 16:08:15] DONE  extract_stage2_scope (0s)
+[2026-05-31 16:08:15] START build_baseline
+[2026-05-31 16:08:15] DONE  build_baseline (0s)
+[2026-05-31 16:08:15] START score_anomalies
+[2026-05-31 16:08:15] DONE  score_anomalies (0s)
+[2026-05-31 16:08:15] START build_session_views
+[2026-05-31 16:08:15] DONE  build_session_views (0s)
+[2026-05-31 16:08:15] START build_sequence_clusters
+[2026-05-31 16:08:16] DONE  build_sequence_clusters (1s)
+[2026-05-31 16:08:16] START build_alerts
+[2026-05-31 16:08:16] DONE  build_alerts (0s)
+[2026-05-31 16:08:16] START emit_alert_log
+[2026-05-31 16:08:16] DONE  emit_alert_log (0s)
+[2026-05-31 16:08:16] START build_baseline_views
+[2026-05-31 16:08:16] DONE  build_baseline_views (0s)
+[2026-05-31 16:08:16] START build_report_context
+[2026-05-31 16:08:16] DONE  build_report_context (0s)
+[2026-05-31 16:08:16] START render_reports
+[2026-05-31 16:08:16] DONE  render_reports (0s)
+[2026-05-31 16:08:16] START build_manifests:package
+[2026-05-31 16:08:16] DONE  build_manifests:package (0s)
+[2026-05-31 16:08:16] START sync_deliverables
