@@ -17,8 +17,8 @@
 - 告警可打印到指定日志文件模拟：已实现。脚本生成 `alert_output.log`，便于评测环境直接检查告警结果。
 - 行为基线需自动分析获得并提供查看方式：已实现。`task2_user_baselines.json`、`task2_baseline_views.json`、`MANUAL.md` 中均提供查看入口。
 - 行为基线可保存为 JSON：已实现。所有中间态与交付态均为 JSON/NDJSON，适合内网环境直接落地。
-- 以某一天/某几天日志对比新日志：已实现。目录支持 `baseline/` 与 `current/` 分离模式，直接对应题意中的“基准日志 vs 新日志”。
-- 大文件内网落地：已增强。支持 `TASK2_LARGE_MODE=1`，在 16G 内存机器上通过限制路径画像、序列聚类样本规模换取稳定运行。
+- 以某一天/某几天日志对比新日志：已实现。目录支持 `baseline/` 与 `current/` 分离模式，直接对应题意中的《基准日志 vs 新日志》。
+- 大文件内网落地：已增强。支持 `TASK2_LARGE_MODE=1`，在 16G 内存机器上通过限制路径画像和序列聚类样本规模换取稳定运行。
 
 ## 系统设计
 
@@ -47,22 +47,18 @@
 
 ## 基线建模方法
 
-- 用户 farms_warn_dongyayh: 常见来源 ['124.74.41.42'], 常见动作 ['AUTH'], 常见路径 [], 常见时段 [9], 常见客户端 ['SSH-2.0-JSCH_2.27.3'], 常见协议安全参数 {'cipher_c2s': [], 'cipher_s2c': [], 'hostkey': [], 'kex': [], 'mac_c2s': [], 'mac_s2c': []}
-- 用户 farms_warn_ruisuiyh: 常见来源 ['220.248.41.29'], 常见动作 ['AUTH'], 常见路径 [], 常见时段 [9], 常见客户端 ['SSH-2.0-JSCH-0.1.72'], 常见协议安全参数 {'cipher_c2s': [], 'cipher_s2c': [], 'hostkey': [], 'kex': [], 'mac_c2s': [], 'mac_s2c': []}
-- 用户 farms_warn_zsbank: 常见来源 ['101.68.90.115', '203.0.113.55'], 常见动作 ['AUTH'], 常见路径 [], 常见时段 [9, 23], 常见客户端 ['SSH-2.0-JSCH-0.1.54', 'SSH-2.0-OpenSSH_9.9'], 常见协议安全参数 {'cipher_c2s': [], 'cipher_s2c': [], 'hostkey': [], 'kex': [], 'mac_c2s': [], 'mac_s2c': []}
-- 用户 mms_cmb: 常见来源 ['202.104.136.69'], 常见动作 ['AUTH', 'LOGIN'], 常见路径 [], 常见时段 [9], 常见客户端 ['SSH-2.0-JSCH-0.1.54'], 常见协议安全参数 {'cipher_c2s': [], 'cipher_s2c': [], 'hostkey': [], 'kex': [], 'mac_c2s': [], 'mac_s2c': []}
-- 用户 unknown: 常见来源 ['203.0.113.55', '220.248.41.29'], 常见动作 ['SESSION_CLOSE', 'SESSION_OPEN'], 常见路径 [], 常见时段 [9, 23], 常见客户端 [], 常见协议安全参数 {'cipher_c2s': [], 'cipher_s2c': [], 'hostkey': [], 'kex': [], 'mac_c2s': [], 'mac_s2c': []}
+- 用户 farms_warn_dongyayh: 常见来源 ['124.74.41.42'], 常见动作 ['AUTH'], 常见路径 [], 常见时段 [9], 常见客户端 ['SSH-2.0-JSCH_2.27.3'], 常见协议安全参数 {'kex': []}
+- 用户 farms_warn_ruisuiyh: 常见来源 ['220.248.41.29'], 常见动作 ['AUTH'], 常见路径 [], 常见时段 [9], 常见客户端 ['SSH-2.0-JSCH-0.1.72'], 常见协议安全参数 {'kex': []}
+- 用户 farms_warn_zsbank: 常见来源 ['101.68.90.115', '203.0.113.55'], 常见动作 ['AUTH'], 常见路径 [], 常见时段 [9, 23], 常见客户端 ['SSH-2.0-JSCH-0.1.54', 'SSH-2.0-OpenSSH_9.9'], 常见协议安全参数 {'kex': []}
+- 用户 mms_cmb: 常见来源 ['202.104.136.69'], 常见动作 ['AUTH', 'LOGIN'], 常见路径 [], 常见时段 [9], 常见客户端 ['SSH-2.0-JSCH-0.1.54'], 常见协议安全参数 {'kex': []}
+- 用户 unknown: 常见来源 ['203.0.113.55', '220.248.41.29'], 常见动作 ['SESSION_CLOSE', 'SESSION_OPEN'], 常见路径 [], 常见时段 [9, 23], 常见客户端 [], 常见协议安全参数 {'kex': []}
 
 ## 会话行为建模
 
 - 会话 3001001: 用户 ['mms_cmb']，推断用户 mms_cmb，来源 ['202.104.136.69']，动作序列 ['AUTH']，时间范围 2026-05-18T09:00:00,101 -> 2026-05-18T09:00:00,101
 - 会话 3001002: 用户 ['farms_warn_ruisuiyh']，推断用户 farms_warn_ruisuiyh，来源 ['220.248.41.29']，动作序列 ['AUTH']，时间范围 2026-05-18T09:00:01,205 -> 2026-05-18T09:00:01,205
-- 会话 3001003: 用户 ['farms_warn_dongyayh']，推断用户 farms_warn_dongyayh，来源 ['124.74.41.42']，动作序列 ['AUTH']，时间范围 2026-05-18T09:00:02,115 -> 2026-05-18T09:00:02,115
-- 会话 3001004: 用户 ['farms_warn_zsbank']，推断用户 farms_warn_zsbank，来源 ['101.68.90.115']，动作序列 ['AUTH']，时间范围 2026-05-18T09:00:03,451 -> 2026-05-18T09:00:03,451
 - 会话 3002001: 用户 ['mms_cmb']，推断用户 mms_cmb，来源 ['202.104.136.69']，动作序列 ['AUTH']，时间范围 2026-05-19T09:02:10,301 -> 2026-05-19T09:02:10,301
 - 会话 3002002: 用户 ['farms_warn_ruisuiyh']，推断用户 farms_warn_ruisuiyh，来源 ['220.248.41.29']，动作序列 ['AUTH']，时间范围 2026-05-19T09:02:11,309 -> 2026-05-19T09:02:11,309
-- 会话 3002003: 用户 ['farms_warn_dongyayh']，推断用户 farms_warn_dongyayh，来源 ['124.74.41.42']，动作序列 ['AUTH']，时间范围 2026-05-19T09:02:12,318 -> 2026-05-19T09:02:12,318
-- 会话 3002004: 用户 ['farms_warn_zsbank']，推断用户 farms_warn_zsbank，来源 ['101.68.90.115']，动作序列 ['AUTH']，时间范围 2026-05-19T09:02:13,327 -> 2026-05-19T09:02:13,327
 - 会话 3999001: 用户 ['mms_cmb']，推断用户 mms_cmb，来源 ['8.8.8.8']，动作序列 ['AUTH']，时间范围 2026-05-20T23:59:59,999 -> 2026-05-20T23:59:59,999
 - 会话 3999002: 用户 ['farms_warn_ruisuiyh']，推断用户 farms_warn_ruisuiyh，来源 ['198.51.100.77']，动作序列 ['AUTH']，时间范围 2026-05-20T23:59:59,998 -> 2026-05-20T23:59:59,998
 - 会话 3999003: 用户 ['farms_warn_zsbank']，推断用户 farms_warn_zsbank，来源 ['203.0.113.55']，动作序列 ['AUTH']，时间范围 2026-05-20T23:59:58,777 -> 2026-05-20T23:59:58,777
@@ -76,7 +72,7 @@
 
 ## 异常识别逻辑
 
-采用三层确定性架构：(1) 历史基线对比：若输入目录包含 baseline/ 与 current/，则只用 baseline/ 建立历史用户画像，对 current/ 逐条评分，满足”以某一天/某几天基准日志对比新日志”的要求。(2) 事件级多维打分：来源偏离、动作偏离、路径偏离、认证偏离、客户端偏离、时段偏离、失败偏离、体量偏离、首次来源IP、特权路径、敏感文件、数据外泄指标、批量下载、进出比偏离、暴力破解、休眠账户激活、异常结果类型；并新增 SSH/SFTP 协议安全维度：弱 KEX、弱 hostkey、弱 cipher、弱 MAC、协议协商偏离、老旧客户端指纹偏离。(3) 会话与关联分析：会话级 5 维度、LCS 行为序列聚类。(4) 风险输出：默认按账户风险聚合，并保留会话级和关联级明细。LLM 仅负责将脚本产出的告警和序列模式串联为攻击叙事。
+采用三层确定性架构：(1) 历史基线对比：若输入目录包含 baseline/ 与 current/，则只用 baseline/ 建立历史用户画像，对 current/ 逐条评分，满足《以某一天/某几天基准日志对比新日志》的要求。(2) 事件级多维打分：来源偏离、动作偏离、路径偏离、认证偏离、客户端偏离、时段偏离、失败偏离、体量偏离、首次来源IP、特权路径、敏感文件、数据外泄指标、批量下载、进出比偏离、暴力破解、休眠账户激活、异常结果类型；并新增 SSH/SFTP 协议安全维度：弱 KEX、弱 hostkey、弱 cipher、弱 MAC、协议协商偏离、老旧客户端指纹偏离。(3) 会话与关联分析：会话级 5 维度、LCS 行为序列聚类。(4) 风险输出：默认按账户风险聚合，并保留会话级和关联级明细。LLM 仅负责将脚本产出的告警和序列模式串联为攻击叙事。
 
 事件级检测包含两层：
 - 行为偏离：来源 IP/网段、动作、路径、认证方式、客户端版本、访问时段、失败率、传输体量、首次来源 IP、进出流量比、休眠账户激活等。
@@ -86,24 +82,21 @@
 关联检测包含一层：
 - 行为序列聚类：不同用户执行相同异常动作序列时，提升为关联攻击模式。
 
-## 关联分析
-
 ## 行为序列聚类
 
 - 模式 seq-cluster-001: 用户 ['farms_warn_ruisuiyh', 'mms_cmb'], 序列 ['AUTH']
-- 异常模式 pattern-001: 序列 ['AUTH'], 影响用户 ['farms_warn_dongyayh', 'farms_warn_ruisuiyh', 'farms_warn_zsbank', 'mms_cmb'], 最高分数 140
+- 异常模式 pattern-001: 序列 ['AUTH'], 影响用户 ['farms_warn_ruisuiyh', 'farms_warn_zsbank', 'mms_cmb'], 最高分数 110
 
 ## 完整攻击故事示例
 
-1. 基线阶段：用户 `farms_warn_ruisuiyh` 和 `mms_cmb` 的历史画像已在 `task2_user_baselines.json` 中建立，包含常见来源、时段和动作。
-2. 告警阶段：`alert-2` 指向用户 `farms_warn_ruisuiyh` 的会话 `3999002`，触发原因为 ['auth deviation', 'client deviation', 'failure deviation', 'first-time source IP', 'source deviation', 'time deviation', 'unusual result type']，来源 ['198.51.100.77']。这说明攻击者先在单账户维度表现为新来源、异常时段或异常动作。
-3. 告警阶段：`alert-4` 指向用户 `farms_warn_ruisuiyh` 的会话 `4999002`，触发原因为 ['action deviation', 'failure deviation', 'first-time source IP', 'source deviation', 'time deviation', 'unusual result type']，来源 ['198.51.100.77']。这说明攻击者先在单账户维度表现为新来源、异常时段或异常动作。
-4. 关联阶段：跨用户序列模式 `seq-cluster-001` 表明用户 ['farms_warn_ruisuiyh', 'mms_cmb'] 在会话 ['3999001', '3999002', '4999002', '4999001'] 中执行了相同异常序列 ['AUTH']。这把原本独立的单账户异常串成了一条统一攻击路径。
-5. 结论阶段：从”基线外单点异常”到”跨用户相同异常序列”，当前样本可被解释为同一批外部来源对多个账户发起了相似访问尝试，系统通过账户告警和序列模式两层输出完成闭环。
+1. 基线阶段：用户 `mms_cmb` 的历史画像已在 `task2_user_baselines.json` 中建立，包含常见来源、时段和动作。
+2. 告警阶段：会话 `3999001` 触发 `alert-1`，原因是 ['auth deviation', 'client deviation', 'failure deviation', 'source deviation', 'time deviation', 'unusual result type']，说明新日志显著偏离历史行为基线。
+3. 关联阶段：跨用户序列模式 `seq-cluster-001` 表明用户 ['farms_warn_ruisuiyh', 'mms_cmb'] 在会话 ['3999001', '3999002', '4999002'] 中执行了相同异常序列 ['AUTH']。这把原本独立的单账户异常串成了一条统一攻击路径。
+4. 结论阶段：从《基线外单点异常》到《跨用户相同异常序列》，当前样本可被解释为多个账户遭受了相似访问尝试，系统通过账户告警和序列模式两层输出完成闭环。
 
 ## 亮点与创新点
 
-- 1. 原生支持 `baseline/current` 双目录模式，和题目“基准日志对比新日志”完全对齐。
+- 1. 原生支持 `baseline/current` 双目录模式，和题目《基准日志对比新日志》完全对齐。
 - 2. 不仅解析普通认证日志，还统一纳入 `runtime pipe`、`proftpd` 程序日志、`mod_sftp` 协议协商日志。
 - 3. 异常判定是确定性脚本规则，不是黑盒模型，所有告警都能追溯到触发原因和得分。
 - 4. 在单用户基线之外，增加了跨用户行为序列聚类和账户风险聚合，更接近真实 SOC 分析链路。
@@ -112,16 +105,21 @@
 
 ## 结果展示方式
 
-本次运行共触发 10 条告警。
+本次运行共触发 13 条告警。
 
-- 告警 alert-1: 用户 mms_cmb，会话 3999001，级别 high，原因 ['auth deviation', 'client deviation', 'failure deviation', 'first-time source IP', 'source deviation', 'time deviation', 'unusual result type']，说明 认证方式偏离历史基线；客户端版本偏离历史基线；失败行为与历史失败率不一致；首次出现的新来源IP地址；来源地址偏离历史基线；访问时段偏离历史基线；异常结果类型
-- 告警 alert-2: 用户 farms_warn_ruisuiyh，会话 3999002，级别 high，原因 ['auth deviation', 'client deviation', 'failure deviation', 'first-time source IP', 'source deviation', 'time deviation', 'unusual result type']，说明 认证方式偏离历史基线；客户端版本偏离历史基线；失败行为与历史失败率不一致；首次出现的新来源IP地址；来源地址偏离历史基线；访问时段偏离历史基线；异常结果类型
-- 告警 alert-3: 用户 mms_cmb，会话 4999001，级别 high，原因 ['failure deviation', 'first-time source IP', 'source deviation', 'time deviation', 'unusual result type']，说明 失败行为与历史失败率不一致；首次出现的新来源IP地址；来源地址偏离历史基线；访问时段偏离历史基线；异常结果类型
-- 告警 alert-4: 用户 farms_warn_ruisuiyh，会话 4999002，级别 high，原因 ['action deviation', 'failure deviation', 'first-time source IP', 'source deviation', 'time deviation', 'unusual result type']，说明 操作类型偏离历史基线；失败行为与历史失败率不一致；首次出现的新来源IP地址；来源地址偏离历史基线；访问时段偏离历史基线；异常结果类型
-- 告警 alert-5: 用户 farms_warn_zsbank，推断用户 farms_warn_zsbank，会话 4999003，级别 medium，原因 ['session imbalance']，说明 会话出现打开未关闭或开闭不平衡现象
-- 告警 alert-6: 用户 farms_warn_ruisuiyh，会话 account-risk:farms_warn_ruisuiyh，级别 high，原因 ['account risk aggregation', 'action deviation', 'auth deviation', 'client deviation', 'failure deviation', 'first-time source IP', 'source deviation', 'time deviation', 'unusual result type']，说明 同一账户在同一时间窗口内聚合出多类异常，账户整体风险升高；该账户在当前窗口内关联 2 条异常告警。
-- 告警 alert-7: 用户 mms_cmb，会话 account-risk:mms_cmb，级别 high，原因 ['account risk aggregation', 'auth deviation', 'client deviation', 'failure deviation', 'first-time source IP', 'source deviation', 'time deviation', 'unusual result type']，说明 同一账户在同一时间窗口内聚合出多类异常，账户整体风险升高；该账户在当前窗口内关联 2 条异常告警。
-- 告警 alert-10: 用户 multiple，会话 correlated-seq:seq-cluster-001，级别 medium，原因 ['correlated action sequence']，说明 跨用户序列模式: 2 个用户执行序列 ['AUTH']。2 个不同用户执行了相同的异常认证序列
+- 告警 alert-1: 用户 mms_cmb，会话 3999001，级别 high，原因 ['auth deviation', 'client deviation', 'failure deviation', 'source deviation', 'time deviation', 'unusual result type']，说明 认证方式偏离历史基线；客户端版本偏离历史基线；失败行为与历史失败率不一致；来源地址偏离历史基线；访问时段偏离历史基线；异常结果类型
+- 告警 alert-2: 用户 farms_warn_ruisuiyh，会话 3999002，级别 high，原因 ['auth deviation', 'client deviation', 'failure deviation', 'source deviation', 'time deviation', 'unusual result type']，说明 认证方式偏离历史基线；客户端版本偏离历史基线；失败行为与历史失败率不一致；来源地址偏离历史基线；访问时段偏离历史基线；异常结果类型
+- 告警 alert-3: 用户 farms_warn_ruisuiyh，会话 4999002，级别 high，原因 ['action deviation', 'failure deviation', 'source deviation', 'time deviation', 'unusual result type']，说明 操作类型偏离历史基线；失败行为与历史失败率不一致；来源地址偏离历史基线；访问时段偏离历史基线；异常结果类型
+- 告警 alert-4: 用户 farms_warn_zsbank，推断用户 farms_warn_zsbank，会话 4999003，级别 medium，原因 ['session imbalance']，说明 会话出现打开未关闭或开闭不平衡现象
+- 告警 alert-5: 用户 farms_warn_ruisuiyh，会话 multi-target:198.51.100.77:2026-05-20T23:59:58.002000，级别 medium，原因 ['same source multi-target fanout']，说明 来源 198.51.100.77 在短时间内访问了多个 SFTP 目标 ['SZ30test', 'nucc-30-test-uat-app-3-dmz-9']，涉及用户 ['farms_warn_ruisuiyh']，存在横向探测或批量尝试访问的风险。
+- 告警 alert-6: 用户 mms_cmb，会话 multi-target:202.104.136.69:2026-05-18T09:00:00.101000，级别 medium，原因 ['same source multi-target fanout']，说明 来源 202.104.136.69 在短时间内访问了多个 SFTP 目标 ['SZ30test', 'nucc-30-test-uat-app-3-dmz-9']，涉及用户 ['mms_cmb']，存在横向探测或批量尝试访问的风险。
+- 告警 alert-7: 用户 farms_warn_zsbank，会话 multi-target:203.0.113.55:2026-05-20T23:59:58.003000，级别 medium，原因 ['same source multi-target fanout']，说明 来源 203.0.113.55 在短时间内访问了多个 SFTP 目标 ['SZ30test', 'nucc-30-test-uat-app-3-dmz-9']，涉及用户 ['farms_warn_zsbank']，存在横向探测或批量尝试访问的风险。
+- 告警 alert-8: 用户 farms_warn_ruisuiyh，会话 multi-target:220.248.41.29:2026-05-18T09:00:00.202000，级别 medium，原因 ['same source multi-target fanout']，说明 来源 220.248.41.29 在短时间内访问了多个 SFTP 目标 ['SZ30test', 'nucc-30-test-uat-app-3-dmz-9']，涉及用户 ['farms_warn_ruisuiyh']，存在横向探测或批量尝试访问的风险。
+- 告警 alert-9: 用户 mms_cmb，会话 multi-target:8.8.8.8:2026-05-20T23:59:58.001000，级别 medium，原因 ['same source multi-target fanout']，说明 来源 8.8.8.8 在短时间内访问了多个 SFTP 目标 ['SZ30test', 'nucc-30-test-uat-app-3-dmz-9']，涉及用户 ['mms_cmb']，存在横向探测或批量尝试访问的风险。
+- 告警 alert-10: 用户 farms_warn_ruisuiyh，会话 account-risk:farms_warn_ruisuiyh，级别 high，原因 ['account risk aggregation', 'action deviation', 'auth deviation', 'client deviation', 'failure deviation', 'same source multi-target fanout', 'source deviation', 'time deviation', 'unusual result type']，说明 同一账户在同一时间窗口内聚合出多类异常，账户整体风险升高；该账户在当前窗口内关联 4 条异常告警。
+- 告警 alert-11: 用户 farms_warn_zsbank，会话 account-risk:farms_warn_zsbank，级别 medium，原因 ['account risk aggregation', 'same source multi-target fanout', 'session imbalance']，说明 同一账户在同一时间窗口内聚合出多类异常，账户整体风险升高；该账户在当前窗口内关联 2 条异常告警。
+- 告警 alert-12: 用户 mms_cmb，会话 account-risk:mms_cmb，级别 high，原因 ['account risk aggregation', 'auth deviation', 'client deviation', 'failure deviation', 'same source multi-target fanout', 'source deviation', 'time deviation', 'unusual result type']，说明 同一账户在同一时间窗口内聚合出多类异常，账户整体风险升高；该账户在当前窗口内关联 3 条异常告警。
+- 告警 alert-13: 用户 multiple，会话 correlated-seq:seq-cluster-001，级别 medium，原因 ['correlated action sequence']，说明 跨用户序列模式: 2 个用户执行序列 ['AUTH']。2 个不同用户执行了相同的异常认证序列
 
 ## 性能与工程考虑
 

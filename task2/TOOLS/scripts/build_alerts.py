@@ -44,7 +44,7 @@ REASON_LABELS = {
     "weak cipher algorithm": "使用了不安全的加密算法",
     "weak mac algorithm": "使用了不安全的MAC算法",
     "protocol negotiation deviation": "协议协商参数偏离历史基线",
-    "correlated IP cluster": "多个告警共享同一IP基础设施集群，可能存在关联攻击",
+    "same source multi-target fanout": "同一来源在短时间内访问多个 SFTP 目标，存在横向探测或批量尝试访问风险",
     "correlated action sequence": "多个用户执行相同的异常操作序列，可能存在共享攻击工具或凭证泄露",
     "account risk aggregation": "同一账户在同一时间窗口内聚合出多类异常，账户整体风险升高",
 }
@@ -116,9 +116,9 @@ def main() -> None:
         if ts and (not group["end"] or ts > group["end"]):
             group["end"] = ts
         group["reasons"].update(item.get("rule_hits", []))
-        if len(group["event_ids"]) < 100:
+        if len(group["event_ids"]) < 10:
             group["event_ids"].append(item.get("item_id"))
-        if len(group["supporting_scores"]) < 100:
+        if len(group["supporting_scores"]) < 10:
             group["supporting_scores"].append(
                 {
                     "item_id": item.get("item_id"),
@@ -146,6 +146,8 @@ def main() -> None:
                 "start_time": session.get("start_time", ""),
                 "end_time": session.get("end_time", ""),
                 "src_ips": session.get("src_ips", []),
+                "server_ips": session.get("server_ips", []),
+                "system_names": session.get("system_names", []),
                 "action_sequence": session.get("action_sequence", [])[:50],
                 "paths": session.get("paths", [])[:50],
                 "event_count": session.get("event_count", 0),
@@ -154,7 +156,7 @@ def main() -> None:
                 "unbalanced_session": session.get("unbalanced_session", False),
             }
     scores_meta = load_json(json_dir / "task2_anomaly_scores.json", {})
-    ip_correlation = load_json(json_dir / "task2_ip_correlation.json", {})
+    stage1_candidates = load_json(json_dir / "task2_stage1_candidates.json", {})
     sequence_clusters = load_json(json_dir / "task2_sequence_clusters.json", {})
 
     alerts = []
@@ -421,6 +423,40 @@ def main() -> None:
             }
         )
 
+    # --- Same source visiting multiple SFTP targets ---
+    for candidate in stage1_candidates.get("multi_target_source_candidates", []):
+        alert_idx += 1
+        targets = candidate.get("targets", [])
+        users = candidate.get("users", [])
+        src_ip = candidate.get("src_ip", "")
+        alerts.append(
+            {
+                "alert_id": f"alert-{alert_idx}",
+                "severity": "high" if len(targets) >= 3 else "medium",
+                "user": "multiple" if len(users) != 1 else users[0],
+                "session_id": f"multi-target:{src_ip}:{candidate.get('window_start', '')}",
+                "time_window": {
+                    "start": candidate.get("window_start", ""),
+                    "end": candidate.get("window_end", ""),
+                },
+                "trigger_type": "same_source_multi_sftp_fanout",
+                "trigger_reasons": ["same source multi-target fanout"],
+                "supporting_event_ids": [],
+                "supporting_scores": [],
+                "session_summary": {
+                    "src_ips": [src_ip],
+                    "target_servers": targets,
+                    "users": users,
+                    "related_sessions": candidate.get("session_ids", []),
+                    "event_count": len(candidate.get("session_ids", [])),
+                },
+                "recommended_action": "Review whether the same source is probing or attempting access across multiple SFTP servers in a short time window. Check source legitimacy, target spread, and correlated failures.",
+                "status": "open",
+                "llm_explanation": f"来源 {src_ip} 在短时间内访问了多个 SFTP 目标 {targets}，涉及用户 {users}，存在横向探测或批量尝试访问的风险。",
+                "llm_confidence": "medium",
+            }
+        )
+
     # --- Account risk aggregation (default output strategy) ---
     if account_risk_strategy == "account":
         by_user_alerts: dict[str, list[dict]] = defaultdict(list)
@@ -457,46 +493,6 @@ def main() -> None:
                     "llm_confidence": "medium",
                 }
             )
-
-    # --- Correlated attack cluster alerts (from IP correlation graph) ---
-    for cluster in ip_correlation.get("ip_clusters", []):
-        if not cluster.get("is_anomalous_cluster"):
-            continue
-        alert_idx += 1
-        related_alert_ids = []
-        cluster_sessions = set(cluster.get("alert_session_ids", []))
-        for existing_alert in alerts:
-            if existing_alert.get("session_id") in cluster_sessions:
-                related_alert_ids.append(existing_alert["alert_id"])
-
-        alerts.append({
-            "alert_id": f"alert-{alert_idx}",
-            "severity": "high" if len(related_alert_ids) >= 2 else "medium",
-            "user": "multiple",
-            "session_id": f"correlated-cluster:{cluster.get('cluster_id')}",
-            "time_window": {"start": "", "end": ""},
-            "trigger_type": "correlated_attack_cluster",
-            "trigger_reasons": ["correlated IP cluster"],
-            "supporting_event_ids": [],
-            "supporting_scores": [],
-            "correlation_data": {
-                "cluster_id": cluster.get("cluster_id"),
-                "cluster_ips": cluster.get("ips", []),
-                "shared_users": cluster.get("shared_users", []),
-                "related_alert_ids": related_alert_ids,
-                "total_events": cluster.get("total_events", 0),
-            },
-            "session_summary": {
-                "cluster_id": cluster.get("cluster_id"),
-                "ip_count": len(cluster.get("ips", [])),
-                "ips": cluster.get("ips", []),
-                "shared_users": cluster.get("shared_users", []),
-            },
-            "recommended_action": "Investigate correlated activity across multiple sessions sharing the same IP infrastructure. Check for shared attacker infrastructure or credential reuse.",
-            "status": "open",
-            "llm_explanation": f"IP集群 {cluster.get('cluster_id')} 关联 {len(cluster.get('ips', []))} 个IP，共享用户 {cluster.get('shared_users', [])}。{len(related_alert_ids)} 条已有告警与此集群关联。",
-            "llm_confidence": "medium",
-        })
 
     # --- Cross-user sequence pattern alerts ---
     for pattern in sequence_clusters.get("cross_user_patterns", []):
@@ -537,6 +533,7 @@ def main() -> None:
         })
 
     record = make_base_record(run_dir.name, "task2", "build_alerts.py")
+    record["events_scope_mode"] = "scoped" if (json_dir / "task2_events_scoped.ndjson").exists() else "full"
     record["alerts"] = alerts
     record["alert_type_summary"] = defaultdict(int, {a.get("trigger_type"): 0 for a in alerts})
     for a in alerts:

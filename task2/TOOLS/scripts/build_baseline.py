@@ -38,7 +38,12 @@ def main() -> None:
     run_dir = Path(args.run_dir)
     json_dir = run_dir / "task2" / "json"
     baseline_events_path = json_dir / "task2_baseline_events.ndjson"
-    events_path = baseline_events_path if baseline_events_path.exists() else json_dir / "task2_events.ndjson"
+    if baseline_events_path.exists():
+        events_path = baseline_events_path
+        baseline_mode = "historical_split"
+    else:
+        events_path = json_dir / "task2_events.ndjson"
+        baseline_mode = "single_dataset"
     events_meta = load_json(json_dir / "task2_events.json", {})
     manifest = load_json(json_dir / "task2_log_ingest_manifest.json", {})
     policy = load_noise_policy(Path(manifest.get("policy_path"))) if manifest.get("policy_path") else load_noise_policy(None)
@@ -333,9 +338,11 @@ def main() -> None:
     cross_user_shared_ips = {ip: sorted(users_set) for ip, users_set in ip_user_map.items() if len(users_set) >= 3}
 
     record = make_base_record(run_dir.name, "task2", "build_baseline.py")
-    record["baseline_mode"] = "historical_split" if baseline_events_path.exists() else "single_dataset"
+    record["baseline_mode"] = baseline_mode
     record["baseline_event_count"] = events_meta.get("baseline_event_count", 0) if baseline_events_path.exists() else events_meta.get("event_count", 0)
     record["current_event_count"] = events_meta.get("event_count", 0)
+    record["events_source_path"] = str(events_path)
+    record["stage2_scope_available"] = (json_dir / "task2_events_scoped.ndjson").exists()
     record["large_mode"] = runtime_config["large_mode"]
     record["baseline_limits"] = {
         "max_paths_per_user": max_paths_per_user,

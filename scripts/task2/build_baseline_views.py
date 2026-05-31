@@ -18,22 +18,34 @@ def main() -> None:
     baselines = load_json(json_dir / "task2_user_baselines.json", {}).get("users", [])
     views = []
     for item in baselines:
+        # Convert sets back to sorted lists for display (baselines may have set fields after score_anomalies)
+        src_ips = item.get("usual_src_ips", [])
+        if isinstance(src_ips, set):
+            src_ips = sorted(src_ips)
+        paths = item.get("usual_paths", [])
+        if isinstance(paths, set):
+            paths = sorted(paths)
+        actions = item.get("usual_actions", [])
+        if isinstance(actions, set):
+            actions = sorted(actions)
+        clients = item.get("usual_client_versions", [])
+        if isinstance(clients, set):
+            clients = sorted(clients)
+        kex = item.get("usual_kex_algorithms", [])
+        if isinstance(kex, set):
+            kex = sorted(kex)
+
         views.append(
             {
                 "user": item.get("user"),
                 "summary": f"user={item.get('user')} sample_size={item.get('sample_size')} failure_rate={item.get('usual_failure_rate')}",
-                "typical_login_window": item.get("active_time_profile", []),
-                "common_sources": item.get("usual_src_ips", []),
-                "common_paths": item.get("usual_paths", []),
-                "common_actions": item.get("usual_actions", []),
-                "common_clients": item.get("usual_client_versions", []),
+                "typical_login_window": item.get("active_time_profile", [])[:10],
+                "common_sources": src_ips[:10],
+                "common_paths": paths[:10],
+                "common_actions": actions[:10],
+                "common_clients": clients[:5],
                 "common_protocol_security": {
-                    "kex": item.get("usual_kex_algorithms", []),
-                    "hostkey": item.get("usual_hostkey_algorithms", []),
-                    "cipher_c2s": item.get("usual_cipher_c2s", []),
-                    "cipher_s2c": item.get("usual_cipher_s2c", []),
-                    "mac_c2s": item.get("usual_mac_c2s", []),
-                    "mac_s2c": item.get("usual_mac_s2c", []),
+                    "kex": kex[:5],
                 },
                 "suspicious_patterns_to_watch": [
                     "new source ip",

@@ -27,6 +27,8 @@ def main() -> None:
 
     run_dir = Path(args.run_dir)
     json_dir = run_dir / "task2" / "json"
+    scoped_events_path = json_dir / "task2_events_scoped.ndjson"
+    events_path = scoped_events_path if scoped_events_path.exists() else json_dir / "task2_events.ndjson"
     sessions = defaultdict(
         lambda: {
             "users": set(),
@@ -36,6 +38,8 @@ def main() -> None:
             "action_sequence": [],
             "paths": set(),
             "results": set(),
+            "server_ips": set(),
+            "system_names": set(),
             "client_versions": set(),
             "kex_algorithms": set(),
             "hostkey_algorithms": set(),
@@ -51,7 +55,7 @@ def main() -> None:
         }
     )
     auth_success_by_ip = defaultdict(list)
-    for event in iter_ndjson(json_dir / "task2_events.ndjson"):
+    for event in iter_ndjson(events_path):
         session_id = event.get("session_id") or f"user:{event.get('user')}"
         item = sessions[session_id]
         item["event_count"] += 1
@@ -70,6 +74,10 @@ def main() -> None:
             item["paths"].add(event["path"])
         if event.get("result"):
             item["results"].add(event["result"])
+        if event.get("server_ip"):
+            item["server_ips"].add(event["server_ip"])
+        if event.get("system_name"):
+            item["system_names"].add(event["system_name"])
         if event.get("client_version"):
             item["client_versions"].add(event["client_version"])
         if event.get("kex_algorithm"):
@@ -129,9 +137,11 @@ def main() -> None:
                 "src_ips": sorted(item["src_ips"]),
                 "start_time": item["start_time"],
                 "end_time": item["end_time"],
-                "action_sequence": item["action_sequence"],
-                "paths": sorted(item["paths"]),
+                "action_sequence": item["action_sequence"][:50],
+                "paths": sorted(item["paths"])[:50],
                 "results": sorted(item["results"]),
+                "server_ips": sorted(item["server_ips"]),
+                "system_names": sorted(item["system_names"]),
                 "client_versions": sorted(item["client_versions"]),
                 "kex_algorithms": sorted(item["kex_algorithms"]),
                 "hostkey_algorithms": sorted(item["hostkey_algorithms"]),
@@ -154,6 +164,7 @@ def main() -> None:
                 preview.append(record)
 
     record = make_base_record(run_dir.name, "task2", "build_session_views.py")
+    record["events_source_path"] = str(events_path)
     record["session_count"] = count
     record["sessions_preview"] = preview
     dump_json(json_dir / "task2_session_views.json", record)

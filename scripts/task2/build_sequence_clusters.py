@@ -266,6 +266,7 @@ def main() -> None:
     # --- Build output ---
     record = make_base_record(run_dir.name, "task2", "build_sequence_clusters.py")
     record.update({
+        "events_scope_mode": "scoped" if (json_dir / "task2_events_scoped.ndjson").exists() else "full",
         "total_sessions_analyzed": len(session_sequences),
         "large_mode": runtime_config["large_mode"],
         "sequence_limits": {

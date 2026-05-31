@@ -139,7 +139,7 @@ def build_requirement_mapping(context: dict) -> str:
         "- 告警可打印到指定日志文件模拟：已实现。脚本生成 `alert_output.log`，便于评测环境直接检查告警结果。",
         "- 行为基线需自动分析获得并提供查看方式：已实现。`task2_user_baselines.json`、`task2_baseline_views.json`、`MANUAL.md` 中均提供查看入口。",
         "- 行为基线可保存为 JSON：已实现。所有中间态与交付态均为 JSON/NDJSON，适合内网环境直接落地。",
-        "- 以某一天/某几天日志对比新日志：已实现。目录支持 `baseline/` 与 `current/` 分离模式，直接对应题意中的“基准日志 vs 新日志”。",
+        "- 以某一天/某几天日志对比新日志：已实现。目录支持 `baseline/` 与 `current/` 分离模式，直接对应题意中的《基准日志 vs 新日志》。",
     ]
     if large_mode:
         lines.append("- 大文件内网落地：已增强。支持 `TASK2_LARGE_MODE=1`，在 16G 内存机器上通过限制路径画像和序列聚类样本规模换取稳定运行。")
@@ -196,7 +196,7 @@ def build_scoring_summary() -> str:
 def build_highlights_summary(context: dict) -> str:
     large_mode = context.get("dataset_summary", {}).get("large_mode", False)
     lines = [
-        "1. 原生支持 `baseline/current` 双目录模式，和题目“基准日志对比新日志”完全对齐。",
+        "1. 原生支持 `baseline/current` 双目录模式，和题目《基准日志对比新日志》完全对齐。",
         "2. 不仅解析普通认证日志，还统一纳入 `runtime pipe`、`proftpd` 程序日志、`mod_sftp` 协议协商日志。",
         "3. 异常判定是确定性脚本规则，不是黑盒模型，所有告警都能追溯到触发原因和得分。",
         "4. 在单用户基线之外，增加了跨用户行为序列聚类和账户风险聚合，更接近真实 SOC 分析链路。",
@@ -243,31 +243,31 @@ def build_completion_summary(context: dict) -> str:
 
 def build_attack_story_example(alerts: list[dict], sequence_clusters: dict) -> str:
     if not alerts:
-        return “当前样本未生成告警，无法构造攻击故事示例。”
+        return "当前样本未生成告警，无法构造攻击故事示例。"
 
-    seq_pattern = sequence_clusters.get(“cross_user_patterns”, [None])[0]
+    seq_pattern = sequence_clusters.get("cross_user_patterns", [None])[0]
 
     alert = alerts[0]
     story_lines = [
-        f”1. 基线阶段：用户 `{alert.get('user')}` 的历史画像已在 `task2_user_baselines.json` 中建立，包含常见来源、时段和动作。”,
-        f”2. 告警阶段：会话 `{alert.get('session_id')}` 触发 `{alert.get('alert_id')}`，原因是 {alert.get('trigger_reasons', [])}，说明新日志显著偏离历史行为基线。”,
+        f"1. 基线阶段：用户 `{alert.get('user')}` 的历史画像已在 `task2_user_baselines.json` 中建立，包含常见来源、时段和动作。",
+        f"2. 告警阶段：会话 `{alert.get('session_id')}` 触发 `{alert.get('alert_id')}`，原因是 {alert.get('trigger_reasons', [])}，说明新日志显著偏离历史行为基线。",
     ]
     if seq_pattern:
         story_lines.append(
-            f”3. 关联阶段：跨用户序列模式 `{seq_pattern.get('cluster_id')}` 表明用户 {seq_pattern.get('users', [])} 在会话 {seq_pattern.get('session_ids', [])} 中执行了相同异常序列 {seq_pattern.get('sequence', [])}。这把原本独立的单账户异常串成了一条统一攻击路径。”
+            f"3. 关联阶段：跨用户序列模式 `{seq_pattern.get('cluster_id')}` 表明用户 {seq_pattern.get('users', [])} 在会话 {seq_pattern.get('session_ids', [])} 中执行了相同异常序列 {seq_pattern.get('sequence', [])}。这把原本独立的单账户异常串成了一条统一攻击路径。"
         )
         story_lines.append(
-            f”4. 结论阶段：从”基线外单点异常”到”跨用户相同异常序列”，当前样本可被解释为多个账户遭受了相似访问尝试，系统通过账户告警和序列模式两层输出完成闭环。”
+            f"4. 结论阶段：从《基线外单点异常》到《跨用户相同异常序列》，当前样本可被解释为多个账户遭受了相似访问尝试，系统通过账户告警和序列模式两层输出完成闭环。"
         )
     else:
         story_lines.append(
-            “3. 关联阶段：当前样本未形成跨用户序列模式，因此该案例主要体现单账户基线偏离如何升级为结构化告警。”
+            "3. 关联阶段：当前样本未形成跨用户序列模式，因此该案例主要体现单账户基线偏离如何升级为结构化告警。"
         )
         story_lines.append(
-            “4. 结论阶段：即使没有跨实体关联，系统仍能从 baseline -> alert 这条主链完成异常检测，并为人工复核保留足够上下文。”
+            "4. 结论阶段：即使没有跨实体关联，系统仍能从 baseline -> alert 这条主链完成异常检测，并为人工复核保留足够上下文。"
         )
 
-    return “\n”.join(story_lines)
+    return "\n".join(story_lines)
 
 
 def load_report_prompt(project_root: Path, prompt_type: str) -> str:

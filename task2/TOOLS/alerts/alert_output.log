@@ -1,10 +1,13 @@
-severity=high user=mms_cmb session=3999001 type=anomalous_source reasons=auth deviation,client deviation,failure deviation,first-time source IP,source deviation,time deviation,unusual result type
-severity=high user=farms_warn_ruisuiyh session=3999002 type=anomalous_source reasons=auth deviation,client deviation,failure deviation,first-time source IP,source deviation,time deviation,unusual result type
-severity=high user=mms_cmb session=4999001 type=anomalous_source reasons=failure deviation,first-time source IP,source deviation,time deviation,unusual result type
-severity=high user=farms_warn_ruisuiyh session=4999002 type=anomalous_source reasons=action deviation,failure deviation,first-time source IP,source deviation,time deviation,unusual result type
+severity=high user=mms_cmb session=3999001 type=session_behavioral_deviation reasons=auth deviation,client deviation,failure deviation,source deviation,time deviation,unusual result type
+severity=high user=farms_warn_ruisuiyh session=3999002 type=session_behavioral_deviation reasons=auth deviation,client deviation,failure deviation,source deviation,time deviation,unusual result type
+severity=high user=farms_warn_ruisuiyh session=4999002 type=session_behavioral_deviation reasons=action deviation,failure deviation,source deviation,time deviation,unusual result type
 severity=medium user=farms_warn_zsbank session=4999003 type=session_state_anomaly reasons=session imbalance
-severity=high user=farms_warn_ruisuiyh session=account-risk:farms_warn_ruisuiyh type=account_risk_aggregation reasons=account risk aggregation,action deviation,auth deviation,client deviation,failure deviation,first-time source IP,source deviation,time deviation,unusual result type
-severity=high user=mms_cmb session=account-risk:mms_cmb type=account_risk_aggregation reasons=account risk aggregation,auth deviation,client deviation,failure deviation,first-time source IP,source deviation,time deviation,unusual result type
-severity=high user=multiple session=correlated-cluster:ip-cluster-001 type=correlated_attack_cluster reasons=correlated IP cluster
-severity=high user=multiple session=correlated-cluster:ip-cluster-002 type=correlated_attack_cluster reasons=correlated IP cluster
+severity=medium user=farms_warn_ruisuiyh session=multi-target:198.51.100.77:2026-05-20T23:59:58.002000 type=same_source_multi_sftp_fanout reasons=same source multi-target fanout
+severity=medium user=mms_cmb session=multi-target:202.104.136.69:2026-05-18T09:00:00.101000 type=same_source_multi_sftp_fanout reasons=same source multi-target fanout
+severity=medium user=farms_warn_zsbank session=multi-target:203.0.113.55:2026-05-20T23:59:58.003000 type=same_source_multi_sftp_fanout reasons=same source multi-target fanout
+severity=medium user=farms_warn_ruisuiyh session=multi-target:220.248.41.29:2026-05-18T09:00:00.202000 type=same_source_multi_sftp_fanout reasons=same source multi-target fanout
+severity=medium user=mms_cmb session=multi-target:8.8.8.8:2026-05-20T23:59:58.001000 type=same_source_multi_sftp_fanout reasons=same source multi-target fanout
+severity=high user=farms_warn_ruisuiyh session=account-risk:farms_warn_ruisuiyh type=account_risk_aggregation reasons=account risk aggregation,action deviation,auth deviation,client deviation,failure deviation,same source multi-target fanout,source deviation,time deviation,unusual result type
+severity=medium user=farms_warn_zsbank session=account-risk:farms_warn_zsbank type=account_risk_aggregation reasons=account risk aggregation,same source multi-target fanout,session imbalance
+severity=high user=mms_cmb session=account-risk:mms_cmb type=account_risk_aggregation reasons=account risk aggregation,auth deviation,client deviation,failure deviation,same source multi-target fanout,source deviation,time deviation,unusual result type
 severity=medium user=multiple session=correlated-seq:seq-cluster-001 type=correlated_attack_cluster reasons=correlated action sequence

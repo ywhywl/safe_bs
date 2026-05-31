@@ -66,7 +66,9 @@ def main() -> None:
     json_dir = run_dir / "task2" / "json"
     layout = resolve_input_layout(Path(args.input_dir))
     policy = load_noise_policy(layout.policy_path)
-    events = iter_ndjson(json_dir / "task2_events.ndjson")
+    scoped_events_path = json_dir / "task2_events_scoped.ndjson"
+    events_path = scoped_events_path if scoped_events_path.exists() else json_dir / "task2_events.ndjson"
+    events = iter_ndjson(events_path)
     baselines_data = load_json(json_dir / "task2_user_baselines.json", {})
     baselines = baselines_data.get("users", [])
     baseline_map = {item["user"]: item for item in baselines}
@@ -360,7 +362,7 @@ def main() -> None:
                 "score_weak_cipher": weak_cipher_score,
                 "score_weak_mac": weak_mac_score,
                 "score_protocol_deviation": protocol_deviation_score,
-                "threshold_hit": score >= 60,
+                "threshold_hit": score >= 100,
                 "rule_hits": reasons,
                 "manual_review_required": score >= 60,
             }
@@ -517,7 +519,9 @@ def main() -> None:
                 "manual_review_required": session_total_score >= 60 and bool(session_reasons),
             }
 
-            write_ndjson_line(session_ndjson_path, session_scored_record, handle=sout)
+            # Only write anomalous sessions to NDJSON
+            if session_scored_record["threshold_hit"]:
+                write_ndjson_line(session_ndjson_path, session_scored_record, handle=sout)
             session_scored_count += 1
             if session_scored_record["threshold_hit"]:
                 session_hit_count += 1
@@ -559,6 +563,7 @@ def main() -> None:
             })
 
     record = make_base_record(run_dir.name, "task2", "score_anomalies.py")
+    record["events_source_path"] = str(events_path)
     record["scored_item_count"] = scored_count
     record["threshold_hit_count"] = hit_count
     record["scored_items_preview"] = scored_preview
