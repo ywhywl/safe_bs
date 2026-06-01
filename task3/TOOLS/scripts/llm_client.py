@@ -53,7 +53,7 @@ class InternalLLMClient:
             raise RuntimeError("urllib not available, cannot call internal LLM API")
 
         messages = [
-            {"role": "system", "content": "你是一名网络安全专家，负责分析 SFTP 日志中的异常行为并生成专业的安全巡检报告。所有结论必须可追溯到脚本输出数据，不得自行推断未由脚本提供的关联关系。"},
+            {"role": "system", "content": "你是一名网络安全专家，负责分析 nginx 配置中的安全风险并生成专业的安全巡检报告。所有结论必须可追溯到脚本输出数据，不得自行推断未由脚本提供的关联关系。"},
             {"role": "user", "content": f"{prompt}\n\n---\n\n配置数据如下：\n\n{context_data}"},
         ]
 

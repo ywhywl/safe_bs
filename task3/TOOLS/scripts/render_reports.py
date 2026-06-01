@@ -9,6 +9,32 @@ from pathlib import Path
 from lib import load_json, render_markdown, write_text
 from llm_client import create_client, InternalLLMClient
 
+_LLM_CONTEXT_CHAR_LIMIT = 10000
+
+
+def slim_context_for_llm(context: dict) -> dict:
+    """裁剪 context，只保留 LLM 生成报告必要的字段，避免超出内网 LLM token 限制。"""
+    slim = {
+        "run_id": context.get("run_id"),
+        "overall_assessment": context.get("overall_assessment"),
+        "confidence": context.get("confidence"),
+        "source_type": context.get("source_type"),
+        "asset_summary": context.get("asset_summary"),
+        "high_risks": context.get("high_risks", []),
+        "medium_risks": context.get("medium_risks", []),
+        "low_risks": context.get("low_risks", []),
+        "server_level_risks": context.get("server_level_risks", []),
+        "roadmap": context.get("roadmap"),
+        "llm_analysis_scope": context.get("llm_analysis_scope"),
+    }
+    # 超限时逐步截断低优先级字段
+    if len(json.dumps(slim, ensure_ascii=False)) > _LLM_CONTEXT_CHAR_LIMIT:
+        slim["server_level_risks"] = slim["server_level_risks"][:3]
+        slim["low_risks"] = slim.get("low_risks", [])[:3]
+    if len(json.dumps(slim, ensure_ascii=False)) > _LLM_CONTEXT_CHAR_LIMIT:
+        slim["medium_risks"] = slim["medium_risks"][:5]
+    return slim
+
 
 def summarize_hosts(hosts: list[dict]) -> str:
     if not hosts:
@@ -221,6 +247,8 @@ def main() -> None:
     # Generate DEF_REPORT via LLM
     prompt = load_report_prompt(project_root)
     context_json_str = json.dumps(context, ensure_ascii=False, indent=2)
+    if is_internal:
+        context_json_str = json.dumps(slim_context_for_llm(context), ensure_ascii=False, indent=2)
 
     llm_output_dir = json_dir
     llm_output_dir.mkdir(parents=True, exist_ok=True)
